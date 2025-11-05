@@ -40,3 +40,134 @@ a {
     color-scheme: dark;
   }
 }
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background-color: #032db6;
+  color: white;
+  width: 240px;
+  transition: width 0.3s;
+  padding: 20px;
+  position: relative;
+}
+
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.sidebar .toggle {
+  position: absolute;
+  right: -12px;
+  top: 20px;
+  background: rgb(255, 255, 255);
+  color: #032db6;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px;
+  border: 2px solid #032db6;
+  font-size: 16px;
+  transition: transform 0.3s;
+  width: 30px;
+}
+
+.sidebar.closed .toggle {
+  transform: rotate(180deg);
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar li:hover {
+  background-color: #07268a;
+}
+
+.sidebar.closed li .text {
+  display: none;
+}
+
+.header {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+.header .search {
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 250px;
+}
+
+.header .search input {
+  border: none;
+  background: none;
+  outline: none;
+  margin-left: 8px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header .stats {
+  font-size: 14px;
+  color: #444;
+}
+
+.header .filter-btn {
+  background-color: #2123a8;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.header .profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header .profile img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.main-content {
+  flex: 1;
+  padding: 25px;
+}
