@@ -169,5 +169,194 @@ a {
 
 .main-content {
   flex: 1;
-  padding: 25px;
+  padding-left: 40px;
 }
+
+.login-container {
+  display: flex;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+.login-left {
+  flex: 1;
+  background-color: #2563eb;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px;
+}
+
+
+.carousel-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+
+.carousel-img {
+  width: 400px;
+  height: 500px;
+  animation: fadeSlide 0.8s ease-in-out;
+}
+
+.carousel h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.carousel p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.welcome-section {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.welcome-section h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.welcome-section p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.dots {
+  margin-top: 25px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.dot.active {
+  background-color: #fff;
+  transform: scale(1.2);
+}
+
+
+.login-right {
+  flex: 1;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  width: 350px;
+  text-align: left;
+}
+
+.login-box h2 {
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+.login-box p {
+  font-size: 14px;
+  margin-bottom: 30px;
+  color: #555;
+}
+
+.login-box a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.input-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.input-group input:focus {
+  border-color: #2563eb;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 13px;
+  color: #555;
+}
+.slide-in {
+  animation: slideIn 0.6s ease forwards;
+}
+.slide-out {
+  animation: slideOut 0.6s ease forwards;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+}
+
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #1e4ed8;
+}
+
+
+

@@ -1,0 +1,71 @@
+.dashboard-container {
+  background: linear-gradient(180deg, #1e40af, #1e3a8a);
+  min-height: 100vh;
+  color: white;
+  padding: 40px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.card p {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #60a5fa;
+}
+
+/* Seções maiores (gráficos, calendário etc.) */
+.dashboard-graph, .dashboard-calendar {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 20px;
+  grid-column: span 2;
+  min-height: 200px;
+}
+
+.dashboard-graph h2,
+.dashboard-calendar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  opacity: 0.9;
+}
+
+/* Fake gráfico e calendário de exemplo */
+.fake-graph,
+.fake-bar,
+.fake-calendar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 150px;
+}

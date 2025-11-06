@@ -1,0 +1,145 @@
+/* --- LAYOUT GERAL --- */
+.admin-container {
+  display: flex;
+  height: 100vh;
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f7ff;
+}
+
+
+/* --- CONTEÚDO PRINCIPAL --- */
+.admin-content {
+  flex: 1;
+  padding: 40px 60px;
+  overflow-y: auto;
+}
+
+.admin-header h1 {
+  color: #2563eb;
+  font-size: 28px;
+}
+
+.admin-header p {
+  color: #555;
+  margin-bottom: 40px;
+}
+
+/* --- CARDS --- */
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 250px;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card h3 {
+  color: #2563eb;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 15px;
+  color: #333;
+}
+
+
+.admin-table {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-table h2 {
+  color: #2563eb;
+  margin-bottom: 15px;
+}
+.admin-table {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.admin-table .card {
+  background: #111;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  flex: 1 1 48%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  transition: 0.3s;
+}
+
+.admin-table .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.admin-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.admin-table th, .admin-table td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.admin-table .ativo {
+  color: #00ff99;
+}
+
+.admin-table .inativo {
+  color: #ff5555;
+}
+
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #2563eb;
+  color: white;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f6ff;
+}
+
+.ativo {
+  color: green;
+  font-weight: 600;
+}
+
+.inativo {
+  color: red;
+  font-weight: 600;
+}
