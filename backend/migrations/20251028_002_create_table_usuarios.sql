@@ -2,12 +2,13 @@
 -- Data: 2025-01-15
 -- Descrição: Tabela para armazenar usuários do sistema
 
-USE produtos_api;
+USE Funcionarios_api;
 
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE IF NOT EXISTS Funcionarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
+    GMID VARCHAR(6) UNIQUE NOT NULL,
+    GMIN VARCHAR(9) UNIQUE NOT NULL,
     senha VARCHAR(255) NOT NULL,
     tipo ENUM('admin', 'comum') NOT NULL DEFAULT 'comum',
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,

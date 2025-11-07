@@ -10,15 +10,8 @@ export const logMiddleware = async (req, res, next) => {
         metodo: req.method,
         ip_address: req.ip || req.connection.remoteAddress || req.socket.remoteAddress,
         user_agent: req.get('User-Agent'),
-        dados_requisicao: {
-            headers: {
-                'content-type': req.get('Content-Type'),
-                'authorization': req.get('Authorization') ? 'Bearer [REDACTED]' : null,
-                'user-agent': req.get('User-Agent')
-            },
-            body: req.method !== 'GET' ? sanitizeRequestBody(req.body) : null,
-            query: Object.keys(req.query).length > 0 ? req.query : null
-        }
+        dados_requisicao: null
+        
     };
 
     // Interceptar a resposta para capturar status code, tempo e usuário (após authMiddleware executar)
