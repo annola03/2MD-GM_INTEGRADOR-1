@@ -5,7 +5,7 @@ import "./SidebarAdmin.css";
 export default function SidebarAdmin() {
   const imagens = ["/imagens/img1.png", "/imagens/img2.png", "/imagens/img3.png"];
   const [atual, setAtual] = useState(0); 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {

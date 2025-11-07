@@ -4,7 +4,7 @@ import SidebarItem from "./SidebarItem";
 import "./sidebar.css";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   return (
     <aside className={`sidebar ${!open ? "closed" : ""}`}>

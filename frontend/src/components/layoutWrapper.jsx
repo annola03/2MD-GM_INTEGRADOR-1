@@ -12,7 +12,7 @@ export default function layoutWrapper({ children }) {
   return (
     <>
       <div className="app-container">
-          {pathname !== "/" && isAdminPage ? <SidebarAdmin /> : <Sidebar />}
+          {pathname !== "/" && isAdminPage ? <SidebarAdmin /> : pathname !== "/" && <Sidebar />}
           <main className="main-content">
             {pathname !== "/" && <Header />}
             {children}
