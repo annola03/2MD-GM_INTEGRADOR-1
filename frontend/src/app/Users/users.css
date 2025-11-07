@@ -4,19 +4,17 @@
   min-height: 100vh;
   color: #333;
   font-family: "Inter", sans-serif;
-  transition: margin-left 0.3s ease, width 0.3s ease, margin-top 0.3s ease;
-  margin-left: 220px; 
-  width: calc(100% - 230px);
-  margin-top: 80px; 
+  transition: margin-left 0.3s ease, margin-top 0.3s ease;
+  margin-left: 20px;
+  margin-top: 50px;
+  width: 100%;
+  box-sizing: border-box;
 }
-
 
 
 .sidebar.closed ~ .users-container {
   margin-left: 70px;
-  width: calc(100% - 70px);
 }
-
 
 .users-header {
   display: flex;
@@ -34,6 +32,7 @@
   font-weight: 700;
 }
 
+/* --- Botões e ações --- */
 .actions {
   display: flex;
   gap: 10px;
@@ -64,7 +63,7 @@
   background-color: #d1d5db;
 }
 
-
+/* --- Tabela de usuários --- */
 .table-container {
   background: #fff;
   border-radius: 12px;
@@ -90,7 +89,7 @@
   border-bottom: 1px solid #eee;
 }
 
-
+/* --- Quando não há dados --- */
 .sem-dados {
   text-align: center;
   vertical-align: middle;
@@ -113,7 +112,7 @@
   }
 }
 
-
+/* --- Status de funcionário --- */
 .status {
   padding: 5px 10px;
   border-radius: 20px;
@@ -131,6 +130,7 @@
   color: #dc2626;
 }
 
+/* --- Botões de ações --- */
 .acoes button {
   border: none;
   background: none;

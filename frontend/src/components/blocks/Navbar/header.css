@@ -1,16 +1,28 @@
 .header {
-    height: 90px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px;
-    margin-left: 230px;
-    transition: margin-left 0.3s;
-  }
+  height: 90px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* todos no início */
+  padding: 0 20px;
+  gap: 20px; /* espaço entre os blocos */
+}
+
   
   .sidebar.closed ~ .header {
     margin-left: 70px;
   }
+
+  .search {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  margin-left: auto; /* faz ela ir pro lado direito */
+  margin-right: 20px; /* espaço da borda direita */
+}
+
   

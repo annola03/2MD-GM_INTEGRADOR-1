@@ -9,7 +9,7 @@ export default function Header() {
           alt="Buscar"
           width="18"
           height="18"
-          style={{ marginRight: "6px", verticalAlign: "middle" }}
+          style={{ marginRight: "10px", verticalAlign: "middle" }}
         />
         <input type="text" placeholder="Search..." />
       </div>
