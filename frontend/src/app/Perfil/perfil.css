@@ -1,0 +1,336 @@
+/* ======= LAYOUT GERAL ======= */
+.profile-page {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7ff, #edf1ff);
+  font-family: "Inter", sans-serif;
+  color: #1a1f36;
+  padding-left: 90px;
+}
+
+/* ======= SIDEBAR ======= */
+.profile-sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #1a237e, #3f51b5);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 35px 20px;
+  border-radius: 16px;
+  margin: 40px 40px 40px 15px; /* 🔹 Sidebar mais próxima da lateral */
+  height: fit-content;
+  position: sticky;
+  top: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.profile-sidebar h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.profile-sidebar ul {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+}
+
+.profile-sidebar li {
+  padding: 12px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.profile-sidebar li:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.profile-sidebar li.active {
+  background-color: #4a6cf7;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(74, 108, 247, 0.4);
+}
+
+/* ======= CONTEÚDO PRINCIPAL ======= */
+.profile-content {
+  flex: 1;
+  padding: 40px 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  position: relative;
+}
+
+.profile-content::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #dbe2ff, #e9edff);
+  border-radius: 2px;
+  opacity: 0.9;
+}
+
+/* ======= QUADROS GERAIS ======= */
+.edit-profile,
+.history,
+.notifications,
+.security {
+  width: 100%;
+  max-width: 740px;
+  background: #e8f0ff;
+  padding: 45px 55px;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e3ebff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 35px;
+  margin-left: 60px;
+  animation: fadeIn 0.3s ease;
+}
+
+.edit-profile h2,
+.history h2,
+.notifications h2,
+.security h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a237e;
+}
+
+/* ======= FOTO DE PERFIL ======= */
+.profile-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.photo-container {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #4a6cf7;
+  box-shadow: 0 4px 20px rgba(74, 108, 247, 0.25);
+  transition: 0.3s;
+}
+
+.photo-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(74, 108, 247, 0.35);
+}
+
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.change-photo-btn {
+  background: linear-gradient(135deg, #4a6cf7, #1a237e);
+  color: white;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.change-photo-btn:hover {
+  background: linear-gradient(135deg, #1d2b53, #3d5af1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(74, 108, 247, 0.3);
+}
+
+/* ======= FORMULÁRIO ======= */
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14.5px;
+  color: #243065;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+input {
+  padding: 13px 15px;
+  border-radius: 10px;
+  border: 1.5px solid #cdd7ff;
+  background-color: #f8faff;
+  font-size: 15px;
+  transition: 0.25s;
+  width: 100%;
+}
+
+input:focus {
+  outline: none;
+  border-color: #4a6cf7;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
+}
+
+/* ======= BOTÕES ======= */
+.save-btn {
+  margin-top: 15px;
+  background: linear-gradient(135deg, #3d5af1, #293e9a);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.save-btn:hover {
+  background: linear-gradient(135deg, #1a237e, #4a6cf7);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
+}
+
+/* ======= TABELAS ======= */
+.card {
+  width: 100%;
+  background: white;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 16px;
+}
+
+th {
+  background-color: #f0f3ff;
+  color: #1a237e;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+tr:nth-child(even) {
+  background-color: #fafbff;
+}
+
+td.ok {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+td.late {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
+/* ======= NOTIFICAÇÕES ======= */
+.notif-list {
+  list-style: none;
+  padding: 0;
+}
+
+.notif-list li {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e3ebff;
+  font-size: 15px;
+  color: #1a1f36;
+}
+
+.notif-list li:last-child {
+  border-bottom: none;
+}
+
+/* ======= SEGURANÇA ======= */
+.security-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-block label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #233266;
+}
+
+/* ======= ANIMAÇÃO ======= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ======= RESPONSIVO ======= */
+@media (max-width: 1024px) {
+  .profile-page {
+    flex-direction: column;
+    padding-left: 0;
+  }
+
+  .profile-sidebar {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .profile-content {
+    padding: 30px 20px;
+  }
+
+  .edit-profile,
+  .history,
+  .notifications,
+  .security {
+    margin-left: 0;
+    padding: 25px;
+  }
+
+  .profile-content::before {
+    display: none;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}

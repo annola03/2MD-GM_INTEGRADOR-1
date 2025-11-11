@@ -55,12 +55,13 @@
 .summary-card.blue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 .summary-card.purple { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 .summary-card.pink { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.summary-card.green { background: linear-gradient(135deg,#60a5fa, #3b82f6); }
+.summary-card.green { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 
 /* ==== GRID PRINCIPAL ==== */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr; /* o lado direito será menor */
+  grid-template-rows: auto auto;
   gap: 25px;
   align-items: start;
 }
@@ -68,16 +69,17 @@
 /* ==== CARTÕES BASE ==== */
 .graph-card,
 .activity-card,
-.table-card {
+.table-card,
+.white-card {
   background: #fff;
   border-radius: 16px;
   padding: 25px;
   box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
-/* ==== GRÁFICO PRINCIPAL (quadrado) ==== */
+/* ==== GRÁFICO PRINCIPAL ==== */
 .graph-card {
-  height: 400px;
+  height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -104,9 +106,9 @@
   background: linear-gradient(to bottom, #dbeafe, #fff);
 }
 
-/* ==== ATIVIDADE POR TURNO (gráfico circular) ==== */
+/* ==== ATIVIDADE POR TURNO ==== */
 .activity-card {
-  height: 400px; /* formato quadrado */
+  height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -148,11 +150,7 @@
 
 /* ==== TABELA ==== */
 .table-card {
-  border-radius: 16px;
-  padding: 25px;
-  background: #fff;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-  height: 400px; /* quadrado */
+  height: 360px;
   overflow-y: auto;
 }
 
@@ -184,30 +182,41 @@
   font-weight: 600;
 }
 
-/* ==== METADE DA LARGURA ==== */
-.half-width {
-  grid-column: span 1;
-}
-
-/* ==== QUADRO BRANCO (resumo por turno) ==== */
+/* ==== QUADRO MENOR (ajustado) ==== */
 .white-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   color: #333;
-  height: 400px; /* quadrado */
+  height: 220px; /* 🔹 reduzido para ser menor */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 30px;
+  align-items: center;
+  padding: 25px;
 }
 
 .white-content {
   font-size: 0.95rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 .white-content hr {
-  margin: 12px 0;
+  margin: 10px 0;
   border: none;
   border-top: 1px solid #e5e7eb;
+}
+
+/* ==== RESPONSIVIDADE ==== */
+@media (max-width: 950px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-card,
+  .activity-card,
+  .table-card,
+  .white-card {
+    height: auto;
+  }
 }
