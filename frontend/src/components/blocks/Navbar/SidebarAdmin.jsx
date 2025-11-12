@@ -33,7 +33,7 @@ export default function SidebarAdmin() {
             0c-.29 0-.62.02-.97.05C16.11 13.64 18 14.81 18 
             16.5V19h4v-2.5c0-2.33-4.67-3.5-6-3.5z"/>
           </svg>
-          {open && <p className="admin-text">Administrador</p>}
+          {open && <p className="admin-text">Cadastro de Funcionário</p>}
         </a>
 
         <a href="#" className="admin-link">
@@ -43,7 +43,7 @@ export default function SidebarAdmin() {
             2-.9 2-2V8l-6-6zM13 9V3.5L18.5 
             9H13z"/>
           </svg>
-          {open && <p className="admin-text">Administrador</p>}
+          {open && <p className="admin-text">Gerenciar Funcionário</p>}
         </a>
 
         <a href="#" className="admin-link">
@@ -51,7 +51,7 @@ export default function SidebarAdmin() {
             <path d="M4 22h16v-2H4V4H2v18c0 1.1.9 2 2 2zm16-6-5.5-7.5-4.5 
             6L7 10l-5 7h18z"/>
           </svg>
-          {open && <p className="admin-text">Administrador</p>}
+          {open && <p className="admin-text">Relatorios de Funcionários</p>}
         </a>
       </nav>
 
