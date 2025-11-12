@@ -1,28 +1,84 @@
 .header {
-  height: 90px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
+  height: 80px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e4e4e7;
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* todos no início */
-  padding: 0 20px;
-  gap: 20px; /* espaço entre os blocos */
+  justify-content: space-between;
+  padding: 0 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: margin-left 0.3s ease;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-  
-  .sidebar.closed ~ .header {
-    margin-left: 70px;
-  }
+/* Quando sidebar estiver fechada */
+.sidebar.closed ~ .header {
+  margin-left: 70px;
+}
 
-  .search {
+/* Título à esquerda */
+.header-left {
   display: flex;
   align-items: center;
-  background-color: white;
+}
+
+.header-title {
+  font-size: 18px;
+  color: #222;
+  font-weight: 600;
+  margin: 60;
+}
+
+/* 📊 Área da direita */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Estatísticas */
+.stats {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #444;
+  background-color: #f9fafb;
   padding: 6px 12px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  margin-left: auto; /* faz ela ir pro lado direito */
-  margin-right: 20px; /* espaço da borda direita */
+  border-radius: 10px;
+  border: 1px solid #e4e4e7;
 }
 
-  
+/* 👤 Perfil */
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 1px solid #e4e4e7;
+  padding-left: 16px;
+}
+
+.avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-weight: 600;
+  color: #222;
+  margin: 0;
+}
+
+.profile-role {
+  font-size: 12px;
+  color: #777;
+  margin: 0;
+}

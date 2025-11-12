@@ -1,4 +1,4 @@
-import ProdutoModel from '../models/ProdutoModel.js';
+import funcionarioModel from '../models/FuncionarioModel.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
@@ -6,10 +6,10 @@ import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Controller para operações com produtos
-class ProdutoController {
+// Controller para operações com funcionarios
+class funcionarioController {
 
-    // GET /produtos - Listar todos os produtos (com paginação)
+    // GET /funcionarios - Listar todos os funcionarios (com paginação)
     static async listarTodos(req, res) {
         try {
            
@@ -42,11 +42,11 @@ class ProdutoController {
 
             const offset = (pagina - 1) * limite;
 
-            const resultado = await ProdutoModel.listarTodos(limite, offset); // <-- MUDANÇA AQUI
+            const resultado = await funcionarioModel.listarTodos(limite, offset); // <-- MUDANÇA AQUI
 
             res.status(200).json({
                 sucesso: true,
-                dados: resultado.produtos,
+                dados: resultado.funcionarios,
                 paginacao: {
                     pagina: resultado.pagina, // O Model deve calcular e retornar isso
                     limite: resultado.limite, // O Model deve retornar isso
@@ -55,16 +55,16 @@ class ProdutoController {
                 }
             });
         } catch (error) {
-            console.error('Erro ao listar produtos:', error);
+            console.error('Erro ao listar funcionarios:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar os produtos'
+                mensagem: 'Não foi possível listar os funcionarios'
             });
         }
     }
 
-    // GET /produtos/:id - Buscar produto por ID
+    // GET /funcionarios/:id - Buscar funcionario por ID
     static async buscarPorId(req, res) {
         try {
             const { id } = req.params;
@@ -78,31 +78,31 @@ class ProdutoController {
                 });
             }
 
-            const produto = await ProdutoModel.buscarPorId(id);
+            const funcionario = await funcionarioModel.buscarPorId(id);
 
-            if (!produto) {
+            if (!funcionario) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'Produto não encontrado',
-                    mensagem: `Produto com ID ${id} não foi encontrado`
+                    erro: 'funcionario não encontrado',
+                    mensagem: `funcionario com ID ${id} não foi encontrado`
                 });
             }
 
             res.status(200).json({
                 sucesso: true,
-                dados: produto
+                dados: funcionario
             });
         } catch (error) {
-            console.error('Erro ao buscar produto:', error);
+            console.error('Erro ao buscar funcionario:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível buscar o produto'
+                mensagem: 'Não foi possível buscar o funcionario'
             });
         }
     }
 
-    // POST /produtos - Criar novo produto
+    // POST /funcionarios - Criar novo funcionario
     static async criar(req, res) {
         try {
             const { nome, descricao, preco, categoria } = req.body;
@@ -149,8 +149,8 @@ class ProdutoController {
                 });
             }
 
-            // Preparar dados do produto
-            const dadosProduto = {
+            // Preparar dados do funcionario
+            const dadosfuncionario = {
                 nome: nome.trim(),
                 descricao: descricao ? descricao.trim() : null,
                 preco: parseFloat(preco),
@@ -159,30 +159,30 @@ class ProdutoController {
 
             // Adicionar imagem se foi enviada
             if (req.file) {
-                dadosProduto.imagem = req.file.filename;
+                dadosfuncionario.imagem = req.file.filename;
             }
 
-            const produtoId = await ProdutoModel.criar(dadosProduto);
+            const funcionarioId = await funcionarioModel.criar(dadosfuncionario);
 
             res.status(201).json({
                 sucesso: true,
-                mensagem: 'Produto criado com sucesso',
+                mensagem: 'funcionario criado com sucesso',
                 dados: {
-                    id: produtoId,
-                    ...dadosProduto
+                    id: funcionarioId,
+                    ...dadosfuncionario
                 }
             });
         } catch (error) {
-            console.error('Erro ao criar produto:', error);
+            console.error('Erro ao criar funcionario:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível criar o produto'
+                mensagem: 'Não foi possível criar o funcionario'
             });
         }
     }
 
-    // PUT /produtos/:id - Atualizar produto
+    // PUT /funcionarios/:id - Atualizar funcionario
     static async atualizar(req, res) {
         try {
             const { id } = req.params;
@@ -197,13 +197,13 @@ class ProdutoController {
                 });
             }
 
-            // Verificar se o produto existe
-            const produtoExistente = await ProdutoModel.buscarPorId(id);
-            if (!produtoExistente) {
+            // Verificar se o funcionario existe
+            const funcionarioExistente = await funcionarioModel.buscarPorId(id);
+            if (!funcionarioExistente) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'Produto não encontrado',
-                    mensagem: `Produto com ID ${id} não foi encontrado`
+                    erro: 'funcionario não encontrado',
+                    mensagem: `funcionario com ID ${id} não foi encontrado`
                 });
             }
 
@@ -243,8 +243,8 @@ class ProdutoController {
             // Adicionar nova imagem se foi enviada
             if (req.file) {
                 // Remover imagem antiga se existir
-                if (produtoExistente.imagem) {
-                    await removerArquivoAntigo(produtoExistente.imagem, 'imagem');
+                if (funcionarioExistente.imagem) {
+                    await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
                 }
                 dadosAtualizacao.imagem = req.file.filename;
             }
@@ -258,26 +258,26 @@ class ProdutoController {
                 });
             }
 
-            const resultado = await ProdutoModel.atualizar(id, dadosAtualizacao);
+            const resultado = await funcionarioModel.atualizar(id, dadosAtualizacao);
 
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'Produto atualizado com sucesso',
+                mensagem: 'funcionario atualizado com sucesso',
                 dados: {
                     linhasAfetadas: resultado.affectedRows || 1
                 }
             });
         } catch (error) {
-            console.error('Erro ao atualizar produto:', error);
+            console.error('Erro ao atualizar funcionario:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível atualizar o produto'
+                mensagem: 'Não foi possível atualizar o funcionario'
             });
         }
     }
 
-    // DELETE /produtos/:id - Excluir produto
+    // DELETE /funcionarios/:id - Excluir funcionario
     static async excluir(req, res) {
         try {
             const { id } = req.params;
@@ -291,51 +291,51 @@ class ProdutoController {
                 });
             }
 
-            // Verificar se o produto existe
-            const produtoExistente = await ProdutoModel.buscarPorId(id);
-            if (!produtoExistente) {
+            // Verificar se o funcionario existe
+            const funcionarioExistente = await funcionarioModel.buscarPorId(id);
+            if (!funcionarioExistente) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'Produto não encontrado',
-                    mensagem: `Produto com ID ${id} não foi encontrado`
+                    erro: 'funcionario não encontrado',
+                    mensagem: `funcionario com ID ${id} não foi encontrado`
                 });
             }
 
-            // Remover imagem do produto se existir
-            if (produtoExistente.imagem) {
-                await removerArquivoAntigo(produtoExistente.imagem, 'imagem');
+            // Remover imagem do funcionario se existir
+            if (funcionarioExistente.imagem) {
+                await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
             }
 
-            const resultado = await ProdutoModel.excluir(id);
+            const resultado = await funcionarioModel.excluir(id);
 
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'Produto excluído com sucesso',
+                mensagem: 'funcionario excluído com sucesso',
                 dados: {
                     linhasAfetadas: resultado || 1
                 }
             });
         } catch (error) {
-            console.error('Erro ao excluir produto:', error);
+            console.error('Erro ao excluir funcionario:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível excluir o produto'
+                mensagem: 'Não foi possível excluir o funcionario'
             });
         }
     }
 
-    // POST /produtos/upload - Upload de imagem para produto
+    // POST /funcionarios/upload - Upload de imagem para funcionario
     static async uploadImagem(req, res) {
         try {
-            const { produto_id } = req.body;
+            const { funcionario_id } = req.body;
 
             // Validações básicas
-            if (!produto_id || isNaN(produto_id)) {
+            if (!funcionario_id || isNaN(funcionario_id)) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'ID de produto inválido',
-                    mensagem: 'O ID do produto é obrigatório e deve ser um número válido'
+                    erro: 'ID de funcionario inválido',
+                    mensagem: 'O ID do funcionario é obrigatório e deve ser um número válido'
                 });
             }
 
@@ -347,23 +347,23 @@ class ProdutoController {
                 });
             }
 
-            // Verificar se o produto existe
-            const produtoExistente = await ProdutoModel.buscarPorId(produto_id);
-            if (!produtoExistente) {
+            // Verificar se o funcionario existe
+            const funcionarioExistente = await funcionarioModel.buscarPorId(funcionario_id);
+            if (!funcionarioExistente) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'Produto não encontrado',
-                    mensagem: `Produto com ID ${produto_id} não foi encontrado`
+                    erro: 'funcionario não encontrado',
+                    mensagem: `funcionario com ID ${funcionario_id} não foi encontrado`
                 });
             }
 
             // Remover imagem antiga se existir
-            if (produtoExistente.imagem) {
-                await removerArquivoAntigo(produtoExistente.imagem, 'imagem');
+            if (funcionarioExistente.imagem) {
+                await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
             }
 
-            // Atualizar produto com a nova imagem
-            await ProdutoModel.atualizar(produto_id, { imagem: req.file.filename });
+            // Atualizar funcionario com a nova imagem
+            await funcionarioModel.atualizar(funcionario_id, { imagem: req.file.filename });
 
             res.status(200).json({
                 sucesso: true,
@@ -384,5 +384,5 @@ class ProdutoController {
     }
 }
 
-export default ProdutoController;
+export default funcionarioController;
 

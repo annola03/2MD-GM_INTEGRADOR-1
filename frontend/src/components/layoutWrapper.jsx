@@ -4,6 +4,7 @@ import Sidebar from "@/components/blocks/Navbar/Sidebar";
 import Header from "@/components/blocks/Navbar/Header";
 import BaterPontoWidget from "@/components/BaterPontoWidget/BaterPontoWidget";
 import SidebarAdmin from "@/components/blocks/Navbar/SidebarAdmin";
+import HeaderAdmin from "@/components/blocks/Navbar/HeaderAdmin";
 
 export default function layoutWrapper({ children }) {
   const pathname = usePathname();
@@ -14,9 +15,9 @@ export default function layoutWrapper({ children }) {
       <div className="app-container">
           {pathname !== "/" && isAdminPage ? <SidebarAdmin /> : pathname !== "/" && <Sidebar />}
           <main className="main-content">
-            {pathname !== "/" && <Header />}
+            {pathname !== "/" && isAdminPage ? <HeaderAdmin /> : pathname !== "/" && <Header />}
             {children}
-            {pathname !== "/" && <BaterPontoWidget/>}
+            {pathname !== "/" && pathname !==  "/Admin" && <BaterPontoWidget/>}
 
           </main>
         </div>

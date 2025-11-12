@@ -6,7 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 // Importar rotas
-import produtoRotas from './routes/produtoRotas.js';
+import funcionarioRotas from './routes/funcionarioRotas.js';
 import authRotas from './routes/authRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import usuarioRotas from './routes/usuarioRotas.js';
@@ -48,7 +48,7 @@ app.use(logMiddleware);
 
 // Rotas da API
 app.use('/api/auth', authRotas);
-app.use('/api/produtos', produtoRotas);
+app.use('/api/funcionarios', funcionarioRotas);
 app.use('/api/criptografia', criptografiaRotas);
 app.use('/api/usuarios', usuarioRotas);
 
@@ -56,22 +56,22 @@ app.use('/api/usuarios', usuarioRotas);
 app.get('/', (req, res) => {
     res.json({
         sucesso: true,
-        mensagem: 'API de Produtos - Sistema de Gestão',
+        mensagem: 'API de funcionarios - Sistema de Gestão',
         versao: '1.0.0',
         rotas: {
             autenticacao: '/api/auth',
-            produtos: '/api/produtos',
+            funcionarios: '/api/funcionarios',
             criptografia: '/api/criptografia'
         },
         documentacao: {
             login: 'POST /api/auth/login',
             registrar: 'POST /api/auth/registrar',
             perfil: 'GET /api/auth/perfil',
-            listarProdutos: 'GET /api/produtos',
-            buscarProduto: 'GET /api/produtos/:id',
-            criarProduto: 'POST /api/produtos',
-            atualizarProduto: 'PUT /api/produtos/:id',
-            excluirProduto: 'DELETE /api/produtos/:id',
+            listarfuncionarios: 'GET /api/funcionarios',
+            buscarfuncionario: 'GET /api/funcionarios/:id',
+            criarfuncionario: 'POST /api/funcionarios',
+            atualizarfuncionario: 'PUT /api/funcionarios/:id',
+            excluirfuncionario: 'DELETE /api/funcionarios/:id',
             infoCriptografia: 'GET /api/criptografia/info',
             cadastrarUsuario: 'POST /api/criptografia/cadastrar-usuario'
         }
@@ -94,7 +94,7 @@ app.use(errorMiddleware);
 app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
     console.log(`📱 Acesse: http://localhost:${PORT}`);
-    console.log(`📚 API de Produtos - Sistema de Gestão`);
+    console.log(`📚 API de funcionarios - Sistema de Gestão`);
     console.log(`🔧 Ambiente: ${process.env.NODE_ENV || 'development'}`);
 });
 
