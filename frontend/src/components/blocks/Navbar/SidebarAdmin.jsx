@@ -25,7 +25,7 @@ export default function SidebarAdmin() {
       </div>
 
       <nav className="admin-menu">
-        <a href="#" className="admin-link admin-active">
+        <a href="/Admin/Cadastro" className="admin-link admin-active">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
             <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 
             2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 
@@ -62,7 +62,7 @@ export default function SidebarAdmin() {
           2.59zM19 3h-8v2h8v14h-8v2h8c1.1 
           0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
         </svg>
-        {open && <p className="admin-text">Administrador</p>}
+        {open && <p className="admin-text">Sair</p>}
       </button>
     </aside>
   );

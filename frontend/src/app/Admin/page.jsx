@@ -15,7 +15,7 @@ export default function AdminPage() {
 
         <section className="cards">
            <InfoCard
-    title="Administrador Rebecca"
+    title="Administrador Rebecc"
     value="153 usuários"
     image="/imagens/perfil.png" 
   />
