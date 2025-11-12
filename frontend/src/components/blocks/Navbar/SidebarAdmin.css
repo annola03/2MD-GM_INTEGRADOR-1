@@ -1,8 +1,11 @@
 .admin-sidebar {
-  width: 260px;
+  width: 300px;
   height: 100vh;
-  background-color: #2563eb;
-  color: white;
+  background: rgba(37, 99, 235, 0.15); 
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -11,68 +14,149 @@
   top: 0;
   left: 0;
   z-index: 1000;
+  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease-in-out;
+  overflow: hidden;
+}
+.admin-sidebar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #60a5fa, transparent, #60a5fa);
+  opacity: 0.6;
+  animation: glowFlow 4s linear infinite;
+}
+
+@keyframes glowFlow {
+  0% { opacity: 0.2; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.2; }
+}
+
+
+.admin-sidebar.closed {
+  width: 90px;
 }
 
 .admin-logo {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  gap: 12px;
+  margin-top: 10px;
 }
 
+
 .admin-logo img {
-  width: 40px;
-  border-radius: 12px;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.8)) brightness(1.2);
+  transition: transform 0.3s ease;
+}
+.admin-logo img:hover {
+  transform: scale(1.08);
 }
 
 .admin-role {
   font-size: 14px;
-  opacity: 0.8;
-  margin-top: 8px;
+  letter-spacing: 1px;
+  color: #cbd5e1;
+  text-transform: uppercase;
 }
-
 .admin-menu {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 12px;
   margin-top: 40px;
 }
 
 .admin-link {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
+  gap: 14px;
+  color: #e0e7ff;
   text-decoration: none;
-  padding: 12px 10px;
-  border-radius: 8px;
-  transition: 0.3s;
-  white-space: nowrap;
+  padding: 12px 14px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-size: 15px;
   position: relative;
-  top: 100px;
+  overflow: hidden;
 }
 
-
+.admin-link svg {
+  min-width: 24px;
+  transition: transform 0.3s ease;
+}
+.admin-link:hover svg {
+  transform: scale(1.15);
+}
+.admin-link::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(59,130,246,0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.admin-link:hover::before {
+  opacity: 1;
+}
 .admin-link:hover,
 .admin-active {
-  background-color: rgba(255, 255, 255, 0.15);
+  background: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 0 12px rgba(96, 165, 250, 0.4);
+  transform: translateX(6px);
 }
 
+
 .admin-logout-btn {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  background: linear-gradient(90deg, rgba(59,130,246,0.3), rgba(37,99,235,0.1));
+  color: #fff;
   border: none;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.3s;
-  position: relative;
-  top: 400px;
+  gap: 10px;
+  transition: all 0.3s ease;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
 }
 
 .admin-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(59,130,246,0.4);
+  box-shadow: 0 0 15px rgba(59,130,246,0.6);
+  transform: scale(1.05);
+}
+.toggle {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 20px;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: all 0.3s ease;
+}
+
+.toggle:hover {
+  color: #93c5fd;
+  transform: rotate(-180deg);
+}
+.admin-text {
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+}
+.admin-sidebar.closed .admin-text {
+  opacity: 0;
+  pointer-events: none;
 }

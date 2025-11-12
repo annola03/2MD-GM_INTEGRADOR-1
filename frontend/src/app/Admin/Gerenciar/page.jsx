@@ -4,11 +4,12 @@ import "./gerenciar.css";
 
 export default function GerenciarUsuarios() {
   const [busca, setBusca] = useState("");
-  const [usuarios, setUsuarios] = useState([
-    { id: 1, nome: "Anna Costa", cargo: "Supervisora", turno: "Matutino", email: "anna@gm.com" },
-    { id: 2, nome: "Willian Rocha", cargo: "Técnico", turno: "Diurno", email: "willian@gm.com" },
-    { id: 3, nome: "Rebecca Lima", cargo: "RH", turno: "Noturno", email: "rebecca@gm.com" },
-  ]);
+ const [usuarios, setUsuarios] = useState([
+  { id: 1, nome: "Anna Costa", cargo: "Supervisora", turno: "Matutino", email: "anna@gm.com", senha: "senha123" },
+  { id: 2, nome: "Willian Rocha", cargo: "Técnico", turno: "Diurno", email: "willian@gm.com", senha: "1234abcd" },
+  { id: 3, nome: "Rebecca Lima", cargo: "RH", turno: "Noturno", email: "rebecca@gm.com", senha: "admin001" },
+]);
+
 
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [usuarioExcluir, setUsuarioExcluir] = useState(null);
@@ -59,7 +60,8 @@ export default function GerenciarUsuarios() {
               <th>Nome</th>
               <th>Cargo</th>
               <th>Turno</th>
-              <th>Email</th>
+              <th>GMID</th>
+             <th>Senha</th> 
               <th>Ações</th>
             </tr>
           </thead>
@@ -70,6 +72,8 @@ export default function GerenciarUsuarios() {
                 <td>{u.cargo}</td>
                 <td>{u.turno}</td>
                 <td>{u.email}</td>
+                <td>{"•".repeat(8)}</td> 
+
                 <td className="acoes">
                   <button className="btn-editar" onClick={() => setUsuarioEditando({ ...u })}>
                     Editar
@@ -127,6 +131,14 @@ export default function GerenciarUsuarios() {
               value={usuarioEditando.email}
               onChange={(e) =>
                 setUsuarioEditando({ ...usuarioEditando, email: e.target.value })
+              }
+            />
+            <label>Senha</label>
+            <input
+              type="password"
+              value={usuarioEditando.senha}
+              onChange={(e) =>
+                setUsuarioEditando({ ...usuarioEditando, senha: e.target.value })
               }
             />
 

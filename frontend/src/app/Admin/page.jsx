@@ -36,7 +36,7 @@ export default function AdminPage() {
 
           <TableCard
             title="Relatórios Recentes"
-            headers={["ID", "Responsável", "Data", "Status"]}
+            headers={["GMID", "Responsável", "Data", "Status"]}
             data={[
               ["#R1023", "Marcos Dias", "05/11/2025", "Concluído"],
               ["#R1024", "Ana Paula", "04/11/2025", "Pendente"],

@@ -15,11 +15,11 @@ export default function Sidebar() {
 
       <div className="logo">
         <img
-          src="/imagens/logo-Preta.png"
+          src="/imagens/logoNova.png"
           width="28"
           height="28"
           alt="logo"
-          style={{ filter: "invert()" }}
+          style={{ width:"50px", height:"50px", backgroundColor:"white", borderRadius:"10px"}}
         />
         {open && <span>Painel de controle</span>}
       </div>

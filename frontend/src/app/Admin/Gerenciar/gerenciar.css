@@ -165,7 +165,22 @@ h1 {
   border-color: #3a9bff;
   box-shadow: 0 0 10px #3a9bff;
 }
+.modal-content select {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
 
+
+.modal-content select option {
+  background: #0e2a6a; 
+  color: #fff; 
+}
+
+.modal-content select option:hover {
+  background: #1e40af; 
+  color: #fff;
+}
 .modal-botoes {
   display: flex;
   justify-content: space-between;

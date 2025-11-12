@@ -1,11 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import "./SidebarAdmin.css";
+import { usePathname } from "next/navigation";
 
 export default function SidebarAdmin() {
   const imagens = ["/imagens/img1.png", "/imagens/img2.png", "/imagens/img3.png"];
   const [atual, setAtual] = useState(0); 
   const [open, setOpen] = useState(false);
+    const pathname = usePathname(); 
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,13 +22,23 @@ export default function SidebarAdmin() {
       <button className="toggle" onClick={() => setOpen(!open)}>
         ❮
       </button>
+       
       <div className="admin-logo">
-        <img src="/imagens/logo-Preta.png" alt="Logo do administrador" style={{filter:"invert()"}}/>
+         <a href="/Admin">
+        <img src="/imagens/logoNova.png" 
+        alt="Logo do administrador" 
+        style={{ width:"50px", height:"50px", backgroundColor:"white"}}
+        />
+        </a>
         {open && <p className="admin-role">Administrador</p>}
+        
       </div>
 
       <nav className="admin-menu">
-        <a href="/Admin/Cadastro" className="admin-link admin-active">
+          <a
+          href="/Admin/Cadastro"
+          className={`admin-link ${pathname === "/Admin/Cadastro" ? "admin-active" : ""}`}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
             <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 
             2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 
@@ -36,7 +49,10 @@ export default function SidebarAdmin() {
           {open && <p className="admin-text">Cadastro de Funcionário</p>}
         </a>
 
-        <a href="#" className="admin-link">
+           <a
+          href="/Admin/Gerenciar"
+          className={`admin-link ${pathname === "/Admin/Gerenciar" ? "admin-active" : ""}`}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
             <path d="M14 2H6c-1.1 0-2 .9-2 
             2v16c0 1.1.9 2 2 2h12c1.1 0 
@@ -46,7 +62,10 @@ export default function SidebarAdmin() {
           {open && <p className="admin-text">Gerenciar Funcionário</p>}
         </a>
 
-        <a href="#" className="admin-link">
+            <a
+          href="/Admin/Relatorios"
+          className={`admin-link ${pathname === "/Admin/Relatorios" ? "admin-active" : ""}`}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 24 24">
             <path d="M4 22h16v-2H4V4H2v18c0 1.1.9 2 2 2zm16-6-5.5-7.5-4.5 
             6L7 10l-5 7h18z"/>

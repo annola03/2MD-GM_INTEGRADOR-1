@@ -79,7 +79,7 @@ export default function CadastroFuncionario() {
         </div>
 
         <div className="form-group">
-          <label>Email</label>
+          <label>GMID</label>
           <input
             type="email"
             name="email"
@@ -89,16 +89,7 @@ export default function CadastroFuncionario() {
           />
         </div>
 
-        <div className="form-group">
-          <label>Telefone</label>
-          <input
-            type="tel"
-            name="telefone"
-            value={form.telefone}
-            onChange={handleChange}
-            placeholder="(00) 00000-0000"
-          />
-        </div>
+      
 
         <button type="submit" className="btn-cadastrar">
           Cadastrar Funcionário
