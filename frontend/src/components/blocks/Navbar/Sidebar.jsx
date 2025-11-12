@@ -114,6 +114,21 @@ export default function Sidebar() {
             open={open}
           />
         </Link>
+
+        <Link href="/Ponto">
+          <SidebarItem
+            icon={
+              <img
+                src="https://img.icons8.com/ios-filled/50/FFFFFF/combo-chart.png"
+                alt="Ponto demonstrativo"
+                width="22"
+                height="22"
+              />
+            }
+            text="Ponto demonstrativo"
+            open={open}
+          />
+        </Link>
       </ul>
     </aside>
   );

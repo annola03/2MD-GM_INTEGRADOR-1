@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Sidebar from "@/components/blocks/Navbar/Sidebar";
 import Header from "@/components/blocks/Navbar/Header";
-import BaterPontoWidget from "@/components/BaterPontoWidget/BaterPontoWidget";
+import BaterPontoWidget from "@/app/Ponto/page";
 import SidebarAdmin from "@/components/blocks/Navbar/SidebarAdmin";
 import HeaderAdmin from "@/components/blocks/Navbar/HeaderAdmin";
 
@@ -17,7 +17,6 @@ export default function layoutWrapper({ children }) {
           <main className="main-content">
             {pathname !== "/" && isAdminPage ? <HeaderAdmin /> : pathname !== "/" && <Header />}
             {children}
-            {!pathname.startsWith("/Admin") && pathname !== "/" && <BaterPontoWidget />}
 
           </main>
         </div>
