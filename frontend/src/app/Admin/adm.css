@@ -1,57 +1,95 @@
-/* ======== Layout Geral ======== */
 .admin-container {
   display: flex;
   height: 100vh;
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(180deg, #e8efff 0%, #f5f8ff 100%);
+  background: radial-gradient(circle at top left, #c7d2fe 0%, #eef2ff 40%, #ffffff 100%);
   padding: 20px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .admin-content {
   flex: 1;
   padding: 30px 50px;
   overflow-y: auto;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .admin-header {
   margin-bottom: 30px;
+  text-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
+}
+.admin-header h1 {
+  color: #1e3a8a;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  position: relative;
 }
 
-.admin-header h1 {
-  color: #1e40af;
-  font-size: 28px;
-  font-weight: 600;
+.admin-header h1::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #2563eb, #60a5fa);
 }
 
 .admin-header p {
   color: #555;
   font-size: 15px;
+  margin-top: 10px;
 }
 
-/* ======== Cards de Info ======== */
+
 .cards {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .profile-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 20px;
-  background: #ffffff;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 18px;
   padding: 25px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease-in-out;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  transition: all 0.3s ease-in-out;
   flex: 1 1 300px;
+  overflow: hidden;
+}
+.profile-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(37,99,235,0.15), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
+.profile-card:hover::before {
+  opacity: 1;
+}
 .profile-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
 }
 
 .profile-image {
@@ -63,12 +101,15 @@
 }
 
 .profile-image img {
-  width: 120px; 
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
+  border: 2px solid #3b82f6;
   object-fit: cover;
-  border: 4px solid #3b82f6;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+.profile-card:hover .profile-image img {
+  transform: scale(1.05);
 }
 
 .profile-info h3 {
@@ -84,7 +125,6 @@
   margin-top: 6px;
 }
 
-/* ======== Seção de Tabelas ======== */
 .admin-table {
   display: flex;
   flex-wrap: wrap;
@@ -94,24 +134,28 @@
 }
 
 .admin-table .card {
-  background: #fff;
-  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
   padding: 25px;
   color: #111;
   flex: 1 1 48%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: 0.3s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .admin-table .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
 }
 
 .admin-table h2 {
   color: #1e40af;
   font-size: 18px;
   margin-bottom: 15px;
+  border-bottom: 2px solid #2563eb;
+  display: inline-block;
+  padding-bottom: 4px;
 }
 
 
@@ -119,25 +163,27 @@ table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 thead {
-  background-color: #2563eb;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
   color: white;
 }
-
 th,
 td {
-  padding: 12px;
+  padding: 12px 14px;
   text-align: left;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #f3f6ff;
+  background-color: rgba(226, 232, 255, 0.6);
 }
 
 tbody tr:hover {
-  background-color: #e6edff;
+  background-color: rgba(219, 234, 254, 0.8);
+  transition: 0.2s;
 }
 
 .ativo {
@@ -155,6 +201,6 @@ tbody tr:hover {
 }
 
 .admin-content::-webkit-scrollbar-thumb {
-  background-color: #93c5fd;
+  background: linear-gradient(180deg, #60a5fa, #2563eb);
   border-radius: 4px;
 }
