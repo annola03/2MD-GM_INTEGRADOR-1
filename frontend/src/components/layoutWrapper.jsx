@@ -17,7 +17,7 @@ export default function layoutWrapper({ children }) {
           <main className="main-content">
             {pathname !== "/" && isAdminPage ? <HeaderAdmin /> : pathname !== "/" && <Header />}
             {children}
-            {pathname !== "/" && pathname !==  "/Admin" && <BaterPontoWidget/>}
+            {!pathname.startsWith("/Admin") && pathname !== "/" && <BaterPontoWidget />}
 
           </main>
         </div>

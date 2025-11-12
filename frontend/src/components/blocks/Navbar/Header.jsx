@@ -4,7 +4,7 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header-left">
-        <h2 className="header-title">Painel de Registro</h2>
+        <h2 className="header-title">Painel do Ponto Eletronico</h2>
       </div>
 
       <div className="header-right">
