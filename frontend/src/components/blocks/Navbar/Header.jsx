@@ -17,7 +17,7 @@ export default function Header() {
         <div className="profile">
           <img src="https://i.pravatar.cc/40" alt="User" className="avatar" />
           <div className="profile-info">
-            <p className="profile-name">Lenis Albert</p>
+            <p className="profile-name">Lewis Hamilton</p>
             <p className="profile-role">Usuario</p>
           </div>
         </div>
