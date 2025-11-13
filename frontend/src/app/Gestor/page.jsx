@@ -7,12 +7,12 @@ export default function GestorPage() {
   const [timeSelecionado, setTimeSelecionado] = useState("Todos");
 
   const areas = ["Todos", "Produção", "RH", "TI", "Financeiro"];
-  const times = ["Todos", "Time A", "Time B", "Time C"];
+  const times = ["Todos", "Manutenção ", "Engenharia Industrial", "Masc "];
 
   const colaboradores = [
-    { nome: "Anna Costa", area: "RH", time: "Time A", status: "Ativo" },
-    { nome: "João Pedro", area: "TI", time: "Time B", status: "Ausente" },
-    { nome: "Mariana Silva", area: "Produção", time: "Time C", status: "Ativo" },
+    { nome: "Anna Costa", area: "RH", time: "Engenharia Industrial", status: "Ativo" },
+    { nome: "João Pedro", area: "TI", time: "Manutenção", status: "Ausente" },
+    { nome: "Mariana Silva", area: "Produção", time: "Masc", status: "Ativo" },
   ];
 
   const [form, setForm] = useState({ nome: "", horarioAntigo: "", novoHorario: "", motivo: "" });
@@ -82,7 +82,7 @@ export default function GestorPage() {
             <div key={i} className="time-card">
               <h3>{colab.nome}</h3>
               <p><strong>Área:</strong> {colab.area}</p>
-              <p><strong>Time:</strong> {colab.time}</p>
+              <p><strong>Shop:</strong> {colab.time}</p>
               <p className={`status ${colab.status === "Ativo" ? "ativo" : "ausente"}`}>
                 {colab.status}
               </p>

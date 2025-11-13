@@ -12,6 +12,7 @@ export default function GerenciarUsuarios() {
 
 
   const [usuarioEditando, setUsuarioEditando] = useState(null);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
   const [usuarioExcluir, setUsuarioExcluir] = useState(null);
 
   const handleSaveEdit = () => {
@@ -34,15 +35,9 @@ export default function GerenciarUsuarios() {
     <div className="gerenciar-container">
       <div className="titulo-section">
         <p className="subtitulo">GESTÃO DE USUÁRIOS - GM</p>
-        <h1>Gerencie colaboradores de forma moderna e intuitiva</h1>
+        <h1>Gerencie colaboradores </h1>
         <div className="input-wrapper">
-    <img
-      src="https://img.icons8.com/ios-glyphs/30/FFFFFF/search--v1.png" 
-      width={"20px"}
-      height={"20px"}
-      alt="buscar"
-      className="icone-busca"
-    />
+  
     <input
       type="text"
       placeholder="Buscar colaborador..."
@@ -133,14 +128,27 @@ export default function GerenciarUsuarios() {
                 setUsuarioEditando({ ...usuarioEditando, email: e.target.value })
               }
             />
-            <label>Senha</label>
-            <input
-              type="password"
-              value={usuarioEditando.senha}
-              onChange={(e) =>
-                setUsuarioEditando({ ...usuarioEditando, senha: e.target.value })
-              }
-            />
+          <label>Senha</label>
+<div className="senha-wrapper">
+  <input
+    type={mostrarSenha ? "text" : "password"}
+    value={usuarioEditando.senha}
+    onChange={(e) =>
+      setUsuarioEditando({ ...usuarioEditando, senha: e.target.value })
+    }
+  />
+  <img
+    src={
+      mostrarSenha
+        ? "https://img.icons8.com/ios-filled/24/000000/visible.png"
+        : "https://img.icons8.com/ios-filled/24/000000/invisible.png"
+    }
+    alt="mostrar senha"
+    className="icone-olho"
+    onClick={() => setMostrarSenha(!mostrarSenha)}
+  />
+</div>
+
 
             <div className="modal-botoes">
               <button className="btn-salvar" onClick={handleSaveEdit}>Salvar</button>
