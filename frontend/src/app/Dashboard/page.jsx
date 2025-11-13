@@ -71,21 +71,21 @@ export default function Dashboard() {
                 <td>08:00</td>
                 <td>17:00</td>
                 <td>Manhã</td>
-                <td className="ok">✔️ Pontual</td>
+                <td className="ok"> Pontual</td>
               </tr>
               <tr>
                 <td>João Lima</td>
                 <td>08:45</td>
                 <td>17:30</td>
                 <td>Manhã</td>
-                <td className="late">⏰ Atraso</td>
+                <td className="late"> Atraso</td>
               </tr>
               <tr>
                 <td>Ana Costa</td>
                 <td>14:00</td>
                 <td>22:00</td>
                 <td>Tarde</td>
-                <td className="ok">✔️ Pontual</td>
+                <td className="ok"> Pontual</td>
               </tr>
             </tbody>
           </table>

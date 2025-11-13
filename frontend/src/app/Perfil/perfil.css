@@ -17,7 +17,7 @@
   flex-direction: column;
   padding: 35px 20px;
   border-radius: 16px;
-  margin: 40px 40px 40px 15px; /* 🔹 Sidebar mais próxima da lateral */
+  margin: 40px 40px 40px 15px;
   height: fit-content;
   position: sticky;
   top: 30px;
@@ -61,8 +61,8 @@
   flex: 1;
   padding: 40px 60px;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center; /* 🔹 Centraliza horizontalmente */
+  align-items: flex-start; /* 🔹 Mantém alinhado mais próximo do topo */
   position: relative;
 }
 
@@ -94,10 +94,18 @@
   flex-direction: column;
   align-items: center;
   gap: 35px;
-  margin-left: 60px;
   animation: fadeIn 0.3s ease;
 }
 
+/* Centralização extra */
+.edit-profile,
+.history,
+.notifications,
+.security {
+  margin-left: 0;
+}
+
+/* ======= TÍTULOS ======= */
 .edit-profile h2,
 .history h2,
 .notifications h2,
@@ -279,6 +287,7 @@ td.late {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 .input-block {
@@ -291,6 +300,20 @@ td.late {
   font-weight: 600;
   font-size: 15px;
   color: #233266;
+}
+
+.input-block input {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1.5px solid #cdd7ff;
+  background-color: #f8faff;
+  transition: 0.25s;
+}
+
+.input-block input:focus {
+  border-color: #4a6cf7;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
 }
 
 /* ======= ANIMAÇÃO ======= */
@@ -316,6 +339,8 @@ td.late {
 
   .profile-content {
     padding: 30px 20px;
+    justify-content: center;
+    align-items: center;
   }
 
   .edit-profile,

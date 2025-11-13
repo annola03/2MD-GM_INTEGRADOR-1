@@ -52,10 +52,10 @@
 }
 
 /* ==== CORES DOS CARDS ==== */
-.summary-card.blue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.summary-card.purple { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.summary-card.pink { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.summary-card.green { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+.summary-card.blue { background: linear-gradient(135deg, #4a6cf7, #1a237e); }
+.summary-card.purple { background: linear-gradient(135deg, #4a6cf7, #1a237e); }
+.summary-card.pink { background: linear-gradient(135deg, #4a6cf7, #1a237e); }
+.summary-card.green {background: linear-gradient(135deg, #4a6cf7, #1a237e); }
 
 /* ==== GRID PRINCIPAL ==== */
 .dashboard-grid {
