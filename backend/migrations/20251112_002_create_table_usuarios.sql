@@ -1,5 +1,5 @@
 -- Migration: Criar tabela usuarios
--- Data: 2025-01-15
+-- Data: 2025-11-12
 -- Descrição: Tabela para armazenar usuários do sistema
 
 USE Funcionarios_api;

@@ -55,36 +55,6 @@ export default function Sidebar() {
           />
         </Link>
 
-        <Link href="/projects">
-          <SidebarItem
-            icon={
-              <img
-                src="https://img.icons8.com/ios-filled/50/FFFFFF/folder-invoices.png"
-                alt="Projetos"
-                width="22"
-                height="22"
-              />
-            }
-            text="Projects"
-            open={open}
-          />
-        </Link>
-
-        <Link href="/tasks">
-          <SidebarItem
-            icon={
-              <img
-                src="https://img.icons8.com/ios-filled/50/FFFFFF/checked-checkbox.png"
-                alt="Tarefas"
-                width="22"
-                height="22"
-              />
-            }
-            text="Tasks"
-            open={open}
-          />
-        </Link>
-
         <Link href="/chats">
           <SidebarItem
             icon={
@@ -100,7 +70,7 @@ export default function Sidebar() {
           />
         </Link>
 
-        <Link href="/reports">
+        <Link href="/Dashboard">
           <SidebarItem
             icon={
               <img
@@ -119,10 +89,11 @@ export default function Sidebar() {
           <SidebarItem
             icon={
               <img
-                src="https://img.icons8.com/ios-filled/50/FFFFFF/combo-chart.png"
+                src="https://img.icons8.com/ios-filled/50/clock.png"
                 alt="Ponto demonstrativo"
                 width="22"
                 height="22"
+                style={{filter:"invert()"}}
               />
             }
             text="Ponto demonstrativo"

@@ -1,8 +1,8 @@
 -- Migration: Criar tabela logs
--- Data: 2025-10-28
+-- Data: 2025-11-12
 -- Descrição: Tabela para registrar logs de acesso às rotas da API
 
-USE produtos_api;
+USE Funcionarios_api;
 
 CREATE TABLE IF NOT EXISTS logs (
     id INT PRIMARY KEY AUTO_INCREMENT,
