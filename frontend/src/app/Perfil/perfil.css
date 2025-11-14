@@ -1,4 +1,4 @@
-/* ======= LAYOUT GERAL ======= */
+/*  LAYOUT GERAL  */
 .profile-page {
   display: flex;
   min-height: 100vh;
@@ -8,7 +8,7 @@
   padding-left: 90px;
 }
 
-/* ======= SIDEBAR ======= */
+/*  SIDEBAR  */
 .profile-sidebar {
   width: 240px;
   background: linear-gradient(180deg, #1a237e, #3f51b5);
@@ -56,13 +56,13 @@
   box-shadow: 0 4px 12px rgba(74, 108, 247, 0.4);
 }
 
-/* ======= CONTEÚDO PRINCIPAL ======= */
+/*  CONTEÚDO PRINCIPAL  */
 .profile-content {
   flex: 1;
   padding: 40px 60px;
   display: flex;
-  justify-content: center; /* 🔹 Centraliza horizontalmente */
-  align-items: flex-start; /* 🔹 Mantém alinhado mais próximo do topo */
+  justify-content: center; 
+  align-items: flex-start;
   position: relative;
 }
 
@@ -78,7 +78,7 @@
   opacity: 0.9;
 }
 
-/* ======= QUADROS GERAIS ======= */
+/*  QUADROS GERAIS  */
 .edit-profile,
 .history,
 .notifications,
@@ -97,7 +97,7 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Centralização extra */
+
 .edit-profile,
 .history,
 .notifications,
@@ -105,7 +105,7 @@
   margin-left: 0;
 }
 
-/* ======= TÍTULOS ======= */
+/*  TÍTULOS  */
 .edit-profile h2,
 .history h2,
 .notifications h2,
@@ -115,7 +115,7 @@
   color: #1a237e;
 }
 
-/* ======= FOTO DE PERFIL ======= */
+/*  FOTO DE PERFIL  */
 .profile-photo {
   display: flex;
   flex-direction: column;
@@ -162,7 +162,7 @@
   box-shadow: 0 4px 15px rgba(74, 108, 247, 0.3);
 }
 
-/* ======= FORMULÁRIO ======= */
+/*  FORMULÁRIO  */
 .profile-form {
   width: 100%;
   display: flex;
@@ -204,7 +204,7 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
 }
 
-/* ======= BOTÕES ======= */
+/*  BOTÕES  */
 .save-btn {
   margin-top: 15px;
   background: linear-gradient(135deg, #3d5af1, #293e9a);
@@ -225,7 +225,7 @@ input:focus {
   box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
 }
 
-/* ======= TABELAS ======= */
+/*  TABELAS  */
 .card {
   width: 100%;
   background: white;
@@ -265,7 +265,7 @@ td.late {
   font-weight: 600;
 }
 
-/* ======= NOTIFICAÇÕES ======= */
+/*  NOTIFICAÇÕES  */
 .notif-list {
   list-style: none;
   padding: 0;
@@ -282,7 +282,7 @@ td.late {
   border-bottom: none;
 }
 
-/* ======= SEGURANÇA ======= */
+/*  SEGURANÇA  */
 .security-form {
   display: flex;
   flex-direction: column;
@@ -316,13 +316,13 @@ td.late {
   box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.1);
 }
 
-/* ======= ANIMAÇÃO ======= */
+/*  ANIMAÇÃO  */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ======= RESPONSIVO ======= */
+/* RESPONSIVO */
 @media (max-width: 1024px) {
   .profile-page {
     flex-direction: column;

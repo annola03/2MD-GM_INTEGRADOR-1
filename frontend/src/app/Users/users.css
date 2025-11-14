@@ -32,7 +32,7 @@
   font-weight: 700;
 }
 
-/* --- Botões e ações --- */
+/*  Botões e ações  */
 .actions {
   display: flex;
   gap: 10px;
@@ -63,7 +63,7 @@
   background-color: #d1d5db;
 }
 
-/* --- Tabela de usuários --- */
+/*  Tabela de usuários  */
 .table-container {
   background: #fff;
   border-radius: 12px;
@@ -89,7 +89,7 @@
   border-bottom: 1px solid #eee;
 }
 
-/* --- Quando não há dados --- */
+/*  Quando não há dados  */
 .sem-dados {
   text-align: center;
   vertical-align: middle;
@@ -112,7 +112,7 @@
   }
 }
 
-/* --- Status de funcionário --- */
+/*  Status de funcionário  */
 .status {
   padding: 5px 10px;
   border-radius: 20px;
@@ -130,7 +130,7 @@
   color: #dc2626;
 }
 
-/* --- Botões de ações --- */
+/*  Botões de ações  */
 .acoes button {
   border: none;
   background: none;

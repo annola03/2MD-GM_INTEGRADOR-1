@@ -148,7 +148,7 @@
 .dot.purple { background: #6a88e7; }
 .dot.pink { background: #2c5d96; }
 
-/* ==== TABELA ==== */
+/*  TABELA  */
 .table-card {
   height: 360px;
   overflow-y: auto;
@@ -182,12 +182,12 @@
   font-weight: 600;
 }
 
-/* ==== QUADRO MENOR (ajustado) ==== */
+/*  QUADRO MENOR (ajustado)  */
 .white-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   color: #333;
-  height: 220px; /* 🔹 reduzido para ser menor */
+  height: 220px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -207,7 +207,7 @@
   border-top: 1px solid #e5e7eb;
 }
 
-/* ==== RESPONSIVIDADE ==== */
+/*  RESPONSIVIDADE */
 @media (max-width: 950px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
