@@ -6,75 +6,26 @@ import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// ===== VALIDAR GMID =====
+function validarGMID(gmid) {
+    const regex = /^[A-Z0-9]{6}$/; // 6 caracteres, letras maiúsculas e números
+    return regex.test(gmid);
+}
+
 class funcionarioController {
-
-    // GET /funcionarios - Listar todos os funcionários (com paginação)
-    static async listarTodos(req, res) {
-        try {
-            let pagina = parseInt(req.query.pagina) || 1;
-            let limite = parseInt(req.query.limite) || 10;
-
-            if (pagina <= 0) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Página inválida',
-                    mensagem: 'A página deve ser maior que zero.'
-                });
-            }
-
-            if (limite <= 0) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Limite inválido',
-                    mensagem: 'O limite deve ser maior que zero.'
-                });
-            }
-
-            const limiteMaximo = parseInt(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
-
-            if (limite > limiteMaximo) {
-                return res.status(400).json({
-                    sucesso: false,
-                    erro: 'Limite inválido',
-                    mensagem: `O limite deve ser entre 1 e ${limiteMaximo}`
-                });
-            }
-
-            const offset = (pagina - 1) * limite;
-
-            const resultado = await funcionarioModel.listarTodos(limite, offset);
-
-            res.status(200).json({
-                sucesso: true,
-                dados: resultado.funcionarios,
-                paginacao: {
-                    pagina: resultado.pagina,
-                    limite: resultado.limite,
-                    total: resultado.total,
-                    totalPaginas: resultado.totalPaginas
-                }
-            });
-
-        } catch (error) {
-            console.error('Erro ao listar funcionários:', error);
-            res.status(500).json({
-                sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar os funcionários.'
-            });
-        }
-    }
 
     // GET /funcionarios/:GMID - Buscar funcionário por GMID
     static async buscarPorGMID(req, res) {
         try {
-            const { GMID } = req.params;
+            let { GMID } = req.params;
 
-            if (!GMID || isNaN(GMID)) {
+            GMID = GMID.toUpperCase();
+
+            if (!validarGMID(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'GMID inválido',
-                    mensagem: 'O GMID deve ser numérico.'
+                    mensagem: 'GMID deve ter exatamente 6 caracteres, somente letras maiúsculas e números.'
                 });
             }
 
@@ -106,18 +57,20 @@ class funcionarioController {
     // POST /funcionarios - Criar funcionário
     static async criar(req, res) {
         try {
-            const { GMID, Entrada, Saida, Turno } = req.body;
+            let { GMID, Entrada, Saida, Turno } = req.body;
 
             const erros = [];
 
-            // GMID
-            if (!GMID || GMID.trim() === '') {
+            if (!GMID) {
                 erros.push({ campo: 'GMID', mensagem: 'GMID é obrigatório.' });
-            } else if (GMID.trim().length < 3) {
-                erros.push({ campo: 'GMID', mensagem: 'GMID deve ter no mínimo 3 caracteres.' });
+            } else {
+                GMID = GMID.toUpperCase();
+
+                if (!validarGMID(GMID)) {
+                    erros.push({ campo: 'GMID', mensagem: 'GMID deve ter exatamente 6 caracteres, apenas letras maiúsculas e números.' });
+                }
             }
 
-            // Saída
             if (!Saida) {
                 erros.push({ campo: 'Saida', mensagem: 'Saída é obrigatória.' });
             }
@@ -131,7 +84,7 @@ class funcionarioController {
             }
 
             const dadosFuncionario = {
-                GMID: GMID.trim(),
+                GMID,
                 Entrada: Entrada || null,
                 Saida: Saida || null,
                 Turno: Turno || 'Geral',
@@ -165,14 +118,16 @@ class funcionarioController {
     // PUT /funcionarios/:GMID - Atualizar funcionário
     static async atualizar(req, res) {
         try {
-            const { GMID } = req.params;
+            let { GMID } = req.params;
             const { Entrada, Saida, Turno } = req.body;
 
-            if (!GMID || isNaN(GMID)) {
+            GMID = GMID.toUpperCase();
+
+            if (!validarGMID(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'GMID inválido',
-                    mensagem: 'GMID deve ser numérico.'
+                    mensagem: 'GMID deve ter exatamente 6 caracteres, somente letras maiúsculas e números.'
                 });
             }
 
@@ -227,13 +182,15 @@ class funcionarioController {
     // DELETE /funcionarios/:GMID - Excluir funcionário
     static async excluir(req, res) {
         try {
-            const { GMID } = req.params;
+            let { GMID } = req.params;
 
-            if (!GMID || isNaN(GMID)) {
+            GMID = GMID.toUpperCase();
+
+            if (!validarGMID(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'GMID inválido',
-                    mensagem: 'GMID deve ser numérico.'
+                    mensagem: 'GMID deve ter exatamente 6 caracteres, letras maiúsculas e números.'
                 });
             }
 
@@ -271,13 +228,15 @@ class funcionarioController {
     // POST /funcionarios/upload - Upload de imagem
     static async uploadImagem(req, res) {
         try {
-            const { funcionario_GMID } = req.body;
+            let { funcionario_GMID } = req.body;
 
-            if (!funcionario_GMID || isNaN(funcionario_GMID)) {
+            funcionario_GMID = funcionario_GMID.toUpperCase();
+
+            if (!validarGMID(funcionario_GMID)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'GMID inválido',
-                    mensagem: 'O GMID deve ser numérico.'
+                    mensagem: 'GMID deve conter 6 caracteres, letras maiúsculas e números.'
                 });
             }
 
