@@ -27,6 +27,14 @@ export default function Home() {
 
   return (
     <main>
+       <div className="fixed-logo">
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/General_Motors_%282021%29.svg/2048px-General_Motors_%282021%29.svg.png" 
+      alt="Logo"
+      className="logo-img"
+    />
+    </div>
+
       <div className="login-container">
         <div className="login-left">
 
@@ -56,6 +64,8 @@ export default function Home() {
 
   
         <div className="login-right">
+            
+
           <div className="login-box">
             <h2>Log In</h2>
             <p>
