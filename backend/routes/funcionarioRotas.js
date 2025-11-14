@@ -7,13 +7,13 @@ const router = express.Router();
 
 // Rotas públicas (não precisam de autenticação)
 router.get('/', FuncionarioController.listarTodos);
-router.get('/:id', FuncionarioController.buscarPorId);
+router.get('/:GMID', FuncionarioController.buscarPorGMID);
 
 // Rotas protegidas (precisam de autenticação)
 router.post('/', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.criar);
 router.post('/upload', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.uploadImagem);
-router.put('/:id', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.atualizar);
-router.delete('/:id', authMiddleware, FuncionarioController.excluir);
+router.put('/:GMID', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.atualizar);
+router.delete('/:GMID', authMiddleware, FuncionarioController.excluir);
 
 // Rotas OPTIONS para CORS (preflight requests)
 router.options('/', (req, res) => {
@@ -30,7 +30,7 @@ router.options('/upload', (req, res) => {
     res.status(200).send();
 });
 
-router.options('/:id', (req, res) => {
+router.options('/:GMID', (req, res) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
