@@ -6,13 +6,11 @@ import { removerArquivoAntigo } from '../middlewares/uploadMiddleware.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Controller para operações com funcionarios
 class funcionarioController {
 
-    // GET /funcionarios - Listar todos os funcionarios (com paginação)
+    // GET /funcionarios - Listar todos os funcionários (com paginação)
     static async listarTodos(req, res) {
         try {
-           
             let pagina = parseInt(req.query.pagina) || 1;
             let limite = parseInt(req.query.limite) || 10;
 
@@ -20,71 +18,73 @@ class funcionarioController {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Página inválida',
-                    mensagem: 'A página deve ser um número maior que zero'
+                    mensagem: 'A página deve ser maior que zero.'
                 });
             }
+
             if (limite <= 0) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Limite inválido',
-                    mensagem: 'O limite deve ser um número maior que zero'
+                    mensagem: 'O limite deve ser maior que zero.'
                 });
             }
 
             const limiteMaximo = parseInt(process.env.PAGINACAO_LIMITE_MAXIMO) || 100;
+
             if (limite > limiteMaximo) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Limite inválido',
-                    mensagem: `O limite deve ser um número entre 1 e ${limiteMaximo}`
+                    mensagem: `O limite deve ser entre 1 e ${limiteMaximo}`
                 });
             }
 
             const offset = (pagina - 1) * limite;
 
-            const resultado = await funcionarioModel.listarTodos(limite, offset); // <-- MUDANÇA AQUI
+            const resultado = await funcionarioModel.listarTodos(limite, offset);
 
             res.status(200).json({
                 sucesso: true,
                 dados: resultado.funcionarios,
                 paginacao: {
-                    pagina: resultado.pagina, // O Model deve calcular e retornar isso
-                    limite: resultado.limite, // O Model deve retornar isso
-                    total: resultado.total,   // O Model deve calcular e retornar isso
-                    totalPaginas: resultado.totalPaginas // O Model deve calcular e retornar isso
+                    pagina: resultado.pagina,
+                    limite: resultado.limite,
+                    total: resultado.total,
+                    totalPaginas: resultado.totalPaginas
                 }
             });
+
         } catch (error) {
-            console.error('Erro ao listar funcionarios:', error);
+            console.error('Erro ao listar funcionários:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível listar os funcionarios'
+                mensagem: 'Não foi possível listar os funcionários.'
             });
         }
     }
 
-    // GET /funcionarios/:id - Buscar funcionario por ID
-    static async buscarPorId(req, res) {
+    // GET /funcionarios/:GMID - Buscar funcionário por GMID
+    static async buscarPorGMID(req, res) {
         try {
-            const { id } = req.params;
+            const { GMID } = req.params;
 
-            // Validação básica do ID
-            if (!id || isNaN(id)) {
+            if (!GMID || isNaN(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'ID inválido',
-                    mensagem: 'O ID deve ser um número válido'
+                    erro: 'GMID inválido',
+                    mensagem: 'O GMID deve ser numérico.'
                 });
             }
 
-            const funcionario = await funcionarioModel.buscarPorId(id);
+            const funcionario = await funcionarioModel.buscarPorGMID(GMID);
 
             if (!funcionario) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'funcionario não encontrado',
-                    mensagem: `funcionario com ID ${id} não foi encontrado`
+                    erro: 'Funcionário não encontrado',
+                    mensagem: `Nenhum funcionário com GMID ${GMID}`
                 });
             }
 
@@ -92,55 +92,36 @@ class funcionarioController {
                 sucesso: true,
                 dados: funcionario
             });
+
         } catch (error) {
-            console.error('Erro ao buscar funcionario:', error);
+            console.error('Erro ao buscar funcionário:', error);
             res.status(500).json({
                 sucesso: false,
                 erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível buscar o funcionario'
+                mensagem: 'Não foi possível consultar o funcionário.'
             });
         }
     }
 
-    // POST /funcionarios - Criar novo funcionario
+    // POST /funcionarios - Criar funcionário
     static async criar(req, res) {
         try {
-            const { nome, descricao, preco, categoria } = req.body;
+            const { GMID, Entrada, Saida, Turno } = req.body;
 
-            // Validações manuais - coletar todos os erros
             const erros = [];
 
-            // Validar nome
-            if (!nome || nome.trim() === '') {
-                erros.push({
-                    campo: 'nome',
-                    mensagem: 'Nome é obrigatório'
-                });
-            } else {
-                if (nome.trim().length < 3) {
-                    erros.push({
-                        campo: 'nome',
-                        mensagem: 'O nome deve ter pelo menos 3 caracteres'
-                    });
-                }
-
-                if (nome.trim().length > 255) {
-                    erros.push({
-                        campo: 'nome',
-                        mensagem: 'O nome deve ter no máximo 255 caracteres'
-                    });
-                }
+            // GMID
+            if (!GMID || GMID.trim() === '') {
+                erros.push({ campo: 'GMID', mensagem: 'GMID é obrigatório.' });
+            } else if (GMID.trim().length < 3) {
+                erros.push({ campo: 'GMID', mensagem: 'GMID deve ter no mínimo 3 caracteres.' });
             }
 
-            // Validar preço
-            if (!preco || isNaN(preco) || preco <= 0) {
-                erros.push({
-                    campo: 'preco',
-                    mensagem: 'Preço deve ser um número positivo'
-                });
+            // Saída
+            if (!Saida) {
+                erros.push({ campo: 'Saida', mensagem: 'Saída é obrigatória.' });
             }
 
-            // Se houver erros, retornar todos de uma vez
             if (erros.length > 0) {
                 return res.status(400).json({
                     sucesso: false,
@@ -149,240 +130,199 @@ class funcionarioController {
                 });
             }
 
-            // Preparar dados do funcionario
-            const dadosfuncionario = {
-                nome: nome.trim(),
-                descricao: descricao ? descricao.trim() : null,
-                preco: parseFloat(preco),
-                categoria: categoria ? categoria.trim() : 'Geral'
+            const dadosFuncionario = {
+                GMID: GMID.trim(),
+                Entrada: Entrada || null,
+                Saida: Saida || null,
+                Turno: Turno || 'Geral',
             };
 
-            // Adicionar imagem se foi enviada
             if (req.file) {
-                dadosfuncionario.imagem = req.file.filename;
+                dadosFuncionario.imagem = req.file.filename;
             }
 
-            const funcionarioId = await funcionarioModel.criar(dadosfuncionario);
+            const novoId = await funcionarioModel.criar(dadosFuncionario);
 
             res.status(201).json({
                 sucesso: true,
-                mensagem: 'funcionario criado com sucesso',
+                mensagem: 'Funcionário criado com sucesso.',
                 dados: {
-                    id: funcionarioId,
-                    ...dadosfuncionario
+                    id: novoId,
+                    ...dadosFuncionario
                 }
             });
+
         } catch (error) {
-            console.error('Erro ao criar funcionario:', error);
+            console.error('Erro ao criar funcionário:', error);
             res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível criar o funcionario'
+                erro: 'Erro interno',
+                mensagem: 'Não foi possível criar o funcionário.'
             });
         }
     }
 
-    // PUT /funcionarios/:id - Atualizar funcionario
+    // PUT /funcionarios/:GMID - Atualizar funcionário
     static async atualizar(req, res) {
         try {
-            const { id } = req.params;
-            const { nome, descricao, preco, categoria } = req.body;
+            const { GMID } = req.params;
+            const { Entrada, Saida, Turno } = req.body;
 
-            // Validação do ID
-            if (!id || isNaN(id)) {
+            if (!GMID || isNaN(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'ID inválido',
-                    mensagem: 'O ID deve ser um número válido'
+                    erro: 'GMID inválido',
+                    mensagem: 'GMID deve ser numérico.'
                 });
             }
 
-            // Verificar se o funcionario existe
-            const funcionarioExistente = await funcionarioModel.buscarPorId(id);
+            const funcionarioExistente = await funcionarioModel.buscarPorGMID(GMID);
+
             if (!funcionarioExistente) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'funcionario não encontrado',
-                    mensagem: `funcionario com ID ${id} não foi encontrado`
+                    erro: 'Funcionário não encontrado',
+                    mensagem: `Nenhum funcionário com GMID ${GMID}`
                 });
             }
 
-            // Preparar dados para atualização
             const dadosAtualizacao = {};
 
-            if (nome !== undefined) {
-                if (nome.trim() === '') {
-                    return res.status(400).json({
-                        sucesso: false,
-                        erro: 'Nome inválido',
-                        mensagem: 'O nome não pode estar vazio'
-                    });
-                }
-                dadosAtualizacao.nome = nome.trim();
-            }
+            if (Entrada !== undefined) dadosAtualizacao.Entrada = Entrada;
+            if (Saida !== undefined) dadosAtualizacao.Saida = Saida;
+            if (Turno !== undefined) dadosAtualizacao.Turno = Turno;
 
-            if (preco !== undefined) {
-                if (isNaN(preco) || preco <= 0) {
-                    return res.status(400).json({
-                        sucesso: false,
-                        erro: 'Preço inválido',
-                        mensagem: 'O preço deve ser um número maior que zero'
-                    });
-                }
-                dadosAtualizacao.preco = parseFloat(preco);
-            }
-
-            if (descricao !== undefined) {
-                dadosAtualizacao.descricao = descricao ? descricao.trim() : null;
-            }
-
-            if (categoria !== undefined) {
-                dadosAtualizacao.categoria = categoria ? categoria.trim() : 'Geral';
-            }
-
-            // Adicionar nova imagem se foi enviada
             if (req.file) {
-                // Remover imagem antiga se existir
                 if (funcionarioExistente.imagem) {
                     await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
                 }
                 dadosAtualizacao.imagem = req.file.filename;
             }
 
-            // Verificar se há dados para atualizar
             if (Object.keys(dadosAtualizacao).length === 0) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'Nenhum dado para atualizar',
-                    mensagem: 'Forneça pelo menos um campo para atualizar'
+                    erro: 'Nenhum dado enviado',
+                    mensagem: 'Envie pelo menos um campo para atualizar.'
                 });
             }
 
-            const resultado = await funcionarioModel.atualizar(id, dadosAtualizacao);
+            await funcionarioModel.atualizar(GMID, dadosAtualizacao);
 
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'funcionario atualizado com sucesso',
-                dados: {
-                    linhasAfetadas: resultado.affectedRows || 1
-                }
+                mensagem: 'Funcionário atualizado com sucesso.'
             });
+
         } catch (error) {
-            console.error('Erro ao atualizar funcionario:', error);
+            console.error('Erro ao atualizar funcionário:', error);
             res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível atualizar o funcionario'
+                erro: 'Erro interno',
+                mensagem: 'Não foi possível atualizar o funcionário.'
             });
         }
     }
 
-    // DELETE /funcionarios/:id - Excluir funcionario
+    // DELETE /funcionarios/:GMID - Excluir funcionário
     static async excluir(req, res) {
         try {
-            const { id } = req.params;
+            const { GMID } = req.params;
 
-            // Validação do ID
-            if (!id || isNaN(id)) {
+            if (!GMID || isNaN(GMID)) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'ID inválido',
-                    mensagem: 'O ID deve ser um número válido'
+                    erro: 'GMID inválido',
+                    mensagem: 'GMID deve ser numérico.'
                 });
             }
 
-            // Verificar se o funcionario existe
-            const funcionarioExistente = await funcionarioModel.buscarPorId(id);
+            const funcionarioExistente = await funcionarioModel.buscarPorGMID(GMID);
+
             if (!funcionarioExistente) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'funcionario não encontrado',
-                    mensagem: `funcionario com ID ${id} não foi encontrado`
+                    erro: 'Funcionário não encontrado',
+                    mensagem: `Nenhum funcionário com GMID ${GMID}`
                 });
             }
 
-            // Remover imagem do funcionario se existir
             if (funcionarioExistente.imagem) {
                 await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
             }
 
-            const resultado = await funcionarioModel.excluir(id);
+            await funcionarioModel.excluir(GMID);
 
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'funcionario excluído com sucesso',
-                dados: {
-                    linhasAfetadas: resultado || 1
-                }
+                mensagem: 'Funcionário excluído com sucesso.'
             });
+
         } catch (error) {
-            console.error('Erro ao excluir funcionario:', error);
+            console.error('Erro ao excluir funcionário:', error);
             res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível excluir o funcionario'
+                erro: 'Erro interno',
+                mensagem: 'Não foi possível excluir o funcionário.'
             });
         }
     }
 
-    // POST /funcionarios/upload - Upload de imagem para funcionario
+    // POST /funcionarios/upload - Upload de imagem
     static async uploadImagem(req, res) {
         try {
-            const { funcionario_id } = req.body;
+            const { funcionario_GMID } = req.body;
 
-            // Validações básicas
-            if (!funcionario_id || isNaN(funcionario_id)) {
+            if (!funcionario_GMID || isNaN(funcionario_GMID)) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'ID de funcionario inválido',
-                    mensagem: 'O ID do funcionario é obrigatório e deve ser um número válido'
+                    erro: 'GMID inválido',
+                    mensagem: 'O GMID deve ser numérico.'
                 });
             }
 
             if (!req.file) {
                 return res.status(400).json({
                     sucesso: false,
-                    erro: 'Imagem não fornecida',
-                    mensagem: 'É necessário enviar uma imagem'
+                    erro: 'Imagem ausente',
+                    mensagem: 'Você deve enviar uma imagem.'
                 });
             }
 
-            // Verificar se o funcionario existe
-            const funcionarioExistente = await funcionarioModel.buscarPorId(funcionario_id);
-            if (!funcionarioExistente) {
+            const funcionario = await funcionarioModel.buscarPorGMID(funcionario_GMID);
+
+            if (!funcionario) {
                 return res.status(404).json({
                     sucesso: false,
-                    erro: 'funcionario não encontrado',
-                    mensagem: `funcionario com ID ${funcionario_id} não foi encontrado`
+                    erro: 'Funcionário não encontrado',
+                    mensagem: `Nenhum funcionário com GMID ${funcionario_GMID}`
                 });
             }
 
-            // Remover imagem antiga se existir
-            if (funcionarioExistente.imagem) {
-                await removerArquivoAntigo(funcionarioExistente.imagem, 'imagem');
+            if (funcionario.imagem) {
+                await removerArquivoAntigo(funcionario.imagem, 'imagem');
             }
 
-            // Atualizar funcionario com a nova imagem
-            await funcionarioModel.atualizar(funcionario_id, { imagem: req.file.filename });
+            await funcionarioModel.atualizar(funcionario_GMID, { imagem: req.file.filename });
 
             res.status(200).json({
                 sucesso: true,
-                mensagem: 'Imagem enviada com sucesso',
+                mensagem: 'Imagem enviada com sucesso.',
                 dados: {
-                    nomeArquivo: req.file.filename,
+                    arquivo: req.file.filename,
                     caminho: `/uploads/imagens/${req.file.filename}`
                 }
             });
+
         } catch (error) {
-            console.error('Erro ao fazer upload de imagem:', error);
+            console.error('Erro ao fazer upload:', error);
             res.status(500).json({
                 sucesso: false,
-                erro: 'Erro interno do servidor',
-                mensagem: 'Não foi possível fazer upload da imagem'
+                erro: 'Erro interno',
+                mensagem: 'Não foi possível enviar a imagem.'
             });
         }
     }
 }
 
 export default funcionarioController;
-
