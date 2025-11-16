@@ -1,6 +1,15 @@
+"use client";
+import { useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 import "./header.css";
 
 export default function Header() {
+  const { user, carregando } = useContext(UserContext);
+
+  if (carregando) {
+    return null;
+  }
+
   return (
     <header className="header">
       <div className="header-left">
@@ -15,10 +24,15 @@ export default function Header() {
         </div>
 
         <div className="profile">
-          <img src="https://i.pravatar.cc/40" alt="User" className="avatar" />
+          <img
+            src="https://i.pravatar.cc/40"
+            alt="User"
+            className="avatar"
+          />
+
           <div className="profile-info">
-            <p className="profile-name">Lewis Hamilton</p>
-            <p className="profile-role">Usuario</p>
+            <p className="profile-name">{user?.nome}</p>
+            <p className="profile-role">{user?.tipo}</p>
           </div>
         </div>
       </div>

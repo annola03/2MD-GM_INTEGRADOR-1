@@ -1,11 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { UserContext } from "@/context/UserContext";
 import SidebarItem from "./SidebarItem";
-import Link from "next/link"; 
+import Link from "next/link";
 import "./sidebar.css";
 
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
+
+  const { user } = useContext(UserContext);
+
+  // Permissões
+  const podeVerAdmin = user?.tipo === "admin" || user?.tipo === "gestor";
 
   return (
     <aside className={`sidebar ${!open ? "closed" : ""}`}>
@@ -19,12 +25,18 @@ export default function Sidebar() {
           width="28"
           height="28"
           alt="logo"
-          style={{ width:"50px", height:"50px", backgroundColor:"white", borderRadius:"10px"}}
+          style={{
+            width: "50px",
+            height: "50px",
+            backgroundColor: "white",
+            borderRadius: "10px",
+          }}
         />
         {open && <span>Painel de controle</span>}
       </div>
 
       <ul>
+        {/* Perfil */}
         <Link href="/Perfil">
           <SidebarItem
             icon={
@@ -40,21 +52,25 @@ export default function Sidebar() {
           />
         </Link>
 
-        <Link href="/Users">
-          <SidebarItem
-            icon={
-              <img
-                src="https://img.icons8.com/?size=100&id=MBPMOlrj4qML&format=png&color=FFFFFF"
-                alt="Usuários"
-                width="22"
-                height="22"
-              />
-            }
-            text="Usuários"
-            open={open}
-          />
-        </Link>
+        {/* Usuários - só admin e gestor */}
+        {podeVerAdmin && (
+          <Link href="/Users">
+            <SidebarItem
+              icon={
+                <img
+                  src="https://img.icons8.com/?size=100&id=MBPMOlrj4qML&format=png&color=FFFFFF"
+                  alt="Usuários"
+                  width="22"
+                  height="22"
+                />
+              }
+              text="Usuários"
+              open={open}
+            />
+          </Link>
+        )}
 
+        {/* Chats */}
         <Link href="/chats">
           <SidebarItem
             icon={
@@ -70,21 +86,25 @@ export default function Sidebar() {
           />
         </Link>
 
-        <Link href="/Dashboard">
-          <SidebarItem
-            icon={
-              <img
-                src="https://img.icons8.com/ios-filled/50/FFFFFF/combo-chart.png"
-                alt="Relatórios"
-                width="22"
-                height="22"
-              />
-            }
-            text="Reports"
-            open={open}
-          />
-        </Link>
+        {/* Dashboard - só admin e gestor */}
+        {podeVerAdmin && (
+          <Link href="/Dashboard">
+            <SidebarItem
+              icon={
+                <img
+                  src="https://img.icons8.com/ios-filled/50/FFFFFF/combo-chart.png"
+                  alt="Relatórios"
+                  width="22"
+                  height="22"
+                />
+              }
+              text="Reports"
+              open={open}
+            />
+          </Link>
+        )}
 
+        {/* Ponto demonstrativo */}
         <Link href="/Ponto">
           <SidebarItem
             icon={
@@ -93,7 +113,7 @@ export default function Sidebar() {
                 alt="Ponto demonstrativo"
                 width="22"
                 height="22"
-                style={{filter:"invert()"}}
+                style={{ filter: "invert()" }}
               />
             }
             text="Ponto demonstrativo"
