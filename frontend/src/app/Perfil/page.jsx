@@ -9,7 +9,6 @@ export default function ProfilePage() {
   const [selected, setSelected] = useState("edit");
   const [loading, setLoading] = useState(true);
 
-
   const [profile, setProfile] = useState({
     nome: "",
     sobrenome: "",
@@ -20,7 +19,6 @@ export default function ProfilePage() {
     estado: "",
     imagem: "",
   });
-
 
   useEffect(() => {
     if (!user) return;
@@ -45,7 +43,9 @@ export default function ProfilePage() {
             endereco: f.endereco || "",
             cidade: f.cidade || "",
             estado: f.estado || "",
-            imagem: f.imagem ? `http://localhost:3001/uploads/imagens/${f.imagem}` : "/imagens/avatar.png",
+            imagem: f.imagem
+              ? `http://localhost:3001/uploads/imagens/${f.imagem}`
+              : "/imagens/avatar.png",
           });
         }
       })
@@ -53,7 +53,6 @@ export default function ProfilePage() {
   }, [user]);
 
   if (loading) return <p>Carregando perfil...</p>;
-
 
   const salvarAlteracoes = async (e) => {
     e.preventDefault();
@@ -80,7 +79,6 @@ export default function ProfilePage() {
       .then((res) => res.json())
       .then(() => alert("Perfil atualizado!"));
   };
-
 
   const trocarFoto = async (e) => {
     const file = e.target.files[0];
@@ -115,10 +113,30 @@ export default function ProfilePage() {
       <aside className="profile-sidebar">
         <h2>Meu Perfil</h2>
         <ul>
-          <li className={selected === "edit" ? "active" : ""} onClick={() => setSelected("edit")}>Editar Perfil</li>
-          <li className={selected === "history" ? "active" : ""} onClick={() => setSelected("history")}>Histórico</li>
-          <li className={selected === "notifications" ? "active" : ""} onClick={() => setSelected("notifications")}>Notificações</li>
-          <li className={selected === "security" ? "active" : ""} onClick={() => setSelected("security")}>Segurança</li>
+          <li
+            className={selected === "edit" ? "active" : ""}
+            onClick={() => setSelected("edit")}
+          >
+            Editar Perfil
+          </li>
+          <li
+            className={selected === "history" ? "active" : ""}
+            onClick={() => setSelected("history")}
+          >
+            Histórico
+          </li>
+          <li
+            className={selected === "notifications" ? "active" : ""}
+            onClick={() => setSelected("notifications")}
+          >
+            Notificações
+          </li>
+          <li
+            className={selected === "security" ? "active" : ""}
+            onClick={() => setSelected("security")}
+          >
+            Segurança
+          </li>
         </ul>
       </aside>
 
@@ -136,7 +154,12 @@ export default function ProfilePage() {
 
               <label className="change-photo-btn">
                 Alterar
-                <input type="file" accept="image/*" onChange={trocarFoto} hidden />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={trocarFoto}
+                  hidden
+                />
               </label>
             </div>
 
@@ -147,12 +170,16 @@ export default function ProfilePage() {
                   <input
                     type="text"
                     value={profile.nome}
-                    onChange={(e) => setProfile({ ...profile, nome: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, nome: e.target.value })
+                    }
                   />
                   <input
                     type="text"
                     value={profile.sobrenome}
-                    onChange={(e) => setProfile({ ...profile, sobrenome: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, sobrenome: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -162,7 +189,9 @@ export default function ProfilePage() {
                 <input
                   type="email"
                   value={profile.email}
-                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, email: e.target.value })
+                  }
                 />
               </div>
 
@@ -171,7 +200,9 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={profile.telefone}
-                  onChange={(e) => setProfile({ ...profile, telefone: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, telefone: e.target.value })
+                  }
                 />
               </div>
 
@@ -180,7 +211,9 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={profile.endereco}
-                  onChange={(e) => setProfile({ ...profile, endereco: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, endereco: e.target.value })
+                  }
                 />
               </div>
 
@@ -190,21 +223,107 @@ export default function ProfilePage() {
                   <input
                     type="text"
                     value={profile.cidade}
-                    onChange={(e) => setProfile({ ...profile, cidade: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, cidade: e.target.value })
+                    }
                   />
                   <input
                     type="text"
                     value={profile.estado}
-                    onChange={(e) => setProfile({ ...profile, estado: e.target.value })}
+                    onChange={(e) =>
+                      setProfile({ ...profile, estado: e.target.value })
+                    }
                   />
                 </div>
               </div>
 
-              <button type="submit" className="save-btn">Salvar Alterações</button>
+              <button type="submit" className="save-btn">
+                Salvar Alterações
+              </button>
             </form>
           </section>
         )}
 
+        {/* === HISTÓRICO === */}
+        {selected === "history" && (
+          <section className="history">
+            <h2>Histórico de Frequência</h2>
+            <div className="card">
+              <table>
+                {" "}
+                <thead>
+                  <tr>
+                    {" "}
+                    <th>Data</th>
+                    <th>Entrada</th>
+                    <th>Saída</th>
+                    <th>Status</th>
+                  </tr>{" "}
+                </thead>
+                <tbody>
+                  <tr>
+                    {" "}
+                    <td>11/11/2025</td>
+                    <td>08:03</td>
+                    <td>17:00</td>
+                    <td className="ok">Pontual</td>
+                  </tr>
+                  <tr>
+                    {" "}
+                    <td>10/11/2025</td>
+                    <td>08:20</td>
+                    <td>17:05</td>
+                    <td className="late">Atraso</td>
+                  </tr>
+                  <tr>
+                    {" "}
+                    <td>09/11/2025</td>
+                    <td>07:58</td>
+                    <td>17:02</td>
+                    <td className="ok">Pontual</td>
+                  </tr>{" "}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
+        {/* === NOTIFICAÇÕES === */}
+        {selected === "notifications" && (
+          <section className="notifications">
+            <h2>Notificações</h2>
+            <div className="card">
+              <ul className="notif-list">
+                <li>Você bateu ponto com atraso em 10/11.</li>
+                <li>Registro de ponto confirmado em 11/11.</li>
+                <li>Atualização do turno de quinta-feira.</li>
+              </ul>
+            </div>
+          </section>
+        )}
+        {/* === SEGURANÇA === */}
+        {selected === "security" && (
+          <section className="security">
+            <h2>Segurança</h2>
+            <div className="card">
+              <p>Altere sua senha para manter sua conta segura:</p>
+              <form className="security-form">
+                <div className="input-block">
+                  <label>Senha atual</label>
+                  <input type="password" placeholder="Digite sua senha atual" />
+                </div>{" "}
+                <div className="input-block">
+                  <label>Nova senha</label>
+                  <input type="password" placeholder="Digite a nova senha" />
+                </div>{" "}
+                <div className="input-block">
+                  <label>Confirmar nova senha</label>
+                  <input type="password" placeholder="Confirme a nova senha" />
+                </div>
+                <button className="save-btn">Atualizar Senha</button>
+              </form>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
