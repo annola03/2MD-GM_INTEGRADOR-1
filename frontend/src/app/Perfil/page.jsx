@@ -52,7 +52,7 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  if (loading) return <p>Carregando perfil...</p>;
+  
 
   const salvarAlteracoes = async (e) => {
     e.preventDefault();

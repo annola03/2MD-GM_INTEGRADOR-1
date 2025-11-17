@@ -10,10 +10,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 70px 8%;
-  background: linear-gradient(135deg, #3c2be3, #673fd7);
+
+  /* GRADIENTE + IMAGEM JUNTOS */
+  background: url(/imagens/fotoTracker.png) ;
+  background-size: cover;    /* ajusta a imagem */
+  background-position: center right; /* puxa ela para o lado direito */
+  background-repeat: no-repeat;
+  background-position: bottom;
+
+
   color: white;
-  
 }
+
+
+
+
 
 .hero-left {
   max-width: 500px;
@@ -33,7 +44,7 @@
 }
 
 .hero-title span {
-  color: #d8c3ff;
+  color: #3c2be3;
 }
 
 .hero-text {
@@ -65,10 +76,7 @@
   color: white;
 }
 
-.hero img {
-  width: 350px;
-  filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
-}
+
 
 /* ---------------- SERVICES (CARDS NOTÍCIAS) ---------------- */
 

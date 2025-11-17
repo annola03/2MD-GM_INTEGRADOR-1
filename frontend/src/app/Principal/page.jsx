@@ -23,7 +23,7 @@ export default function HomePage() {
             <button className="btn primary">Clique aqui!</button>
           </div>
         </div>
-    
+     
 
       </section>
 
