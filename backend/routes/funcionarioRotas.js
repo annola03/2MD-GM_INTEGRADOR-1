@@ -6,7 +6,7 @@ import { uploadImagens, handleUploadError } from '../middlewares/uploadMiddlewar
 const router = express.Router();
 
 // Rotas públicas (não precisam de autenticação)
-router.get('/', FuncionarioController.listarTodos);
+
 router.get('/:GMID', FuncionarioController.buscarPorGMID);
 
 // Rotas protegidas (precisam de autenticação)
