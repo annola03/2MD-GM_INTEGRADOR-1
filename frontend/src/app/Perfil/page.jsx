@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "@/context/UserContext";
 import "./perfil.css";
 
 export default function ProfilePage() {
