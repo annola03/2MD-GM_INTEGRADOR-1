@@ -20,7 +20,7 @@ class CriptografiaController {
      */
     static async cadastrarUsuario(req, res) {
         try {
-            const { nome, email, senha, tipo } = req.body;
+            const { nome, email_padrao, senha, tipo } = req.body;
             
             console.log('🔐 DEMONSTRAÇÃO DE CRIPTOGRAFIA DE SENHAS');
             console.log('==========================================');
@@ -39,7 +39,7 @@ class CriptografiaController {
                 });
             }
 
-            if (!email || email.trim() === '') {
+            if (!email_padrao || email_padrao.trim() === '') {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email obrigatório',
@@ -67,8 +67,8 @@ class CriptografiaController {
                 });
             }
 
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            const email_padraoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email_padraoRegex.test(email_padrao)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email inválido',
@@ -93,7 +93,7 @@ class CriptografiaController {
             console.log('2️⃣ VERIFICAÇÃO DE USUÁRIO EXISTENTE');
             console.log('-----------------------------------');
             
-            const usuarioExistente = await UsuarioModel.buscarPorEmail(email);
+            const usuarioExistente = await UsuarioModel.buscarPorEmail_padrao(email_padrao);
             if (usuarioExistente) {
                 console.log('❌ Usuário já existe no banco de dados');
                 return res.status(409).json({
@@ -136,14 +136,14 @@ class CriptografiaController {
             
             const dadosUsuario = {
                 nome: nome.trim(),
-                email: email.trim().toLowerCase(),
+                email_padrao: email_padrao.trim().toLowerCase(),
                 senha: senhaHash, // ← SENHA CRIPTOGRAFADA
                 tipo: tipo || 'comum'
             };
 
             console.log('📦 Dados preparados para o banco:');
             console.log('   Nome:', dadosUsuario.nome);
-            console.log('   Email:', dadosUsuario.email);
+            console.log('   Email:', dadosUsuario.email_padrao);
             console.log('   Tipo:', dadosUsuario.tipo);
             console.log('   Senha: [CRIPTOGRAFADA - não visível]');
             console.log('');
@@ -177,7 +177,7 @@ class CriptografiaController {
                 dados: {
                     id: usuarioId,
                     nome: dadosUsuario.nome,
-                    email: dadosUsuario.email,
+                    email_padrao: dadosUsuario.email_padrao,
                     tipo: dadosUsuario.tipo
                 },
                 demonstracao: {

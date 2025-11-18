@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     Turno VARCHAR(255) NOT NULL,
     Telefone VARCHAR(255),
     Endereco VARCHAR(255),
-    Senha VARCHAR(255) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
     tipo ENUM('admin', 'gestor', 'comum') NOT NULL DEFAULT 'comum',
     data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     data_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

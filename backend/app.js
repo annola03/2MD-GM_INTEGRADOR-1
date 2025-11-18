@@ -29,13 +29,13 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet()); // Segurança HTTP headers
 
 // Configurar CORS para permitir que rotas OPTIONS específicas sejam processadas
-app.use(cors({
-    origin: '*',
+ app.use(cors({
+   origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false, // Deixa as rotas OPTIONS específicas serem processadas
     optionsSuccessStatus: 200 // Retorna 200 para OPTIONS em vez de 204
-}));
+ }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
