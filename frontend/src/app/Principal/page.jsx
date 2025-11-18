@@ -76,7 +76,7 @@ export default function HomePage() {
 
      
       <div className="services-container">
-        <h2 className="titulo">Nossos modelos</h2>
+        
 
         
         <div className="servico">
