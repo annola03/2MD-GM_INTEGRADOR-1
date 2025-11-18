@@ -5,7 +5,7 @@ export default function HomePage() {
   return (
     <div className="page">
 
-      {/* HERO */}
+      
       <section className="hero">
         <div className="hero-left">
           <h4 className="welcome">BEM-VINDO(A)!</h4>
@@ -30,10 +30,10 @@ export default function HomePage() {
       {/* CARDS */}
       <section className="services">
         
-        {/* CARD 1 – mantém igual */}
+        
         <div className="service-card">
           <img 
-            src="https://tse2.mm.bing.net/th/id/OIP.tGePiC7UXs4OedwwU2JDgQHaE7?cb=ucfimg2ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3" 
+            src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/11/12/carbon_silhueta-1iusr047054j5.jpg" 
             alt="Novo GM Sonic 2026" 
           />
           <h3>GM Sonic 2026</h3>
@@ -44,7 +44,7 @@ export default function HomePage() {
           <button className="learn-btn">Saiba mais</button>
         </div>
 
-        {/* CARD 2 – AGORA É O QUE ERA O ANTIGO CARD 3 */}
+        
         <div className="service-card active">
           <img 
             src="https://1.bp.blogspot.com/-dRRh5f3Julg/UQaefJEWGKI/AAAAAAAAWn0/3siNTmhZmaM/s1600/03_GM_Onix_2+milhoes_28-01.jpg" 
@@ -58,10 +58,10 @@ export default function HomePage() {
           <button className="learn-btn">Saiba mais</button>
         </div>
 
-        {/* CARD 3 – AGORA É O ANTIGO CARD 2 */}
+        
         <div className="service-card">
           <img 
-            src="https://olhardigital.com.br/wp-content/uploads/2022/12/bolt-ev-carregador-tipo-2-695x500.jpg" 
+            src="https://tse4.mm.bing.net/th/id/OIP.gOqYeNhfmUI1ukpfSGsWKwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" 
             alt="GM veículos elétricos" 
           />
           <h3>Avanço em Veículos Elétricos</h3>
@@ -74,14 +74,14 @@ export default function HomePage() {
 
       </section>
 
-      {/* MODELOS */}
+     
       <div className="services-container">
         <h2 className="titulo">Nossos modelos</h2>
 
-        {/* TRACKER */}
+        
         <div className="servico">
           <img
-            src="https://gmauthority.com/blog/wp-content/uploads/2024/12/2025-Chevrolet-Tracker-Premier-Brazil-Press-Photos-Exterior-001-Front-Three-Quarters-720x480.jpg"
+            src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRCBfu6ao__qA6nCe0l9r1pJLY3fCzSGWbUoWHhErtTxsefngJzX8NWPSRpytHGykHNNgLbBb_URxjdt1XdzPqOA7bacJrScPoCso7DdXmpkIP-6M-OXz7Rjqhc8wy9temCcoYnIi4lVpfEL1H8TsspBbVGcX0RnU-Ozf9msIYOoI6eazyn90LlmclTqtO/s1120/Novo-Tracker-2025%20%282%29.jpg"
             alt="Chevrolet Tracker"
           />
           <div className="texto">
@@ -94,10 +94,10 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* MONTANA */}
+        
         <div className="servico reverso">
           <img
-            src="https://garagem360.com.br/wp-content/uploads/2023/02/GM-Montana-1024x725.jpg"
+            src="https://petrosolgas.com.br/wp-content/uploads/2024/05/chevrolet-montana-lt-2025-ficha-tecnica.jpg"
             alt="Chevrolet Montana"
           />
           <div className="texto">
@@ -110,10 +110,10 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* SPIN */}
+        
         <div className="servico">
           <img
-            src="https://cdn.autopapo.com.br/box/uploads/2024/03/21140403/chevrolet-spin-premier-2025-azul-boreal-frente-parado-2-1918x1280.jpg"
+            src="https://quatrorodas.abril.com.br/wp-content/uploads/2024/03/2025-chevrolet-spin-008_FGD_6968.jpg?quality=70&strip=info&crop=1&resize=1080,565"
             alt="Chevrolet Spin"
           />
           <div className="texto">

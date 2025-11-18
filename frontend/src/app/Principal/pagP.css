@@ -3,28 +3,20 @@
   color: #1a1a1a;
 }
 
-/* ---------------- HERO ---------------- */
-
 .hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 70px 8%;
 
-  /* GRADIENTE + IMAGEM JUNTOS */
-  background: url(/imagens/fotoTracker.png) ;
-  background-size: cover;    /* ajusta a imagem */
-  background-position: center right; /* puxa ela para o lado direito */
+  background: url(/imagens/fotoTracker.png);
+  background-size: cover;
+  background-position: center right;
   background-repeat: no-repeat;
   background-position: bottom;
 
-
   color: white;
 }
-
-
-
-
 
 .hero-left {
   max-width: 500px;
@@ -76,37 +68,38 @@
   color: white;
 }
 
-
-
-/* ---------------- SERVICES (CARDS NOTÍCIAS) ---------------- */
-
 .services {
   display: flex;
   justify-content: center;
-  gap: 35px;
-  margin-top: -40px;
-  flex-wrap: wrap;
-  padding: 0 8%;
+  gap: 30px;
+  padding: 40px 0;
+
+  margin-top: -140px;      
+  position: relative;
+  z-index: 50;
 }
 
 .service-card {
-  width: 320px;
-  background: #ffffff;
+  width: 300px;
+  background: #fff;
   padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-radius: 20px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
   text-align: center;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+  transform: translateY(0);
 }
 
 .service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+  transform: translateY(-15px);
 }
 
 .service-card.active {
-  transform: translateY(-12px);
-  box-shadow: 0 8px 26px rgba(0,0,0,0.22);
+  transform: translateY(-25px);
+}
+
+.service-card.active:hover {
+  transform: translateY(-40px);
 }
 
 .service-card img {
@@ -144,8 +137,6 @@
 .learn-btn:hover {
   background: #2e61be;
 }
-
-/* ---------------- BLOCO DE SERVIÇOS ABAIXO ---------------- */
 
 .services-container {
   width: 100%;
@@ -212,7 +203,6 @@
   background-color: #2e61be;
 }
 
-/* ---------------- RESPONSIVO ---------------- */
 
 @media (max-width: 900px) {
   .hero {
@@ -222,6 +212,7 @@
 
   .services {
     margin-top: 20px;
+    flex-direction: column;
   }
 
   .servico {
