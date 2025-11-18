@@ -71,7 +71,7 @@ export default function Sidebar() {
         )}
 
         {/* Chats */}
-        <Link href="/chats">
+        <Link href="/Chats">
           <SidebarItem
             icon={
               <img

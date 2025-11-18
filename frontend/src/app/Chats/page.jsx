@@ -5,53 +5,61 @@ import "./chat.css";
 export default function Chats() {
   const [selectedChat, setSelectedChat] = useState("Suporte");
 
-  const cards = [
-    { id: "Suporte", title: "Suporte", description: "Atendimento geral e ajuda técnica.", icon: "🛠️" },
-    { id: "Shop", title: "Shop", description: "Status de pedidos e compras.", icon: "" },
-    { id: "Time", title: "Time", description: "Comunicação interna com o time.", icon: "👥" },
+  const chats = [
+    { id: "Suporte", title: "Suporte", subtitle: "Atendimento técnico", icon: <img src="https://img.icons8.com/windows/32/online-support.png"/>},
+    { id: "Shop", title: "Shop", subtitle: "Pedidos e compras", icon: <img width="32" height="32" src="https://img.icons8.com/pulsar-line/48/FFFFFF/permanent-job.png" alt="permanent-job"/> },
+    { id: "Time", title: "Time", subtitle: "Comunicação interna", icon: <img width="32" height="32" src="https://img.icons8.com/water-color/50/group-foreground-selected.png" alt="group-foreground-selected"/>},
   ];
 
   return (
-    <div className="chatContainer">
+    <div className="uiContainer">
 
-      <div className="leftPanel">
-        <h3 className="title">Conversas</h3>
+      <aside className="uiSidebar">
+        <h2 className="uiSidebarTitle">Conversas</h2>
 
-        {cards.map((card) => (
+        {chats.map(chat => (
           <div
-            key={card.id}
-            className={`card ${selectedChat === card.id ? "activeCard" : ""}`}
-            onClick={() => setSelectedChat(card.id)}
+            key={chat.id}
+            className={`uiChatItem ${selectedChat === chat.id ? "active" : ""}`}
+            onClick={() => setSelectedChat(chat.id)}
           >
-            <div className="cardIcon">{card.icon}</div>
+            <div className="uiChatIcon">{chat.icon}</div>
             <div>
-              <h4>{card.title}</h4>
-              <p>{card.description}</p>
+              <h4>{chat.title}</h4>
+              <p>{chat.subtitle}</p>
             </div>
           </div>
         ))}
-      </div>
+      </aside>
 
-      <div className="rightPanel">
-        <div className="chatHeader">
+      
+      <main className="uiChatMain">
+        <header className="uiChatHeader">
           <h3>{selectedChat}</h3>
-        </div>
+        </header>
 
-        <div className="chatBody">
-          <div className="messageReceived">
-            Olá! Como posso ajudar em <b>{selectedChat}</b>?
+        <div className="uiChatBody">
+
+          <div className="uiMsgRow">
+            <div className="uiAvatar">S</div>
+            <div className="uiBubble">
+              Olá! Como posso ajudar em <b>{selectedChat}</b>?
+            </div>
           </div>
 
-          <div className="messageSent">
-            Testando o chat de {selectedChat}.
+          <div className="uiMsgRow sent">
+            <div className="uiBubble">
+              Testando o chat de {selectedChat}.
+            </div>
           </div>
+
         </div>
 
-        <div className="chatInput">
-          <input type="text" placeholder="Digite uma mensagem..." />
+        <div className="uiInputArea">
+          <input type="text" placeholder="Digite sua mensagem..." />
           <button>Enviar</button>
         </div>
-      </div>
+      </main>
 
     </div>
   );
