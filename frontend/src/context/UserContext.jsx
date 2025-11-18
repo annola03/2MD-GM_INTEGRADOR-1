@@ -11,7 +11,7 @@ export default function UserProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      setCarregando(false);
+      setCarregando(false); 
       return;
     }
 

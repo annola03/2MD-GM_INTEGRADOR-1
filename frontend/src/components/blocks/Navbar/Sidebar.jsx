@@ -18,22 +18,23 @@ export default function Sidebar() {
       <button className="toggle" onClick={() => setOpen(!open)}>
         ❮
       </button>
-
-      <div className="logo">
-        <img
-          src="/imagens/logoNova.png"
-          width="28"
-          height="28"
-          alt="logo"
-          style={{
-            width: "50px",
-            height: "50px",
-            backgroundColor: "white",
-            borderRadius: "10px",
-          }}
-        />
-        {open && <span>Painel de controle</span>}
-      </div>
+      <Link href="/Principal">
+        <div className="logo">
+          <img
+            src="/imagens/logoNova.png"
+            width="28"
+            height="28"
+            alt="logo"
+            style={{
+              width: "50px",
+              height: "50px",
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }}
+          />
+          {open && <span>Painel de controle</span>}
+        </div>
+      </Link>
 
       <ul>
         {/* Perfil */}
