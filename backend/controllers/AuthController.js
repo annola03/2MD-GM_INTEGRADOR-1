@@ -8,10 +8,10 @@ class AuthController {
     // POST /auth/login - Fazer login
     static async login(req, res) {
         try {
-            const { email, senha } = req.body;
+            const { email_padrao, senha } = req.body;
             
             // Validações básicas
-            if (!email || email.trim() === '') {
+            if (!email_padrao || email_padrao.trim() === '') {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email obrigatório',
@@ -27,9 +27,9 @@ class AuthController {
                 });
             }
 
-            // Validação básica de formato de email
+            // Validação básica de formato de email_padrao
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!emailRegex.test(email_padrao)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email inválido',
@@ -38,7 +38,7 @@ class AuthController {
             }
 
             // Verificar credenciais
-            const usuario = await UsuarioModel.verificarCredenciais(email.trim(), senha);
+            const usuario = await UsuarioModel.verificarCredenciais(email_padrao.trim(), senha);
             
             if (!usuario) {
                 return res.status(401).json({
@@ -52,7 +52,7 @@ class AuthController {
             const token = jwt.sign(
                 { 
                     id: usuario.id, 
-                    email: usuario.email,
+                    email_padrao: usuario.email_padrao,
                     tipo: usuario.tipo 
                 },
                 JWT_CONFIG.secret,
@@ -67,7 +67,7 @@ class AuthController {
                     usuario: {
                         id: usuario.id,
                         nome: usuario.nome,
-                        email: usuario.email,
+                        email_padrao: usuario.email_padrao,
                         tipo: usuario.tipo
                     }
                 }
@@ -85,7 +85,7 @@ class AuthController {
     // POST /auth/registrar - Registrar novo usuário
     static async registrar(req, res) {
         try {
-            const { nome, email, senha, tipo } = req.body;
+            const { nome, email_padrao, senha, tipo } = req.body;
             
             // Validações básicas
             if (!nome || nome.trim() === '') {
@@ -96,11 +96,11 @@ class AuthController {
                 });
             }
 
-            if (!email || email.trim() === '') {
+            if (!email_padrao || email_padrao.trim() === '') {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email obrigatório',
-                    mensagem: 'O email é obrigatório'
+                    mensagem: 'O email_padrao é obrigatório'
                 });
             }
 
@@ -130,11 +130,11 @@ class AuthController {
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!emailRegex.test(email_padrao)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email inválido',
-                    mensagem: 'Formato de email inválido'
+                    mensagem: 'Formato de email_padrao inválido'
                 });
             }
 
@@ -146,20 +146,20 @@ class AuthController {
                 });
             }
 
-            // Verificar se o email já existe
-            const usuarioExistente = await UsuarioModel.buscarPorEmail(email);
+            // Verificar se o email_padrao já existe
+            const usuarioExistente = await UsuarioModel.buscarPorEmail(email_padrao);
             if (usuarioExistente) {
                 return res.status(409).json({
                     sucesso: false,
                     erro: 'Email já cadastrado',
-                    mensagem: 'Este email já está sendo usado por outro usuário'
+                    mensagem: 'Este email_padrao já está sendo usado por outro usuário'
                 });
             }
 
             // Preparar dados do usuário
             const dadosUsuario = {
                 nome: nome.trim(),
-                email: email.trim().toLowerCase(),
+                email_padrao: email_padrao.trim().toLowerCase(),
                 senha: senha,
                 tipo: tipo || 'comum'
             };
@@ -173,7 +173,7 @@ class AuthController {
                 dados: {
                     id: usuarioId,
                     nome: dadosUsuario.nome,
-                    email: dadosUsuario.email,
+                    email_padrao: dadosUsuario.email_padrao,
                     tipo: dadosUsuario.tipo
                 }
             });
@@ -270,7 +270,7 @@ class AuthController {
     // POST /usuarios - Criar novo usuário (apenas admin)
     static async criarUsuario(req, res) {
         try {
-            const { nome, email, senha, tipo } = req.body;
+            const { nome, email_padrao, senha, tipo } = req.body;
             
             // Validações básicas
             if (!nome || nome.trim() === '') {
@@ -281,11 +281,11 @@ class AuthController {
                 });
             }
 
-            if (!email || email.trim() === '') {
+            if (!email_padrao || email_padrao.trim() === '') {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email obrigatório',
-                    mensagem: 'O email é obrigatório'
+                    mensagem: 'O email_padrao é obrigatório'
                 });
             }
 
@@ -315,7 +315,7 @@ class AuthController {
             }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!emailRegex.test(email_padrao)) {
                 return res.status(400).json({
                     sucesso: false,
                     erro: 'Email inválido',
@@ -331,8 +331,8 @@ class AuthController {
                 });
             }
 
-            // Verificar se o email já existe
-            const usuarioExistente = await UsuarioModel.buscarPorEmail(email);
+            // Verificar se o email_padrao já existe
+            const usuarioExistente = await UsuarioModel.buscarPorEmail(email_padrao);
             if (usuarioExistente) {
                 return res.status(409).json({
                     sucesso: false,
@@ -344,7 +344,7 @@ class AuthController {
             // Preparar dados do usuário
             const dadosUsuario = {
                 nome: nome.trim(),
-                email: email.trim().toLowerCase(),
+                email_padrao: email_padrao.trim().toLowerCase(),
                 senha: senha,
                 tipo: tipo || 'comum'
             };
@@ -358,7 +358,7 @@ class AuthController {
                 dados: {
                     id: usuarioId,
                     nome: dadosUsuario.nome,
-                    email: dadosUsuario.email,
+                    email_padrao: dadosUsuario.email_padrao,
                     tipo: dadosUsuario.tipo
                 }
             });
@@ -376,7 +376,7 @@ class AuthController {
     static async atualizarUsuario(req, res) {
         try {
             const { id } = req.params;
-            const { nome, email, senha, tipo } = req.body;
+            const { nome, email_padrao, senha, tipo } = req.body;
             
             // Validação do ID
             if (!id || isNaN(id)) {
@@ -418,9 +418,9 @@ class AuthController {
                 dadosAtualizacao.nome = nome.trim();
             }
 
-            if (email !== undefined) {
+            if (email_padrao !== undefined) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
+                if (!emailRegex.test(email_padrao)) {
                     return res.status(400).json({
                         sucesso: false,
                         erro: 'Email inválido',
@@ -428,8 +428,8 @@ class AuthController {
                     });
                 }
                 
-                // Verificar se o email já está em uso por outro usuário
-                const usuarioComEmail = await UsuarioModel.buscarPorEmail(email);
+                // Verificar se o email_padrao já está em uso por outro usuário
+                const usuarioComEmail = await UsuarioModel.buscarPorEmail(email_padrao);
                 if (usuarioComEmail && usuarioComEmail.id !== parseInt(id)) {
                     return res.status(409).json({
                         sucesso: false,
@@ -438,7 +438,7 @@ class AuthController {
                     });
                 }
                 
-                dadosAtualizacao.email = email.trim().toLowerCase();
+                dadosAtualizacao.email_padrao = email_padrao.trim().toLowerCase();
             }
 
             if (senha !== undefined) {

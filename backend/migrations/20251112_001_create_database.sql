@@ -1,4 +1,4 @@
--- Migration: Criar banco de dados produtos_api
+-- Migration: Criar banco de dados Funcionarios_api
 -- Data: 2025-11-12
 -- Descrição: Criação inicial do banco de dados
 

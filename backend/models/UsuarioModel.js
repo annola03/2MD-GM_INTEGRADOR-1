@@ -44,10 +44,10 @@ class UsuarioModel {
         }
     }
 
-    // Buscar usuário por email
-    static async buscarPorEmail(email) {
+    // Buscar usuário por email_padrao
+    static async buscarPorEmail_padrao(email_padrao) {
         try {
-            const rows = await read('usuarios', `email = '${email}'`);
+            const rows = await read('usuarios', `email_padrao = '${email_padrao}'`);
             return rows[0] || null;
         } catch (error) {
             console.error('Erro ao buscar usuário por email:', error);
@@ -98,9 +98,9 @@ class UsuarioModel {
     }
 
     // Verificar credenciais de login
-    static async verificarCredenciais(email, senha) {
+    static async verificarCredenciais(email_padrao, senha) {
         try {
-            const usuario = await this.buscarPorEmail(email);
+            const usuario = await this.buscarPorEmail_padrao(email_padrao);
             
             if (!usuario) {
                 return null;

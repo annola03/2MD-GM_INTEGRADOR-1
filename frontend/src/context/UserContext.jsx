@@ -22,7 +22,7 @@ export default function UserProvider({ children }) {
             Authorization: `Bearer ${token}`,
           },
         });
-
+console.log(token);
         const data = await res.json();
 
         if (res.ok) {
@@ -39,6 +39,7 @@ export default function UserProvider({ children }) {
 
     carregarUsuario();
   }, []);
+  console.log(user);
 
   return (
     <UserContext.Provider value={{ user, setUser, carregando }}>

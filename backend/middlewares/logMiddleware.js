@@ -31,7 +31,7 @@ export const logMiddleware = async (req, res, next) => {
             ...logData,
             status_code: res.statusCode,
             tempo_resposta_ms: Date.now() - startTime
-        };
+        };  
         
         // Capturar usuário se autenticado (após authMiddleware ter executado)
         if (req.usuario && req.usuario.id) {
@@ -108,16 +108,31 @@ function sanitizeRequestBody(body) {
 // Função para salvar o log no banco de dados
 async function saveLog(logData) {
     try {
-        await create('logs', logData);
+        const finalData = {
+            rota: logData.rota || null,
+            metodo: logData.metodo || null,
+            ip_address: logData.ip_address || null,
+            user_agent: logData.user_agent || null,
+            dados_requisicao: logData.dados_requisicao || null,
+            status_code: logData.status_code || null,
+            tempo_resposta_ms: logData.tempo_resposta_ms || null,
+            dados_resposta: logData.dados_resposta 
+                ? JSON.stringify(logData.dados_resposta).substring(0, 500)
+                : null,
+            usuario_id: logData.usuario_id || null
+        };
+
+        await create('logs', finalData);
     } catch (error) {
         console.error('Erro ao inserir log no banco:', error);
     }
 }
 
+
 // Middleware para logs simples (apenas console)
 export const simpleLogMiddleware = (req, res, next) => {
     const timestamp = new Date().toISOString();
-    const usuario = req.usuario ? `[${req.usuario.email}]` : '[Anônimo]';
+    const usuario = req.usuario ? `[${req.usuario.email_padrao}]` : '[Anônimo]';
     
     console.log(`${timestamp} - ${req.method} ${req.originalUrl} ${usuario} - IP: ${req.ip || 'N/A'}`);
     
