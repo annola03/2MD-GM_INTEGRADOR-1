@@ -1,11 +1,28 @@
 "use client";
 import "./pagP.css";
+import { useEffect } from "react";
 
 export default function HomePage() {
+
+  
+  useEffect(() => {
+    const elements = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, { threshold: 0.2 });
+
+    elements.forEach(el => observer.observe(el));
+  }, []);
+
   return (
     <div className="page">
 
-      
+     
       <section className="hero">
         <div className="hero-left">
           <h4 className="welcome">BEM-VINDO(A)!</h4>
@@ -23,18 +40,15 @@ export default function HomePage() {
             <button className="btn primary">Clique aqui!</button>
           </div>
         </div>
-     
-
       </section>
 
-      {/* CARDS */}
+      
       <section className="services">
-        
         
         <div className="service-card">
           <img 
-            src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/11/12/carbon_silhueta-1iusr047054j5.jpg" 
-            alt="Novo GM Sonic 2026" 
+            src="https://p2.trrsf.com/image/fget/cf/774/0/images.terra.com/2025/11/12/carbon_silhueta-1iusr047054j5.jpg"
+            alt="Novo GM Sonic 2026"
           />
           <h3>GM Sonic 2026</h3>
           <p>
@@ -44,11 +58,10 @@ export default function HomePage() {
           <button className="learn-btn">Saiba mais</button>
         </div>
 
-        
         <div className="service-card active">
           <img 
-            src="https://1.bp.blogspot.com/-dRRh5f3Julg/UQaefJEWGKI/AAAAAAAAWn0/3siNTmhZmaM/s1600/03_GM_Onix_2+milhoes_28-01.jpg" 
-            alt="GM fábrica Brasil" 
+            src="https://1.bp.blogspot.com/-dRRh5f3Julg/UQaefJEWGKI/AAAAAAAAWn0/3siNTmhZmaM/s1600/03_GM_Onix_2+milhoes_28-01.jpg"
+            alt="GM fábrica Brasil"
           />
           <h3>Expansão Industrial</h3>
           <p>
@@ -58,11 +71,10 @@ export default function HomePage() {
           <button className="learn-btn">Saiba mais</button>
         </div>
 
-        
         <div className="service-card">
           <img 
-            src="https://tse4.mm.bing.net/th/id/OIP.gOqYeNhfmUI1ukpfSGsWKwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" 
-            alt="GM veículos elétricos" 
+            src="https://tse4.mm.bing.net/th/id/OIP.gOqYeNhfmUI1ukpfSGsWKwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3"
+            alt="GM veículos elétricos"
           />
           <h3>Avanço em Veículos Elétricos</h3>
           <p>
@@ -74,12 +86,10 @@ export default function HomePage() {
 
       </section>
 
-     
+    
       <div className="services-container">
-        
 
-        
-        <div className="servico">
+        <div className="servico reveal">
           <img
             src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiRCBfu6ao__qA6nCe0l9r1pJLY3fCzSGWbUoWHhErtTxsefngJzX8NWPSRpytHGykHNNgLbBb_URxjdt1XdzPqOA7bacJrScPoCso7DdXmpkIP-6M-OXz7Rjqhc8wy9temCcoYnIi4lVpfEL1H8TsspBbVGcX0RnU-Ozf9msIYOoI6eazyn90LlmclTqtO/s1120/Novo-Tracker-2025%20%282%29.jpg"
             alt="Chevrolet Tracker"
@@ -94,8 +104,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        
-        <div className="servico reverso">
+        <div className="servico reverso reveal">
           <img
             src="https://petrosolgas.com.br/wp-content/uploads/2024/05/chevrolet-montana-lt-2025-ficha-tecnica.jpg"
             alt="Chevrolet Montana"
@@ -110,8 +119,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        
-        <div className="servico">
+        <div className="servico reveal">
           <img
             src="https://quatrorodas.abril.com.br/wp-content/uploads/2024/03/2025-chevrolet-spin-008_FGD_6968.jpg?quality=70&strip=info&crop=1&resize=1080,565"
             alt="Chevrolet Spin"
