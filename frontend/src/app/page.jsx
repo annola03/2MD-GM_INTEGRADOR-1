@@ -1,5 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const imagens = [
@@ -8,6 +10,9 @@ export default function Login() {
     "https://i.postimg.cc/m2gvs0xd/3.png",
   ];
 
+  const { setUser } = useContext(AuthContext);
+  const router = useRouter();
+
   const [atual, setAtual] = useState(0);
   const [transicao, setTransicao] = useState(false);
 
@@ -15,7 +20,6 @@ export default function Login() {
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     const intervalo = setInterval(() => {
@@ -39,9 +43,7 @@ export default function Login() {
     try {
       const resposta = await fetch("http://localhost:3001/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email_padrao, senha }),
       });
 
@@ -57,6 +59,9 @@ export default function Login() {
       localStorage.setItem("token", dados.dados.token);
       localStorage.setItem("email_padrao", dados.dados.email_padrao);
 
+      // Atualizar contexto global
+      setUser(dados.dados);
+
       // Redirecionar pós login
       window.location.href = "/Principal";
 
@@ -67,16 +72,13 @@ export default function Login() {
     setLoading(false);
   };
 
+
   return (
     <div className="login-container">
-      
+
       <div className="login-left">
         <div className={`carousel ${transicao ? "slide-out" : "slide-in"}`}>
-          <img
-            src={imagens[atual]}
-            alt={`Slide ${atual + 1}`}
-            className="carousel-img"
-          />
+          <img src={imagens[atual]} alt={`Slide ${atual + 1}`} className="carousel-img" />
         </div>
 
         <div className="welcome-section">
@@ -98,9 +100,7 @@ export default function Login() {
       <div className="login-right">
         <div className="login-box">
           <h2>Log In</h2>
-          <p>
-            Ainda não tem cadastro? <a href="#">Criar Login</a>
-          </p>
+          <p>Ainda não tem cadastro? <a href="#">Criar Login</a></p>
 
           {erro && <p className="erro-login">{erro}</p>}
 
@@ -126,9 +126,7 @@ export default function Login() {
             </div>
 
             <div className="options">
-              <label>
-                <input type="checkbox" /> Lembrar senha
-              </label>
+              <label><input type="checkbox" /> Lembrar senha</label>
               <a href="#">Esqueceu sua senha?</a>
             </div>
 
@@ -136,6 +134,7 @@ export default function Login() {
               {loading ? "Entrando..." : "Sign in"}
             </button>
           </form>
+
         </div>
       </div>
     </div>
