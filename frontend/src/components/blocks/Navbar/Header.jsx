@@ -31,7 +31,7 @@ export default function Header() {
           />
 
           <div className="profile-info">
-            <p className="profile-name">{user?.nome}</p>
+            <p className="profile-name">{user?.Nome}</p>
             <p className="profile-role">{user?.tipo}</p>
           </div>
         </div>
