@@ -22,7 +22,7 @@ export default function UserProvider({ children }) {
       }
 
       try {
-        const res = await fetch("http://localhost:3001/auth/me", {
+        const res = await fetch("http://localhost:3001/api/auth/perfil", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,12 +37,12 @@ export default function UserProvider({ children }) {
           // Token inválido → apagar e redirecionar
           localStorage.removeItem("token");
           setUser(null);
-          router.push("/login");
+          router.push("/");
         }
       } catch (error) {
         localStorage.removeItem("token");
         setUser(null);
-        router.push("/login");
+        router.push("/");
       }
 
       setCarregando(false);
