@@ -50,17 +50,6 @@ class AuthController {
           mensagem: "Email ou senha incorretos",
         });
       }
-
-       if (usuario.tipo === "Admin") {
-        const jaGerou = await UsuarioModel.verificarDadosGerados(usuario.id);
-
-        if (!jaGerou) {
-          console.log("🔄 Gerando registros iniciais... (primeiro login do Admin)");
-          await gerarRegistrosAutomaticos();
-          await UsuarioModel.marcarDadosGerados(usuario.id);
-        }
-      }
-
       // Gerar token JWT
       const token = jwt.sign(
         {
@@ -71,6 +60,18 @@ class AuthController {
         JWT_CONFIG.secret,
         { expiresIn: JWT_CONFIG.expiresIn }
       );
+
+      if (usuario.tipo === "Admin") {
+        const jaGerou = await UsuarioModel.verificarDadosGerados(usuario.id);
+
+        if (!jaGerou) {
+          console.log(
+            "🔄 Gerando registros iniciais... (primeiro login do Admin)"
+          );
+          await gerarRegistrosAutomaticos(token);
+          await UsuarioModel.marcarDadosGerados(usuario.id);
+        }
+      }
 
       res.status(200).json({
         sucesso: true,
@@ -543,7 +544,6 @@ class AuthController {
       });
     }
   }
-
 }
 
 export default AuthController;

@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get('/:GMID', FuncionarioController.buscarPorGMID);
 
+router.get('/', authMiddleware, FuncionarioController.listarTodos);
+
 // Rotas protegidas (precisam de autenticação)
 router.post('/', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.criar);
 router.post('/upload', authMiddleware, uploadImagens.single('imagem'), handleUploadError, FuncionarioController.uploadImagem);

@@ -132,15 +132,25 @@ class UsuarioModel {
   }
 
   static async marcarDadosGerados(id) {
-    const sql = "UPDATE usuarios SET dados_gerados = 1 WHERE id = ?";
-    const [resultado] = await db.execute(sql, [id]);
-    return resultado.affectedRows > 0;
+    const connection = await getConnection();
+    try {
+      const sql = "UPDATE usuarios SET dados_gerados = 1 WHERE id = ?";
+      const [resultado] = await connection.execute(sql, [id]);
+      return resultado.affectedRows > 0;
+    } finally {
+      connection.release();
+    }
   }
 
   static async verificarDadosGerados(id) {
-    const sql = "SELECT dados_gerados FROM usuarios WHERE id = ?";
-    const [linhas] = await db.execute(sql, [id]);
-    return linhas.length > 0 ? linhas[0].dados_gerados : null;
+    const connection = await getConnection();
+    try {
+      const sql = "SELECT dados_gerados FROM usuarios WHERE id = ?";
+      const [linhas] = await connection.execute(sql, [id]);
+      return linhas.length > 0 ? linhas[0].dados_gerados : null;
+    } finally {
+      connection.release();
+    }
   }
 }
 

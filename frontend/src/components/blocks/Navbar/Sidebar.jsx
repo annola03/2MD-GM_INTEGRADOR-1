@@ -11,7 +11,8 @@ export default function Sidebar() {
   const { user } = useContext(UserContext);
 
   // Permissões
-  const podeVerAdmin = user?.tipo === "admin" || user?.tipo === "gestor";
+  const podeVer = user?.tipo === "admin" || user?.tipo === "gestor";
+  const podeVerAdmin = user?.tipo === "admin";
 
   return (
     <aside className={`sidebar ${!open ? "closed" : ""}`}>
@@ -54,7 +55,7 @@ export default function Sidebar() {
         </Link>
 
         {/* Usuários - só admin e gestor */}
-        {podeVerAdmin && (
+        {podeVer && (
           <Link href="/Users">
             <SidebarItem
               icon={
@@ -88,7 +89,7 @@ export default function Sidebar() {
         </Link>
 
         {/* Dashboard - só admin e gestor */}
-        {podeVerAdmin && (
+        {podeVer && (
           <Link href="/Dashboard">
             <SidebarItem
               icon={
@@ -100,6 +101,24 @@ export default function Sidebar() {
                 />
               }
               text="Reports"
+              open={open}
+            />
+          </Link>
+        )}
+
+        {/* Dashboard - só admin e gestor */}
+        {podeVerAdmin && (
+          <Link href="/Admin">
+            <SidebarItem
+              icon={
+                <img
+                  src="https://img.icons8.com/ios-filled/50/FFFFFF/crown.png"
+                  alt="Relatórios"
+                  width="22"
+                  height="22"
+                />
+              }
+              text="Admin"
               open={open}
             />
           </Link>

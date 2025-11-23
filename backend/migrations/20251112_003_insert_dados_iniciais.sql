@@ -63,7 +63,13 @@ INSERT INTO usuarios (nome, GMID, Cargo, Turno, senha, tipo) VALUES
 ('Otavio Mendes', 'Q3G7BX','Gerente','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'gestor'),
 ('Manuela Reis', 'E7N4YC','Analista','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
 ('Felipe Cardim', 'V1S8PL','Tecnico','Noturno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
-('Tatiana Morel', 'G5W0RJ','Assistente','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum');
+('Tatiana Morel', 'G5W0RJ','Assistente','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
+('André Vasques', 'K9T4MW','Analista','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
+('Priscila Duarte', 'F7B2QL','Assistente','Noturno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
+('Jonathan Ribeiro', 'M3H8ZX','Tecnico','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
+('Elaine Martins', 'V4S9KD','Supervisora','Noturno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
+('Otto Carvalho', 'R1N7JP','Operador','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum');
+
 
 
 
