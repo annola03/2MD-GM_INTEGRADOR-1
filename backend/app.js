@@ -10,6 +10,9 @@ import funcionarioRotas from './routes/funcionarioRotas.js';
 import authRotas from './routes/authRotas.js';
 import criptografiaRotas from './routes/criptografiaRotas.js';
 import usuarioRotas from './routes/usuarioRotas.js';
+import suporteRoutes from "./routes/suporte.js";
+import timeRoutes from "./routes/time.js";
+import shopRoutes from "./routes/shop.js";
 
 // Importar middlewares
 import { logMiddleware } from './middlewares/logMiddleware.js';
@@ -77,6 +80,11 @@ app.get('/', (req, res) => {
         }
     });
 });
+
+// rotas IA
+app.use("/ia/suporte", suporteRoutes);
+app.use("/ia/time", timeRoutes);
+app.use("/ia/shop", shopRoutes);
 
 // Middleware para tratar rotas não encontradas
 app.use('*', (req, res) => {
