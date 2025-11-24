@@ -48,22 +48,23 @@ export default function AdminPage() {
     carregarDados();
   }, []);
 
-  const funcionariosPorGMID = {};
+const funcionariosPorGMID = funcionarios.reduce((acc, f) => {
+  const gmid = String(f.GMID || "SEM_GMID"); // normalize para evitar undefined
 
-  funcionarios.forEach((f) => {
-    if (!funcionariosPorGMID[f.GMID]) {
-      funcionariosPorGMID[f.GMID] = f; // primeiro registro
-    } else {
-      // substituir se o id for maior = registro mais recente
-      if (f.id > funcionariosPorGMID[f.GMID].id) {
-        funcionariosPorGMID[f.GMID] = f;
-      }
-    }
-  });
+  // se ainda não temos esse GMID, ou se é um registro mais novo
+  if (!acc[gmid] || f.id > acc[gmid].id) {
+    acc[gmid] = f;
+  }
 
+  return acc;
+}, {});
+console.log("LISTA COMPLETA DE GMIDs DOS FUNCIONÁRIOS:");
+console.log(funcionarios.map(f => f.GMID));
+
+console.log(funcionariosPorGMID)
   // Só AQUI você pode usar return condicional
   if (carregando || loading) return <p>Carregando dados...</p>;
-
+console.log(funcionarios)
   if (!Array.isArray(usuarios)) {
     return <div>Carregando usuários...</div>;
   }
@@ -71,7 +72,7 @@ export default function AdminPage() {
   const usuariosCompletos = usuarios.map((u) => {
     const func = funcionariosPorGMID[u.GMID];
 
-    return {
+    return {  
       nome: u.Nome,
       funcao: u.Cargo,
       data: func?.data_registro || "—",

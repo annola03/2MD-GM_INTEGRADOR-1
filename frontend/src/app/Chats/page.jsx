@@ -20,7 +20,7 @@ export default function Chats() {
 
   // --- Add mensagem no estado ---
   function addMessage(chatId, newMessage) {
-    setMessages(prev => ({
+    setMessages((prev) => ({
       ...prev,
       [chatId]: [...prev[chatId], newMessage],
     }));
@@ -45,11 +45,23 @@ export default function Chats() {
     const res = await fetch("http://localhost:3001/ia/time", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text, membro }),
+      body: JSON.stringify({ message: text, membro, membrosTime }),
     });
 
     const data = await res.json();
-    addMessage("Time", { sender: membro.nome, text: data.reply });
+    const falas = data.messages;
+
+    // adiciona uma por vez com delay
+    for (let i = 0; i < falas.length; i++) {
+      setTimeout(() => {
+        const fala = falas[i];
+
+        const nome = fala.split("]:")[0].replace("[", "") + "]";
+        const texto = fala.split("]:")[1].trim();
+
+        addMessage("Time", { sender: nome, text: texto });
+      }, 1500 * (i + 1)); // delay de 1.5s
+    }
   }
 
   // --- SHOP AUTO ---
@@ -120,12 +132,10 @@ export default function Chats() {
       <aside className="uiSidebar">
         <h2 className="uiSidebarTitle">Conversas</h2>
 
-        {chats.map(chat => (
+        {chats.map((chat) => (
           <div
             key={chat.id}
-            className={`uiChatItem ${
-              selectedChat === chat.id ? "active" : ""
-            }`}
+            className={`uiChatItem ${selectedChat === chat.id ? "active" : ""}`}
             onClick={() => setSelectedChat(chat.id)}
           >
             <div className="uiChatIcon">{chat.icon}</div>
@@ -150,9 +160,7 @@ export default function Chats() {
               className={`uiMsgRow ${msg.sender === "user" ? "sent" : ""}`}
             >
               {msg.sender !== "user" && (
-                <div className="uiAvatar">
-                  {msg.sender[0].toUpperCase()}
-                </div>
+                <div className="uiAvatar">{msg.sender[0].toUpperCase()}</div>
               )}
 
               <div className="uiBubble">{msg.text}</div>
@@ -166,8 +174,8 @@ export default function Chats() {
             type="text"
             placeholder="Digite sua mensagem..."
             value={message}
-            onChange={e => setMessage(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleSend()}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
           />
           <button onClick={handleSend}>Enviar</button>
         </div>
