@@ -10,12 +10,13 @@ export default function AdminPage() {
   const [relatorios, setRelatorios] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, carregando } = useContext(UserContext);
+  const [funcionarios, setFuncionarios] = useState([]);
 
   const API_URL = "http://localhost:3001";
 
   useEffect(() => {
     async function carregarDados() {
-      const token = localStorage.getItem("token");  // 👈 aqui!
+      const token = localStorage.getItem("token");
 
       if (!token) {
         console.error("Nenhum token encontrado!");
@@ -23,26 +24,60 @@ export default function AdminPage() {
       }
 
       try {
-        const [respUsuarios] = await Promise.all([
+        const [respUsuarios, respFuncionarios] = await Promise.all([
           fetch(`${API_URL}/api/usuarios`, {
             headers: { Authorization: `Bearer ${token}` },
-          })
+          }),
+          fetch(`${API_URL}/api/funcionarios`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
         ]);
-        
 
-        setUsuarios(await respUsuarios.json());
+        const jsonUsuarios = await respUsuarios.json();
+        const jsonFuncionarios = await respFuncionarios.json();
+
+        setUsuarios(jsonUsuarios.dados || []);
+        setFuncionarios(jsonFuncionarios.funcionarios || []);
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
       } finally {
         setLoading(false);
       }
     }
-console.log(usuarios)
+
     carregarDados();
   }, []);
 
+  const funcionariosPorGMID = {};
+
+  funcionarios.forEach((f) => {
+    if (!funcionariosPorGMID[f.GMID]) {
+      funcionariosPorGMID[f.GMID] = f; // primeiro registro
+    } else {
+      // substituir se o id for maior = registro mais recente
+      if (f.id > funcionariosPorGMID[f.GMID].id) {
+        funcionariosPorGMID[f.GMID] = f;
+      }
+    }
+  });
+
   // Só AQUI você pode usar return condicional
   if (carregando || loading) return <p>Carregando dados...</p>;
+
+  if (!Array.isArray(usuarios)) {
+    return <div>Carregando usuários...</div>;
+  }
+
+  const usuariosCompletos = usuarios.map((u) => {
+    const func = funcionariosPorGMID[u.GMID];
+
+    return {
+      nome: u.Nome,
+      funcao: u.Cargo,
+      data: func?.data_registro || "—",
+      status: func?.Status || "—",
+    };
+  });
 
   return (
     <div className="admin-container">
@@ -78,10 +113,10 @@ console.log(usuarios)
           <TableCard
             title="Últimos Cadastros"
             headers={["Nome", "Função", "Data", "Status"]}
-            data={usuarios.map((u) => [
+            data={usuariosCompletos.map((u) => [
               u.nome,
               u.funcao,
-              u.dataCadastro,
+              u.data,
               u.status,
             ])}
           />
