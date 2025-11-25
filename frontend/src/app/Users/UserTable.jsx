@@ -9,7 +9,7 @@ export default function UserTable({ users }) {
             <th>Nome</th>
             <th>GMIN</th>
             <th>Cargo</th>
-            <th>Área</th>
+            <th>Tipo</th>
             <th>Turno</th>
             <th>Hora do Ponto</th>
             <th>Entrada</th>
@@ -23,19 +23,19 @@ export default function UserTable({ users }) {
           {users.length > 0 ? (
             users.map((user) => (
               <tr key={user.id}>
-                <td>{user.nome}</td>
+                <td>{user.Nome}</td>
                 <td>{user.gmin}</td>
                 <td>{user.cargo}</td>
                 <td>{user.area}</td>
                 <td>{user.turno}</td>
-                <td>{user.horaPonto}</td>
+                <td>{user.horaPonto ? new Date(user.horaPonto).toLocaleDateString("pt-BR") : "-"}</td>
                 <td>{user.entrada}</td>
                 <td>{user.saida}</td>
 
                 <td>
                   <span
                     className={`status ${
-                      user.status === "Ativo" ? "active" : "inactive"
+                      user.status === "Pontual" ? "active" : "inactive"
                     }`}
                   >
                     {user.status}

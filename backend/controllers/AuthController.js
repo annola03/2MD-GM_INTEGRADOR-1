@@ -544,6 +544,40 @@ class AuthController {
       });
     }
   }
+
+   static async atualizarProprioUsuario(req, res) {
+    try {
+      const userId = req.user.id; // ID vindo do token JWT
+      const { nome, email_padrao, senha } = req.body;
+
+      const camposParaAtualizar = {};
+
+      if (nome) camposParaAtualizar.nome = nome;
+      if (email_padrao) camposParaAtualizar.email_padrao = email_padrao;
+
+      // Se o usuário quiser alterar a senha
+      if (senha) {
+        const hashed = await bcrypt.hash(senha, 10);
+        camposParaAtualizar.senha = hashed;
+      }
+
+      const usuarioAtualizado = await UsuarioModel.atualizar(
+        userId,
+        camposParaAtualizar
+      );
+
+      res.json({
+        sucesso: true,
+        mensagem: "Usuário atualizado com sucesso!",
+        dados: usuarioAtualizado,
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar usuário:", error);
+      res
+        .status(500)
+        .json({ sucesso: false, mensagem: "Erro interno no servidor" });
+    }
+  }
 }
 
 export default AuthController;

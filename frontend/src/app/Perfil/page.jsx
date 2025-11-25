@@ -9,23 +9,43 @@ export default function ProfilePage() {
   const [selected, setSelected] = useState("edit");
   const [loading, setLoading] = useState(true);
 
+
+  const [historico, setHistorico] = useState([]);
+
+  useEffect(() => {
+    if (!user?.GMID) return;
+
+    const token = localStorage.getItem("token");
+
+    fetch(`http://localhost:3001/api/funcionarios/${user.GMID}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.sucesso) setHistorico(res.funcionarios);
+      });
+      
+  }, [user]);
+
+
+
+
+
   const [profile, setProfile] = useState({
-    nome: "",
-    sobrenome: "",
+    nomeCompleto: "",
     email: "",
     telefone: "",
     endereco: "",
-    cidade: "",
-    estado: "",
-    imagem: "",
+    imagem: "/imagens/avatar.png"
   });
+
 
   useEffect(() => {
     if (!user) return;
 
     const token = localStorage.getItem("token");
 
-    fetch(`http://localhost:3001/funcionarios/${user.GMID}`, {
+    fetch(`http://localhost:3001/api/usuarios/me`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -36,13 +56,11 @@ export default function ProfilePage() {
           const f = dados.dados;
 
           setProfile({
-            nome: f.nome?.split(" ")[0] || "",
-            sobrenome: f.nome?.split(" ")[1] || "",
+            nome: f.nome || "",
+            email: f.email || "",
             email: f.email || "",
             telefone: f.telefone || "",
             endereco: f.endereco || "",
-            cidade: f.cidade || "",
-            estado: f.estado || "",
             imagem: f.imagem
               ? `http://localhost:3001/uploads/imagens/${f.imagem}`
               : "/imagens/avatar.png",
@@ -52,7 +70,7 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [user]);
 
-  
+
 
   const salvarAlteracoes = async (e) => {
     e.preventDefault();
@@ -64,11 +82,9 @@ export default function ProfilePage() {
       email: profile.email,
       telefone: profile.telefone,
       endereco: profile.endereco,
-      cidade: profile.cidade,
-      estado: profile.estado,
     };
 
-    fetch(`http://localhost:3001/funcionarios/${user.GMID}`, {
+    fetch(`http://localhost:3001/funcionarios/me`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -174,13 +190,6 @@ export default function ProfilePage() {
                       setProfile({ ...profile, nome: e.target.value })
                     }
                   />
-                  <input
-                    type="text"
-                    value={profile.sobrenome}
-                    onChange={(e) =>
-                      setProfile({ ...profile, sobrenome: e.target.value })
-                    }
-                  />
                 </div>
               </div>
 
@@ -217,26 +226,6 @@ export default function ProfilePage() {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Localização</label>
-                <div className="form-row">
-                  <input
-                    type="text"
-                    value={profile.cidade}
-                    onChange={(e) =>
-                      setProfile({ ...profile, cidade: e.target.value })
-                    }
-                  />
-                  <input
-                    type="text"
-                    value={profile.estado}
-                    onChange={(e) =>
-                      setProfile({ ...profile, estado: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
               <button type="submit" className="save-btn">
                 Salvar Alterações
               </button>
@@ -250,38 +239,32 @@ export default function ProfilePage() {
             <h2>Histórico de Frequência</h2>
             <div className="card">
               <table>
-                {" "}
+
                 <thead>
                   <tr>
-                    {" "}
                     <th>Data</th>
                     <th>Entrada</th>
                     <th>Saída</th>
                     <th>Status</th>
-                  </tr>{" "}
+                  </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    {" "}
-                    <td>11/11/2025</td>
-                    <td>08:03</td>
-                    <td>17:00</td>
-                    <td className="ok">Pontual</td>
-                  </tr>
-                  <tr>
-                    {" "}
-                    <td>10/11/2025</td>
-                    <td>08:20</td>
-                    <td>17:05</td>
-                    <td className="late">Atraso</td>
-                  </tr>
-                  <tr>
-                    {" "}
-                    <td>09/11/2025</td>
-                    <td>07:58</td>
-                    <td>17:02</td>
-                    <td className="ok">Pontual</td>
-                  </tr>{" "}
+                  {historico.length === 0 && (
+                    <tr>
+                      <td colSpan="4">Nenhum registro encontrado</td>
+                    </tr>
+                  )}
+
+                  {historico.map((item, index) => (
+                    <tr key={index}>
+                      <td>{new Date(item.data_registro).toLocaleDateString("pt-BR")}</td>
+                      <td>{item.Entrada}</td>
+                      <td>{item.Saida}</td>
+                      <td className={item.Status === "Atraso" ? "late" : "ok"}>
+                        {item.Status}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

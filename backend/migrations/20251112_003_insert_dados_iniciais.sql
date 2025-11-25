@@ -6,9 +6,9 @@ USE Funcionarios_api;
 
 -- Inserir usuários iniciais (senha: 123456)
 INSERT INTO usuarios (nome, GMID, Cargo, Turno, senha, tipo) VALUES
-('Willian', 'AdminW','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'admin'),
-('Anna', 'AdminA','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'admin'),
-('Rebecca', 'AdminR','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'admin'),
+('Willian', 'AdminW','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'Admin'),
+('Anna', 'AdminA','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'Admin'),
+('Rebecca', 'AdminR','AdminSystem','Matutino', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'Admin'),
 ('Willian Silva', 'RV3NGT','Gerente','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'gestor'),
 ('Anna Grillo', 'KJT5DS','Group Leader','Noturno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),
 ('Rebecca Reis', 'FSDGF5','Supervisora','Diurno', '$2a$10$nnK8RyRP.M18lL0qz4m6h.C76FKtKb9fSUza9.tck2ORhskerUYZq', 'comum'),

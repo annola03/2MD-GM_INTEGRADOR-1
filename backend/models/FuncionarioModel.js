@@ -8,7 +8,7 @@ class funcionarioModel {
 
             const connection = await getConnection();
             try {
-                const sql = 'SELECT * FROM funcionarios ORDER BY id DESC LIMIT ? OFFSET ?';
+                const sql = 'SELECT * FROM funcionarios ORDER BY GMID DESC LIMIT ? OFFSET ?';
 
                 const [funcionarios] = await connection.query(sql, [limite, offset]);
 
@@ -34,13 +34,13 @@ class funcionarioModel {
         }
     }
 
-    // Buscar funcionario por ID
-    static async buscarPorId(id) {
+    // Buscar funcionario por GMID
+    static async buscarPorGMID(GMID) {
         try {
-            const rows = await read('funcionarios', `id = ${id}`);
+            const rows = await read('funcionarios', `GMID = ${GMID}`);
             return rows[0] || null;
         } catch (error) {
-            console.error('Erro ao buscar funcionario por ID:', error);
+            console.error('Erro ao buscar funcionario por GMID:', error);
             throw error;
         }
     }
@@ -56,9 +56,9 @@ class funcionarioModel {
     }
 
     // Atualizar funcionario
-    static async atualizar(id, dadosfuncionario) {
+    static async atualizar(GMID, dadosfuncionario) {
         try {
-            return await update('funcionarios', dadosfuncionario, `id = ${id}`);
+            return await update('funcionarios', dadosfuncionario, `GMID = ${GMID}`);
         } catch (error) {
             console.error('Erro ao atualizar funcionario:', error);
             throw error;
@@ -66,9 +66,9 @@ class funcionarioModel {
     }
 
     // Excluir funcionario
-    static async excluir(id) {
+    static async excluir(GMID) {
         try {
-            return await deleteRecord('funcionarios', `id = ${id}`);
+            return await deleteRecord('funcionarios', `GMID = ${GMID}`);
         } catch (error) {
             console.error('Erro ao excluir funcionario:', error);
             throw error;

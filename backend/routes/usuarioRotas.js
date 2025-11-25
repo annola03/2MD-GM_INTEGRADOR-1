@@ -9,6 +9,7 @@ router.get('/', authMiddleware, adminMiddleware, AuthController.listarUsuarios);
 router.post('/', authMiddleware, adminMiddleware, AuthController.criarUsuario);
 router.put('/:id', authMiddleware, adminMiddleware, AuthController.atualizarUsuario);
 router.delete('/:id', authMiddleware, adminMiddleware, AuthController.excluirUsuario);
+router.put('/me', authMiddleware, AuthController.atualizarProprioUsuario);
 
 // Rotas OPTIONS para CORS (preflight requests)
 router.options('/', (req, res) => {

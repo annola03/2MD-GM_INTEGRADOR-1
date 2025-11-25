@@ -152,6 +152,25 @@ class UsuarioModel {
       connection.release();
     }
   }
+
+  static async atualizar(id, dados) {
+    const campos = Object.keys(dados)
+      .map((c) => `${c} = ?`)
+      .join(", ");
+    const valores = Object.values(dados);
+
+    await db.query(`UPDATE usuarios SET ${campos} WHERE id = ?`, [
+      ...valores,
+      id,
+    ]);
+
+    const [usuario] = await db.query(
+      "SELECT id, nome, email_padrao, tipo FROM usuarios WHERE id = ?",
+      [id]
+    );
+
+    return usuario[0];
+  }
 }
 
 export default UsuarioModel;
