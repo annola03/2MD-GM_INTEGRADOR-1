@@ -91,11 +91,10 @@ export default function Dashboard() {
           </table>
         </div>
 
-        {/* === Novo quadro branco ao lado === */}
-        <div className="activity-card white-card half-width">
+        
           
           
-        </div>
+        
       </section>
     </main>
   );
