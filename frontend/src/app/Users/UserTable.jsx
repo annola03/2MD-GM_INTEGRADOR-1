@@ -1,8 +1,36 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 
 export default function UserTable({ users }) {
+  const [filtro, setFiltro] = useState("");
+
+  const dadosFiltrados = users.filter((item) => {
+    const texto = filtro.toLowerCase();
+    return (
+      item.Nome.toLowerCase().includes(texto) ||
+      item.gmin.toLowerCase().includes(texto) ||
+      item.cargo.toLowerCase().includes(texto) ||
+      item.area.toLowerCase().includes(texto) ||
+      item.turno.toLowerCase().includes(texto) ||
+      item.status.toLowerCase().includes(texto)
+    );
+  });
   return (
     <div className="table-container">
+      <input
+        type="text"
+        placeholder="Filtrar por Nome, GMID, Cargo, Status..."
+        value={filtro}
+        onChange={(e) => setFiltro(e.target.value)}
+        style={{
+          padding: "8px 12px",
+          width: "300px",
+          marginBottom: "15px",
+          borderRadius: "5px",
+          border: "1px solid #ccc",
+        }}
+      />
       <table className="user-table">
         <thead>
           <tr>
@@ -21,14 +49,18 @@ export default function UserTable({ users }) {
 
         <tbody>
           {users.length > 0 ? (
-            users.map((user) => (
+            dadosFiltrados.map((user) => (
               <tr key={user.id}>
                 <td>{user.Nome}</td>
                 <td>{user.gmin}</td>
                 <td>{user.cargo}</td>
                 <td>{user.area}</td>
                 <td>{user.turno}</td>
-                <td>{user.horaPonto ? new Date(user.horaPonto).toLocaleDateString("pt-BR") : "-"}</td>
+                <td>
+                  {user.horaPonto
+                    ? new Date(user.horaPonto).toLocaleDateString("pt-BR")
+                    : "-"}
+                </td>
                 <td>{user.entrada}</td>
                 <td>{user.saida}</td>
 

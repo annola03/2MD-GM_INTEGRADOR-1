@@ -37,13 +37,14 @@ class funcionarioModel {
     // Buscar funcionario por GMID
     static async buscarPorGMID(GMID) {
         try {
-            const rows = await read('funcionarios', `GMID = ${GMID}`);
-            return rows[0] || null;
+            const rows = await read('funcionarios', `GMID = '${GMID}'`);
+            return rows; // retorna todos os registros
         } catch (error) {
             console.error('Erro ao buscar funcionario por GMID:', error);
             throw error;
         }
     }
+    
 
     // Criar novo funcionario
     static async criar(dadosfuncionario) {

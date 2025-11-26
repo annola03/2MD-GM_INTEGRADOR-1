@@ -17,9 +17,9 @@ class funcionarioController {
   static async buscarPorGMID(req, res) {
     try {
       let { GMID } = req.params;
-
+  
       GMID = GMID.toUpperCase();
-
+  
       if (!validarGMID(GMID)) {
         return res.status(400).json({
           sucesso: false,
@@ -28,20 +28,21 @@ class funcionarioController {
             "GMID deve ter exatamente 6 caracteres, somente letras maiúsculas e números.",
         });
       }
-
-      const funcionario = await funcionarioModel.buscarPorGMID(GMID);
-
-      if (!funcionario) {
+  
+      // Agora traz TODOS os registros
+      const funcionarios = await funcionarioModel.buscarPorGMID(GMID);
+  
+      if (!funcionarios || funcionarios.length === 0) {
         return res.status(404).json({
           sucesso: false,
           erro: "Funcionário não encontrado",
           mensagem: `Nenhum funcionário com GMID ${GMID}`,
         });
       }
-
+  
       res.status(200).json({
         sucesso: true,
-        dados: funcionario,
+        funcionarios, // <-- agora está correto
       });
     } catch (error) {
       console.error("Erro ao buscar funcionário:", error);
@@ -52,6 +53,7 @@ class funcionarioController {
       });
     }
   }
+  
 
   // POST /funcionarios - Criar funcionário
   static async criar(req, res) {

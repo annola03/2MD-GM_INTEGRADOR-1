@@ -4,7 +4,7 @@ import { UserContext } from "@/context/UserContext";
 import "./header.css";
 
 export default function Header() {
-    const { user, carregando } = useContext(UserContext);
+    const { user, carregando, logout } = useContext(UserContext);
   
     if (carregando) {
       return null;
@@ -31,6 +31,11 @@ export default function Header() {
             <p className="profile-name">{user?.Nome}</p>
             <p className="profile-role">{user?.tipo}</p>
           </div>
+
+          {/* 🔴 BOTÃO DE LOGOUT */}
+          <button className="logout-btn" onClick={logout}>
+            Sair
+          </button>
         </div>
       </div>
     </header>
