@@ -7,6 +7,7 @@ import "./users.css";
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
 
+
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -68,13 +69,11 @@ export default function UsersPage() {
   }, []);
 
 
-
   return (
     <div className="users-container">
       <div className="users-header">
         <h1>Controle de Ponto - Funcionários</h1>
         <div className="actions">
-          <button className="add-btn">+ Novo Funcionário</button>
           <button className="export-btn">Exportar (Excel)</button>
         </div>
       </div>

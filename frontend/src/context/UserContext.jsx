@@ -11,6 +11,13 @@ export default function UserProvider({ children }) {
 
   const router = useRouter();
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    // Se quiser redirecionar:
+     window.location.href = "/";
+  };
+
   useEffect(() => {
     async function carregarUsuario() {
       const token = localStorage.getItem("token");
@@ -52,7 +59,7 @@ export default function UserProvider({ children }) {
   }, [router]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, carregando }}>
+    <UserContext.Provider value={{ user, setUser, carregando, logout }}>
       {children}
     </UserContext.Provider>
   );

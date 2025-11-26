@@ -5,7 +5,7 @@ import { authMiddleware, adminMiddleware } from '../middlewares/authMiddleware.j
 const router = express.Router();
 
 // Rotas de usuários (apenas admin)
-router.get('/', authMiddleware, adminMiddleware, AuthController.listarUsuarios);
+router.get('/', authMiddleware, AuthController.listarUsuarios);
 router.post('/', authMiddleware, adminMiddleware, AuthController.criarUsuario);
 router.put('/:id', authMiddleware, adminMiddleware, AuthController.atualizarUsuario);
 router.delete('/:id', authMiddleware, adminMiddleware, AuthController.excluirUsuario);

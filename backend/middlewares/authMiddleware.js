@@ -60,7 +60,7 @@ const authMiddleware = (req, res, next) => {
 
 // Middleware para verificar se o usuário é administrador
 const adminMiddleware = (req, res, next) => {
-    if (req.usuario.tipo !== 'admin') {
+    if (req.usuario.tipo !== 'admin' || req.usuario.tipo !== 'gestor') {
         return res.status(403).json({ 
             erro: 'Acesso negado',
             mensagem: 'Apenas administradores podem acessar este recurso'

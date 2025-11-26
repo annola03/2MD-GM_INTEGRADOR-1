@@ -6,29 +6,21 @@ import InfoCard from "@/components/CardAdm/InfoCard";
 import TableCard from "@/components/CardAdm/TableCard";
 
 export default function AdminPage() {
-  const [usuarios, setUsuarios] = useState([]);
-  const [relatorios, setRelatorios] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { user, carregando } = useContext(UserContext);
-  const [funcionarios, setFuncionarios] = useState([]);
+    const [users, setUsers] = useState([]);
 
   const API_URL = "http://localhost:3001";
 
   useEffect(() => {
-    async function carregarDados() {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("Nenhum token encontrado!");
-        return;
-      }
-
+    async function fetchUsers() {
       try {
+        const token = localStorage.getItem("token");
+
         const [respUsuarios, respFuncionarios] = await Promise.all([
-          fetch(`${API_URL}/api/usuarios`, {
+          fetch("http://localhost:3001/api/usuarios?limite=60", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch(`${API_URL}/api/funcionarios`, {
+          fetch("http://localhost:3001/api/funcionarios?limite=1800", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -36,49 +28,48 @@ export default function AdminPage() {
         const jsonUsuarios = await respUsuarios.json();
         const jsonFuncionarios = await respFuncionarios.json();
 
-        setUsuarios(jsonUsuarios.dados || []);
-        setFuncionarios(jsonFuncionarios.funcionarios || []);
+        const usuarios = jsonUsuarios.dados || [];
+        const funcionarios = jsonFuncionarios.funcionarios || [];
+
+        // pegar último registro por GMID
+        const ultimoRegistro = {};
+
+        funcionarios.forEach((f) => {
+          if (!ultimoRegistro[f.GMID] || f.id > ultimoRegistro[f.GMID].id) {
+            ultimoRegistro[f.GMID] = f;
+          }
+        });
+
+        // transformar em array
+        const ultimaBatida = Object.values(ultimoRegistro);
+        const filtrados = usuarios.filter(u => u.tipo !== "admin");
+        // unir usuários + ponto
+        const unificados = filtrados.map((u) => {
+          const ponto = ultimaBatida.find((p) => p.GMID === u.GMID);
+
+          return {
+            Nome: u.Nome,
+            gmin: u.GMID, // Seu UserTable usa "gmin"
+            cargo: u.Cargo,
+            area: u.tipo || "-", // caso venha depois
+            turno: u.Turno,
+            horaPonto: ponto?.data_registro || "-",
+            entrada: ponto?.Entrada || "-",
+            saida: ponto?.Saida || "-",
+            status: ponto?.Status || "-",
+          };
+
+        });
+
+
+        setUsers(unificados);
       } catch (error) {
         console.error("Erro ao carregar dados:", error);
-      } finally {
-        setLoading(false);
       }
     }
 
-    carregarDados();
+    fetchUsers();
   }, []);
-
-const funcionariosPorGMID = funcionarios.reduce((acc, f) => {
-  const gmid = String(f.GMID || "SEM_GMID"); // normalize para evitar undefined
-
-  // se ainda não temos esse GMID, ou se é um registro mais novo
-  if (!acc[gmid] || f.id > acc[gmid].id) {
-    acc[gmid] = f;
-  }
-
-  return acc;
-}, {});
-console.log("LISTA COMPLETA DE GMIDs DOS FUNCIONÁRIOS:");
-console.log(funcionarios.map(f => f.GMID));
-
-console.log(funcionariosPorGMID)
-  // Só AQUI você pode usar return condicional
-  if (carregando || loading) return <p>Carregando dados...</p>;
-console.log(funcionarios)
-  if (!Array.isArray(usuarios)) {
-    return <div>Carregando usuários...</div>;
-  }
-
-  const usuariosCompletos = usuarios.map((u) => {
-    const func = funcionariosPorGMID[u.GMID];
-
-    return {  
-      nome: u.Nome,
-      funcao: u.Cargo,
-      data: func?.data_registro || "—",
-      status: func?.Status || "—",
-    };
-  });
 
   return (
     <div className="admin-container">
@@ -91,21 +82,21 @@ console.log(funcionarios)
         <section className="cards">
           <InfoCard
             title={`Administrador ${user?.Nome}`}
-            value={`${usuarios.length} usuários`}
+            value={`${users.length} usuários`}
             image="/imagens/fotoPerfil1.png"
           />
 
           <InfoCard
             title="Relatórios Gerados"
-            value={`${relatorios.length} relatórios`}
+            value={` relatórios`}
           />
 
           <InfoCard
             title="Atividades Recentes"
             value={
-              relatorios[0]
-                ? `Último relatório em ${relatorios[0].data}`
-                : "Sem dados"
+              
+                 `Último relatório em`
+                 
             }
           />
         </section>
@@ -114,22 +105,11 @@ console.log(funcionarios)
           <TableCard
             title="Últimos Cadastros"
             headers={["Nome", "Função", "Data", "Status"]}
-            data={usuariosCompletos.map((u) => [
-              u.nome,
-              u.funcao,
-              u.data,
+            data={users.map((u) => [
+              u.Nome,
+              u.cargo,
+              new Date(u.horaPonto).toLocaleDateString("pt-BR"),
               u.status,
-            ])}
-          />
-
-          <TableCard
-            title="Relatórios Recentes"
-            headers={["ID", "Responsável", "Data", "Status"]}
-            data={relatorios.map((r) => [
-              r.id,
-              r.responsavel,
-              r.data,
-              r.status,
             ])}
           />
         </section>
