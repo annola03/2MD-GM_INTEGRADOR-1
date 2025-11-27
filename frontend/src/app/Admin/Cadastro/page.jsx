@@ -8,6 +8,7 @@ export default function CadastroFuncionario() {
     cargo: "",
     turno: "",
     GMID: "",
+    tipo: "",
   });
 
   const handleChange = (e) => {
@@ -37,7 +38,7 @@ const handleSubmit = async (e) => {
       `Funcionário cadastrado com sucesso!\n\nSenha gerada: ${dados.senha}`
     );
 
-    setForm({ nome: "", cargo: "", turno: "", GMID: "" });
+    setForm({ nome: "", cargo: "", turno: "", GMID: "", tipo: "" });
 
   } catch (erro) {
     console.error("Erro ao cadastrar:", erro);
@@ -96,9 +97,9 @@ const handleSubmit = async (e) => {
           <label>Turno</label>
           <select name="turno" value={form.turno} onChange={handleChange} required>
             <option value="">Selecione o turno</option>
-            <option value="Manhã">Matutino</option>
-            <option value="Tarde">Diurno</option>
-            <option value="Noite">Noturno</option>
+            <option value="Matutino">Matutino</option>
+            <option value="Diurno">Diurno</option>
+            <option value="Noturno">Noturno</option>
           </select>
         </div>
 
@@ -111,6 +112,16 @@ const handleSubmit = async (e) => {
             onChange={handleChange}
             required
           />
+        </div>
+
+        <div className="form-group">
+          <label>Tipo</label>
+          <select name="tipo" value={form.tipo} onChange={handleChange} required>
+            <option value="">Selecione o Tipo</option>
+            <option value="admin">admin</option>
+            <option value="gestor">gestor</option>
+            <option value="comum">comum</option>
+          </select>
         </div>
 
       

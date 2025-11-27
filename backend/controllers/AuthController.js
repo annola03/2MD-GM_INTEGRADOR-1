@@ -109,7 +109,7 @@ class AuthController {
 
   static async registrar(req, res) {
     try {
-      const { nome, cargo, turno, GMID } = req.body;
+      const { nome, cargo, turno, GMID, tipo } = req.body;
 
       // Validações...
       if (!GMID) {
@@ -141,7 +141,7 @@ class AuthController {
         turno,
         GMID,
         senha: senhaHash,
-        tipo: "funcionario",
+        tipo: tipo,
       });
 
       // 👉 RETORNAR A SENHA GERADA NO JSON
@@ -155,6 +155,7 @@ class AuthController {
           cargo,
           turno,
           GMID,
+          tipo,
         },
       });
     } catch (error) {
@@ -439,7 +440,7 @@ class AuthController {
       const dadosUsuario = {
         nome: nome.trim(),
         email_padrao: email_padrao.trim().toLowerCase(),
-        senha: senha,
+        senha: hash,
         tipo: tipo || "comum",
       };
 

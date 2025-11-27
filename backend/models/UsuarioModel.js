@@ -55,9 +55,9 @@ class UsuarioModel {
   }
 
   // Buscar usuário por email_padrao
-  static async buscarPorEmail_padrao(email_padrao) {
+  static async buscarPorEmail(email_padrao) {
     try {
-      const rows = await read("usuarios", (email_padrao = "${email_padrao}"));
+      const rows = await read("usuarios", `email_padrao = '${email_padrao}'`);
       return rows[0] || null;
     } catch (error) {
       console.error("Erro ao buscar usuário por email:", error);
@@ -124,7 +124,7 @@ class UsuarioModel {
   // Verificar credenciais de login
   static async verificarCredenciais(email_padrao, senha) {
     try {
-      const usuario = await this.buscarPorEmail_padrao(email_padrao);
+      const usuario = await this.buscarPorEmail(email_padrao);
 
       if (!usuario) {
         return null;
