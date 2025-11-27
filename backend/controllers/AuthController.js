@@ -2,6 +2,17 @@ import jwt from "jsonwebtoken";
 import UsuarioModel from "../models/UsuarioModel.js";
 import { JWT_CONFIG } from "../config/jwt.js";
 import { gerarRegistrosAutomaticos } from "../utils/popularRegistros.js";
+import bcrypt from "bcryptjs";
+
+function gerarSenha() {
+  const caracteres =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";
+  let senha = "";
+  for (let i = 0; i < 10; i++) {
+    senha += caracteres[Math.floor(Math.random() * caracteres.length)];
+  }
+  return senha;
+}
 
 // Controller para operações de autenticação
 class AuthController {
@@ -96,107 +107,61 @@ class AuthController {
     }
   }
 
-  // POST /auth/registrar - Registrar novo usuário
   static async registrar(req, res) {
     try {
-      const { nome, email_padrao, senha, tipo } = req.body;
+      const { nome, cargo, turno, GMID } = req.body;
 
-      // Validações básicas
-      if (!nome || nome.trim() === "") {
+      // Validações...
+      if (!GMID) {
         return res.status(400).json({
           sucesso: false,
-          erro: "Nome obrigatório",
-          mensagem: "O nome é obrigatório",
+          erro: "GMID obrigatório",
         });
       }
 
-      if (!email_padrao || email_padrao.trim() === "") {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Email obrigatório",
-          mensagem: "O email_padrao é obrigatório",
-        });
-      }
-
-      if (!senha || senha.trim() === "") {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Senha obrigatória",
-          mensagem: "A senha é obrigatória",
-        });
-      }
-
-      // Validações de formato
-      if (nome.length < 2) {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Nome muito curto",
-          mensagem: "O nome deve ter pelo menos 2 caracteres",
-        });
-      }
-
-      if (nome.length > 255) {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Nome muito longo",
-          mensagem: "O nome deve ter no máximo 255 caracteres",
-        });
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email_padrao)) {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Email inválido",
-          mensagem: "Formato de email_padrao inválido",
-        });
-      }
-
-      if (senha.length < 6) {
-        return res.status(400).json({
-          sucesso: false,
-          erro: "Senha muito curta",
-          mensagem: "A senha deve ter pelo menos 6 caracteres",
-        });
-      }
-
-      // Verificar se o email_padrao já existe
-      const usuarioExistente = await UsuarioModel.buscarPorEmail(email_padrao);
+      // Verificar se GMID já existe
+      const usuarioExistente = await UsuarioModel.buscarPorGMID(GMID);
       if (usuarioExistente) {
         return res.status(409).json({
           sucesso: false,
-          erro: "Email já cadastrado",
-          mensagem: "Este email_padrao já está sendo usado por outro usuário",
+          erro: "GMID já cadastrado",
         });
       }
 
-      // Preparar dados do usuário
-      const dadosUsuario = {
-        nome: nome.trim(),
-        email_padrao: email_padrao.trim().toLowerCase(),
-        senha: senha,
-        tipo: tipo || "comum",
-      };
+      // 👉 GERAR A SENHA AQUI
+      const senhaGerada = gerarSenha();
+
+      // Criptografar
+      const senhaHash = await bcrypt.hash(senhaGerada, 10);
 
       // Criar usuário
-      const usuarioId = await UsuarioModel.criar(dadosUsuario);
+      const usuarioId = await UsuarioModel.criar({
+        nome,
+        cargo,
+        turno,
+        GMID,
+        senha: senhaHash,
+        tipo: "funcionario",
+      });
 
-      res.status(201).json({
+      // 👉 RETORNAR A SENHA GERADA NO JSON
+      return res.status(201).json({
         sucesso: true,
-        mensagem: "Usuário registrado com sucesso",
+        mensagem: "Funcionário registrado com sucesso!",
+        senha: senhaGerada, // <= AQUI!!!
         dados: {
           id: usuarioId,
-          nome: dadosUsuario.nome,
-          email_padrao: dadosUsuario.email_padrao,
-          tipo: dadosUsuario.tipo,
+          nome,
+          cargo,
+          turno,
+          GMID,
         },
       });
     } catch (error) {
-      console.error("Erro ao registrar usuário:", error);
-      res.status(500).json({
+      console.error("Erro ao registrar funcionário:", error);
+      return res.status(500).json({
         sucesso: false,
-        erro: "Erro interno do servidor",
-        mensagem: "Não foi possível registrar o usuário",
+        erro: "Erro interno no servidor",
       });
     }
   }
@@ -227,6 +192,119 @@ class AuthController {
         sucesso: false,
         erro: "Erro interno do servidor",
         mensagem: "Não foi possível obter o perfil",
+      });
+    }
+  }
+
+  // PUT /auth/perfil - Atualizar perfil do usuário logado
+  static async atualizarPerfil(req, res) {
+    try {
+      const usuarioId = req.usuario.id;
+      const { Nome, email_padrao, Telefone, Endereco } = req.body; // Ajuste conforme os campos que podem ser atualizados
+
+      // Verificar se o usuário existe
+      const usuario = await UsuarioModel.buscarPorId(usuarioId);
+
+      if (!usuario) {
+        return res.status(404).json({
+          sucesso: false,
+          erro: "Usuário não encontrado",
+          mensagem: "Usuário não foi encontrado",
+        });
+      }
+
+      // Montar os campos que serão atualizados
+      const novosDados = {};
+
+      if (Nome) novosDados.Nome = Nome;
+      if (email_padrao) novosDados.email_padrao = email_padrao;
+      if (Telefone) novosDados.Telefone = Telefone;
+      if (Endereco) novosDados.Endereco = Endereco;
+
+      // Se nenhum campo vier no body
+      if (Object.keys(novosDados).length === 0) {
+        return res.status(400).json({
+          sucesso: false,
+          erro: "Nenhum dado enviado",
+          mensagem: "Envie ao menos um campo para atualizar",
+        });
+      }
+
+      console.log("DADOS RECEBIDOS NO PUT:", req.body);
+
+      // Atualizar no banco
+      const usuarioAtualizado = await UsuarioModel.atualizar(
+        usuarioId,
+        novosDados
+      );
+
+      // Remover senha
+      const { senha, ...usuarioSemSenha } = usuarioAtualizado;
+
+      return res.status(200).json({
+        sucesso: true,
+        mensagem: "Perfil atualizado com sucesso",
+        dados: usuarioSemSenha,
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+      return res.status(500).json({
+        sucesso: false,
+        erro: "Erro interno do servidor",
+        mensagem: "Não foi possível atualizar o perfil",
+      });
+    }
+  }
+
+  // PUT /auth/senha - Atualizar senha
+  static async atualizarSenha(req, res) {
+    try {
+      const { senha_atual, nova_senha } = req.body;
+
+      if (!senha_atual || !nova_senha) {
+        return res.status(400).json({
+          sucesso: false,
+          mensagem: "Envie a senha atual e a nova senha.",
+        });
+      }
+
+      // Buscar usuário logado
+      const usuario = await UsuarioModel.buscarPorId(req.usuario.id);
+
+      if (!usuario) {
+        return res.status(404).json({
+          sucesso: false,
+          mensagem: "Usuário não encontrado.",
+        });
+      }
+
+      // Comparar senha atual
+      const senhaConfere = await bcrypt.compare(senha_atual, usuario.senha);
+
+      if (!senhaConfere) {
+        return res.status(401).json({
+          sucesso: false,
+          mensagem: "Senha atual incorreta.",
+        });
+      }
+
+      // Gerar hash da nova senha
+      const novaSenhaHash = await bcrypt.hash(nova_senha, 10);
+
+      // Atualizar no banco
+      await UsuarioModel.atualizar(req.usuario.id, {
+        senha: novaSenhaHash,
+      });
+
+      return res.status(200).json({
+        sucesso: true,
+        mensagem: "Senha atualizada com sucesso!",
+      });
+    } catch (erro) {
+      console.error("Erro ao atualizar senha:", erro);
+      return res.status(500).json({
+        sucesso: false,
+        mensagem: "Erro interno ao atualizar senha.",
       });
     }
   }
@@ -545,7 +623,7 @@ class AuthController {
     }
   }
 
-   static async atualizarProprioUsuario(req, res) {
+  static async atualizarProprioUsuario(req, res) {
     try {
       const userId = req.user.id; // ID vindo do token JWT
       const { nome, email_padrao, senha } = req.body;

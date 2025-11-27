@@ -57,10 +57,21 @@ class UsuarioModel {
   // Buscar usuário por email_padrao
   static async buscarPorEmail_padrao(email_padrao) {
     try {
-      const rows = await read("usuarios", `email_padrao = '${email_padrao}'`);
+      const rows = await read("usuarios", (email_padrao = "${email_padrao}"));
       return rows[0] || null;
     } catch (error) {
       console.error("Erro ao buscar usuário por email:", error);
+      throw error;
+    }
+  }
+
+  // Buscar usuário por GMID
+  static async buscarPorGMID(GMID) {
+    try {
+      const rows = await read("usuarios", `GMID = '${GMID}'`);
+      return rows[0] || null;
+    } catch (error) {
+      console.error("Erro ao buscar usuário por GMID:", error);
       throw error;
     }
   }
@@ -89,6 +100,9 @@ class UsuarioModel {
       if (dadosUsuario.senha) {
         dadosUsuario.senha = await hashPassword(dadosUsuario.senha);
       }
+      console.log("Atualizando ID:", id);
+      console.log("Campos a atualizar:", campos);
+      console.log("Valores:", valores);
 
       return await update("usuarios", dadosUsuario, `id = ${id}`);
     } catch (error) {
@@ -154,22 +168,26 @@ class UsuarioModel {
   }
 
   static async atualizar(id, dados) {
-    const campos = Object.keys(dados)
-      .map((c) => `${c} = ?`)
-      .join(", ");
-    const valores = Object.values(dados);
+    const campos = {};
 
-    await db.query(`UPDATE usuarios SET ${campos} WHERE id = ?`, [
-      ...valores,
-      id,
-    ]);
+    // monta objeto apenas com os campos enviados
+    for (const key in dados) {
+      if (dados[key] !== undefined && dados[key] !== null) {
+        campos[key] = dados[key];
+      }
+    }
 
-    const [usuario] = await db.query(
-      "SELECT id, nome, email_padrao, tipo FROM usuarios WHERE id = ?",
-      [id]
-    );
+    if (Object.keys(campos).length === 0) {
+      throw new Error("Nenhum campo enviado para atualização.");
+    }
 
-    return usuario[0];
+    // adiciona data_atualizacao automaticamente
+    campos.data_atualizacao = new Date();
+
+    // chama seu update customizado
+    const result = await update("usuarios", campos, { id });
+
+    return result;
   }
 }
 

@@ -58,19 +58,31 @@ async function create(table, data) {
 async function update(table, data, where) {
     const connection = await getConnection();
     try {
+        // Monta SET
         const set = Object.keys(data)
             .map(column => `${column} = ?`)
             .join(', ');
 
-        const sql = `UPDATE ${table} SET ${set} WHERE ${where}`;
-        const values = Object.values(data);
+        // Monta WHERE
+        const whereClause = Object.keys(where)
+            .map(column => `${column} = ?`)
+            .join(' AND ');
 
-        const [result] = await connection.execute(sql, [...values]);
+        const sql = `UPDATE ${table} SET ${set} WHERE ${whereClause}`;
+
+        const values = [
+            ...Object.values(data),
+            ...Object.values(where),
+        ];
+
+        const [result] = await connection.execute(sql, values);
         return result.affectedRows;
+
     } finally {
         connection.release();
     }
 }
+
 
 // Função para excluir um registro
 async function deleteRecord(table, where) {

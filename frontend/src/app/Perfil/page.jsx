@@ -10,6 +10,10 @@ export default function ProfilePage() {
   const [selected, setSelected] = useState("edit");
   const [loading, setLoading] = useState(true);
 
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+
   const [profile, setProfile] = useState({
     nome: "",
     email: "",
@@ -26,18 +30,18 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
+
     fetch("http://localhost:3001/api/auth/perfil", {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then(r => r.json())
-      .then(res => {
+      .then((r) => r.json())
+      .then((res) => {
         if (res.sucesso) {
           setProfile({
             nome: res.dados.Nome,
             email: res.dados.email_padrao,
-            telefone: res.dados.telefone || "",
-            endereco: res.dados.endereco || "",
+            telefone: res.dados.Telefone || "",
+            endereco: res.dados.Endereco || "",
             imagem: res.dados.imagem
               ? `http://localhost:3001/uploads/imagens/${res.dados.imagem}`
               : "/imagens/avatar.png",
@@ -45,7 +49,6 @@ export default function ProfilePage() {
         }
       });
   }, []);
-  
 
   // ============================
   // 2) CARREGAR HISTÓRICO DO FUNCIONÁRIO PELO GMID
@@ -71,30 +74,35 @@ export default function ProfilePage() {
 
   const salvarAlteracoes = async (e) => {
     e.preventDefault();
-  
+
     const token = localStorage.getItem("token");
-  
+
     const body = {
-      nome: profile.nome,
+      Nome: profile.nome,
       email_padrao: profile.email,
-      telefone: profile.telefone,
-      endereco: profile.endereco,
+      Telefone: profile.telefone,
+      Endereco: profile.endereco,
     };
-  
-    fetch("http://localhost:3001/api/auth/me", {
+
+    console.log("Enviando body:", body);
+
+    const res = await fetch("http://localhost:3001/api/auth/perfil", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(body)
-    })
-      .then(r => r.json())
-      .then((res) => {
-        if (res.sucesso) alert("Perfil atualizado!");
-      });
+      body: JSON.stringify(body),
+    });
+
+    const dados = await res.json();
+
+    if (dados.sucesso) {
+      alert("Perfil atualizado!");
+    } else {
+      alert("Erro: " + dados.mensagem);
+    }
   };
-  
 
   // ============================
   // TROCAR FOTO
@@ -126,6 +134,58 @@ export default function ProfilePage() {
   };
 
   // ============================
+  // Atualizar senha
+  // ============================
+
+  async function atualizarSenha(e) {
+    e.preventDefault();
+
+    if (!senhaAtual || !novaSenha || !confirmarSenha) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    if (novaSenha !== confirmarSenha) {
+      alert("A nova senha e a confirmação não coincidem.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:3001/api/auth/senha",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            senha_atual: senhaAtual,
+            nova_senha: novaSenha,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Erro ao atualizar senha.");
+        return;
+      }
+
+      alert("Senha atualizada com sucesso!");
+
+      // limpa campos
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarSenha("");
+    } catch (error) {
+      console.error("Erro ao atualizar senha:", error);
+      alert("Erro inesperado.");
+    }
+  }
+
+  // ============================
   // RENDER
   // ============================
 
@@ -135,16 +195,35 @@ export default function ProfilePage() {
       <aside className="profile-sidebar">
         <h2>Meu Perfil</h2>
         <ul>
-          <li className={selected === "edit" ? "active" : ""} onClick={() => setSelected("edit")}>Editar Perfil</li>
-          <li className={selected === "history" ? "active" : ""} onClick={() => setSelected("history")}>Histórico</li>
-          <li className={selected === "notifications" ? "active" : ""} onClick={() => setSelected("notifications")}>Notificações</li>
-          <li className={selected === "security" ? "active" : ""} onClick={() => setSelected("security")}>Segurança</li>
+          <li
+            className={selected === "edit" ? "active" : ""}
+            onClick={() => setSelected("edit")}
+          >
+            Editar Perfil
+          </li>
+          <li
+            className={selected === "history" ? "active" : ""}
+            onClick={() => setSelected("history")}
+          >
+            Histórico
+          </li>
+          <li
+            className={selected === "notifications" ? "active" : ""}
+            onClick={() => setSelected("notifications")}
+          >
+            Notificações
+          </li>
+          <li
+            className={selected === "security" ? "active" : ""}
+            onClick={() => setSelected("security")}
+          >
+            Segurança
+          </li>
         </ul>
       </aside>
 
       {/* === CONTEÚDO === */}
       <main className="profile-content">
-        
         {/* === EDITAR === */}
         {selected === "edit" && (
           <section className="edit-profile">
@@ -157,7 +236,12 @@ export default function ProfilePage() {
 
               <label className="change-photo-btn">
                 Alterar
-                <input type="file" accept="image/*" onChange={trocarFoto} hidden />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={trocarFoto}
+                  hidden
+                />
               </label>
             </div>
 
@@ -167,7 +251,9 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={profile.nome}
-                  onChange={(e) => setProfile({ ...profile, nome: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, nome: e.target.value })
+                  }
                 />
               </div>
 
@@ -176,7 +262,9 @@ export default function ProfilePage() {
                 <input
                   type="email"
                   value={profile.email}
-                  onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, email: e.target.value })
+                  }
                 />
               </div>
 
@@ -185,7 +273,9 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={profile.telefone}
-                  onChange={(e) => setProfile({ ...profile, telefone: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, telefone: e.target.value })
+                  }
                 />
               </div>
 
@@ -194,11 +284,15 @@ export default function ProfilePage() {
                 <input
                   type="text"
                   value={profile.endereco}
-                  onChange={(e) => setProfile({ ...profile, endereco: e.target.value })}
+                  onChange={(e) =>
+                    setProfile({ ...profile, endereco: e.target.value })
+                  }
                 />
               </div>
 
-              <button type="submit" className="save-btn">Salvar Alterações</button>
+              <button type="submit" className="save-btn">
+                Salvar Alterações
+              </button>
             </form>
           </section>
         )}
@@ -228,7 +322,11 @@ export default function ProfilePage() {
 
                   {historico.map((item, index) => (
                     <tr key={index}>
-                      <td>{new Date(item.data_registro).toLocaleDateString("pt-BR")}</td>
+                      <td>
+                        {new Date(item.data_registro).toLocaleDateString(
+                          "pt-BR"
+                        )}
+                      </td>
                       <td>{item.Entrada}</td>
                       <td>{item.Saida}</td>
                       <td className={item.Status === "Atraso" ? "late" : "ok"}>
@@ -263,23 +361,37 @@ export default function ProfilePage() {
             <div className="card">
               <p>Altere sua senha:</p>
 
-              <form className="security-form">
+              <form className="security-form" onSubmit={atualizarSenha}>
                 <div className="input-block">
                   <label>Senha atual</label>
-                  <input type="password" />
+                  <input
+                    type="password"
+                    value={senhaAtual}
+                    onChange={(e) => setSenhaAtual(e.target.value)}
+                  />
                 </div>
 
                 <div className="input-block">
                   <label>Nova senha</label>
-                  <input type="password" />
+                  <input
+                    type="password"
+                    value={novaSenha}
+                    onChange={(e) => setNovaSenha(e.target.value)}
+                  />
                 </div>
 
                 <div className="input-block">
                   <label>Confirmar nova senha</label>
-                  <input type="password" />
+                  <input
+                    type="password"
+                    value={confirmarSenha}
+                    onChange={(e) => setConfirmarSenha(e.target.value)}
+                  />
                 </div>
 
-                <button className="save-btn">Atualizar Senha</button>
+                <button type="submit" className="save-btn">
+                  Atualizar Senha
+                </button>
               </form>
             </div>
           </section>

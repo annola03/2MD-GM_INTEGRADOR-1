@@ -7,20 +7,44 @@ export default function CadastroFuncionario() {
     nome: "",
     cargo: "",
     turno: "",
-    email: "",
-    telefone: "",
+    GMID: "",
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Dados cadastrados:", form);
-    alert("Funcionário cadastrado com sucesso!");
-    setForm({ nome: "", cargo: "", turno: "", email: "", telefone: "" });
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const resposta = await fetch("http://localhost:3001/api/auth/registrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      alert("Erro: " + dados.mensagem);
+      return;
+    }
+
+    alert(
+      `Funcionário cadastrado com sucesso!\n\nSenha gerada: ${dados.senha}`
+    );
+
+    setForm({ nome: "", cargo: "", turno: "", GMID: "" });
+
+  } catch (erro) {
+    console.error("Erro ao cadastrar:", erro);
+    alert("Erro ao conectar com o servidor");
+  }
+};
+
 
   return (
     <div className="cadastro-container">
@@ -81,9 +105,9 @@ export default function CadastroFuncionario() {
         <div className="form-group">
           <label>GMID</label>
           <input
-            type="email"
-            name="email"
-            value={form.email}
+            type="text"
+            name="GMID"
+            value={form.GMID}
             onChange={handleChange}
             required
           />
