@@ -4,6 +4,9 @@ import React, { useState } from "react";
 
 export default function UserTable({ users }) {
   const [filtro, setFiltro] = useState("");
+  const [editRow, setEditRow] = useState(null);
+  const [entradaEdit, setEntradaEdit] = useState("");
+  const [saidaEdit, setSaidaEdit] = useState("");
 
   const dadosFiltrados = users.filter((item) => {
     const texto = filtro.toLowerCase();
@@ -16,6 +19,39 @@ export default function UserTable({ users }) {
       item.status.toLowerCase().includes(texto)
     );
   });
+
+  const salvarHorario = async (user) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/funcionarios/${user.gmin}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            Entrada: entradaEdit,
+            Saida: saidaEdit,
+          }),
+        }
+      );
+
+      const data = await res.json();
+      if (data.sucesso) {
+        alert("Horários atualizados!");
+        setEditRow(null);
+      } else {
+        alert("Erro ao atualizar horários!");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao atualizar horários!");
+    }
+  };
+
   return (
     <div className="table-container">
       <input
@@ -31,6 +67,7 @@ export default function UserTable({ users }) {
           border: "1px solid #ccc",
         }}
       />
+
       <table className="user-table">
         <thead>
           <tr>
@@ -48,9 +85,9 @@ export default function UserTable({ users }) {
         </thead>
 
         <tbody>
-          {users.length > 0 ? (
+          {dadosFiltrados.length > 0 ? (
             dadosFiltrados.map((user) => (
-              <tr key={user.id}>
+              <tr key={user.gmin}>
                 <td>{user.Nome}</td>
                 <td>{user.gmin}</td>
                 <td>{user.cargo}</td>
@@ -61,8 +98,30 @@ export default function UserTable({ users }) {
                     ? new Date(user.horaPonto).toLocaleDateString("pt-BR")
                     : "-"}
                 </td>
-                <td>{user.entrada}</td>
-                <td>{user.saida}</td>
+
+                <td>
+                  {editRow === user.gmin ? (
+                    <input
+                      type="time"
+                      value={entradaEdit}
+                      onChange={(e) => setEntradaEdit(e.target.value)}
+                    />
+                  ) : (
+                    user.entrada || "-"
+                  )}
+                </td>
+
+                <td>
+                  {editRow === user.gmin ? (
+                    <input
+                      type="time"
+                      value={saidaEdit}
+                      onChange={(e) => setSaidaEdit(e.target.value)}
+                    />
+                  ) : (
+                    user.saida || "-"
+                  )}
+                </td>
 
                 <td>
                   <span
@@ -70,12 +129,28 @@ export default function UserTable({ users }) {
                       user.status === "Pontual" ? "active" : "inactive"
                     }`}
                   >
-                    {user.status}
+                    {user.status || "-"}
                   </span>
                 </td>
+
                 <td className="acoes">
-                  <button className="edit-btn">✏️</button>
-                  <button className="delete-btn">🗑️</button>
+                  {editRow === user.gmin ? (
+                    <>
+                      <button onClick={() => salvarHorario(user)}>💾</button>
+                      <button onClick={() => setEditRow(null)}>❌</button>
+                    </>
+                  ) : (
+                    <button
+                      className="edit-btn"
+                      onClick={() => {
+                        setEditRow(user.gmin);
+                        setEntradaEdit(user.entrada || "");
+                        setSaidaEdit(user.saida || "");
+                      }}
+                    >
+                      ✏️
+                    </button>
+                  )}
                 </td>
               </tr>
             ))

@@ -4,9 +4,25 @@ import React, { useEffect, useState } from "react";
 import UserTable from "./UserTable";
 import "./users.css";
 
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
+// dentro do componente
+const exportToExcel = () => {
+  if (!users || users.length === 0) return;
+
+  // Exemplo simples usando SheetJS (xlsx)
+  import("xlsx").then((XLSX) => {
+    const worksheet = XLSX.utils.json_to_sheet(users);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Funcionarios");
+    XLSX.writeFile(workbook, "funcionarios.xlsx");
+  });
+};
+
+
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
-
 
   useEffect(() => {
     async function fetchUsers() {
@@ -39,7 +55,7 @@ export default function UsersPage() {
 
         // transformar em array
         const ultimaBatida = Object.values(ultimoRegistro);
-        const filtrados = usuarios.filter(u => u.tipo !== "admin");
+        const filtrados = usuarios.filter((u) => u.tipo !== "admin");
         // unir usuários + ponto
         const unificados = filtrados.map((u) => {
           const ponto = ultimaBatida.find((p) => p.GMID === u.GMID);
@@ -55,9 +71,7 @@ export default function UsersPage() {
             saida: ponto?.Saida || "-",
             status: ponto?.Status || "-",
           };
-
         });
-
 
         setUsers(unificados);
       } catch (error) {
@@ -68,13 +82,14 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-
   return (
     <div className="users-container">
       <div className="users-header">
         <h1>Controle de Ponto - Funcionários</h1>
         <div className="actions">
-          <button className="export-btn">Exportar (Excel)</button>
+          <button className="export-btn" onClick={exportToExcel}>
+            Exportar (Excel)
+          </button>
         </div>
       </div>
 

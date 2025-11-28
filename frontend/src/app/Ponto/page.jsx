@@ -8,6 +8,26 @@ export default function BaterPontoPage() {
 
   const [horaAtual, setHoraAtual] = useState(new Date());
   const [animando, setAnimando] = useState(false);
+  const [tipoPonto, setTipoPonto] = useState("Carregando...");
+
+  const verificarTipoPonto = async () => {
+    if (!user?.GMID) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/funcionarios/proximoPonto/${user.GMID}`
+      );
+      const data = await res.json();
+
+      setTipoPonto(data.tipo);
+    } catch (error) {
+      console.error("Erro ao verificar tipo de ponto:", error);
+    }
+  };
+
+  useEffect(() => {
+    verificarTipoPonto();
+  }, [user]);
 
   useEffect(() => {
     const interval = setInterval(() => setHoraAtual(new Date()), 1000);
@@ -24,11 +44,14 @@ export default function BaterPontoPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:3001/api/funcionarios/registrar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ GMID, Turno: turno }),
-      });
+      const res = await fetch(
+        "http://localhost:3001/api/funcionarios/registrar",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ GMID, Turno: turno }),
+        }
+      );
 
       const data = await res.json();
 
@@ -38,6 +61,8 @@ export default function BaterPontoPage() {
       }
 
       console.log("Ponto registrado:", data);
+      await verificarTipoPonto();
+
     } catch (error) {
       console.error("Erro na requisição:", error);
     }
@@ -51,16 +76,6 @@ export default function BaterPontoPage() {
 
     setAnimando(true);
 
-    await fetch("http://localhost:3001/api/funcionarios/registrar", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        funcionarioId: user?.id,
-        nome: user?.nome,
-        hora: formatarHora(new Date()),
-      }),
-    });
-
     setTimeout(() => setAnimando(false), 1500);
   };
 
@@ -68,6 +83,10 @@ export default function BaterPontoPage() {
     <main className="ponto-container">
       <div className="maquina-nova">
         <h2 className="titulo">Ponto Eletrônico</h2>
+        <div className="info-ponto">
+          <span className="label">Próximo Registro</span>
+          <span className="tipo-ponto">{tipoPonto}</span>
+        </div>
 
         <div className="visor">
           <span className="label">Horário Atual</span>

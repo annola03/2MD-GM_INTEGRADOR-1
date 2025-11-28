@@ -70,7 +70,6 @@ export default function ProfilePage() {
       });
   }, [user]);
 
-
   // ============================
   // SALVAR ALTERAÇÕES DE PERFIL
   // ============================
@@ -231,7 +230,12 @@ export default function ProfilePage() {
 
             <div className="profile-photo">
               <div className="photo-container">
-                <img src={profile.imagem} alt="Avatar" />
+                <img
+                  src={
+                    "https://i.pravatar.cc/40"
+                  }
+                  alt="Avatar"
+                />
               </div>
 
               <label className="change-photo-btn">

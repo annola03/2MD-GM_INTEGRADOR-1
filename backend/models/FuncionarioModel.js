@@ -46,27 +46,32 @@ class funcionarioModel {
     try {
       const connection = await getConnection();
 
-      // Formatar data atual YYYY-MM-DD
       const hoje = new Date().toISOString().split("T")[0];
 
-      // Checar se já existe registro de hoje
+      // Buscar registro aberto (entrada sem saída)
       const [registros] = await connection.query(
-        "SELECT * FROM funcionarios WHERE GMID = ? AND DATE(Entrada) = ? ORDER BY id DESC LIMIT 1",
+        `
+      SELECT * FROM funcionarios 
+      WHERE GMID = ? 
+      AND data_registro = ? 
+      ORDER BY id DESC LIMIT 1
+      `,
         [GMID, hoje]
       );
 
-      // Se já existe uma entrada sem saída → registrar saída
+      // Registrar SAÍDA
       if (registros.length > 0 && registros[0].Saida === "00:00:00") {
         const horaSaida = new Date().toLocaleTimeString("pt-BR", {
           hour12: false,
         });
 
         await connection.query(
-          "UPDATE funcionarios SET Saida = ? WHERE id = ?",
+          `UPDATE funcionarios SET Saida = ? WHERE id = ?`,
           [horaSaida, registros[0].id]
         );
 
         connection.release();
+
         return {
           tipo: "saida",
           mensagem: "Saída registrada!",
@@ -74,16 +79,17 @@ class funcionarioModel {
         };
       }
 
-      // Caso contrário → registrar nova ENTRADA
+      // Registrar ENTRADA
       const horaEntrada = new Date().toLocaleTimeString("pt-BR", {
         hour12: false,
       });
 
       const [result] = await connection.query(
-        `INSERT INTO funcionarios (GMID, Entrada, Saida, Turno)
-       VALUES (?, ?, '00:00:00', ?)`,
-
-        [GMID, horaEntrada, turno]
+        `
+      INSERT INTO funcionarios (GMID, Entrada, Saida, Turno, data_registro)
+      VALUES (?, ?, '00:00:00', ?, ?)
+      `,
+        [GMID, horaEntrada, turno, hoje]
       );
 
       connection.release();
@@ -102,8 +108,11 @@ class funcionarioModel {
   // Buscar funcionario por GMID
   static async buscarPorGMID(GMID) {
     try {
-      const rows = await read("funcionarios", `GMID = '${GMID}'`);
-      return rows; // retorna todos os registros
+      const rows = await read(
+        "funcionarios",
+        `GMID = '${GMID}' ORDER BY id DESC LIMIT 30`
+      );
+      return rows;
     } catch (error) {
       console.error("Erro ao buscar funcionario por GMID:", error);
       throw error;

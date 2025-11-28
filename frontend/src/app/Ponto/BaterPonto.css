@@ -128,3 +128,17 @@
     transform: translate(-50%, -20px) rotate(0);
   }
 }
+
+
+.info-ponto {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.tipo-ponto {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #2b72ff;
+  margin-top: 4px;
+}

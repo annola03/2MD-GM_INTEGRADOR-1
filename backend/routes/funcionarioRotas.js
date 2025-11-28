@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get('/:GMID', FuncionarioController.buscarPorGMID);
 router.post('/registrar', FuncionarioController.registrarPonto);
+router.get("/proximoPonto/:GMID", FuncionarioController.proximoPonto);
 router.get('/', authMiddleware, FuncionarioController.listarTodos);
 
 // Rotas protegidas (precisam de autenticação)

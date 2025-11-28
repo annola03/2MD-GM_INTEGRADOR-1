@@ -54,7 +54,7 @@ class funcionarioController {
     }
   }
   
-  // POST /registrarPonto - Criar registro de ponto do funcionário
+  // POST /registrar - Criar registro de ponto do funcionário
    static async registrarPonto(req, res) {
   try {
     const { GMID, Turno } = req.body;
@@ -81,7 +81,34 @@ class funcionarioController {
       mensagem: "Não foi possível registrar o ponto.",
     });
   }
+
 }
+
+// GET /funcionarios/proximoPonto/:GMID
+static async proximoPonto(req, res) {
+  try {
+    let { GMID } = req.params;
+    GMID = GMID.toUpperCase();
+
+    const registros = await funcionarioModel.buscarPorGMID(GMID);
+
+    if (!registros || registros.length === 0) {
+      return res.status(200).json({ tipo: "Entrada" });
+    }
+
+    const ultimo = registros[0];
+
+    if (ultimo.Saida === "00:00:00") {
+      return res.status(200).json({ tipo: "Saída" });
+    }
+
+    return res.status(200).json({ tipo: "Entrada" });
+  } catch (error) {
+    console.error("Erro ao verificar próximo ponto:", error);
+    res.status(500).json({ erro: "Erro interno" });
+  }
+}
+
 
 
   
