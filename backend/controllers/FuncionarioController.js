@@ -181,7 +181,7 @@ static async proximoPonto(req, res) {
   static async atualizar(req, res) {
     try {
       let { GMID } = req.params;
-      const { Entrada, Saida, Turno } = req.body;
+      const { Entrada, Saida } = req.body;
 
       GMID = GMID.toUpperCase();
 
@@ -208,7 +208,7 @@ static async proximoPonto(req, res) {
 
       if (Entrada !== undefined) dadosAtualizacao.Entrada = Entrada;
       if (Saida !== undefined) dadosAtualizacao.Saida = Saida;
-      if (Turno !== undefined) dadosAtualizacao.Turno = Turno;
+
 
       if (req.file) {
         if (funcionarioExistente.imagem) {

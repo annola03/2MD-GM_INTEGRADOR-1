@@ -7,22 +7,22 @@ import "./users.css";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-// dentro do componente
-const exportToExcel = () => {
-  if (!users || users.length === 0) return;
-
-  // Exemplo simples usando SheetJS (xlsx)
-  import("xlsx").then((XLSX) => {
-    const worksheet = XLSX.utils.json_to_sheet(users);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Funcionarios");
-    XLSX.writeFile(workbook, "funcionarios.xlsx");
-  });
-};
-
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
+
+  // dentro do componente
+  const exportToExcel = () => {
+    if (!users || users.length === 0) return;
+
+    // Exemplo simples usando SheetJS (xlsx)
+    import("xlsx").then((XLSX) => {
+      const worksheet = XLSX.utils.json_to_sheet(users);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Funcionarios");
+      XLSX.writeFile(workbook, "funcionarios.xlsx");
+    });
+  };
 
   useEffect(() => {
     async function fetchUsers() {
@@ -62,13 +62,13 @@ export default function UsersPage() {
 
           return {
             Nome: u.Nome,
-            gmin: u.GMID, // Seu UserTable usa "gmin"
+            GMID: u.GMID, // Seu UserTable usa "gmin"
             cargo: u.Cargo,
             area: u.tipo || "-", // caso venha depois
             turno: u.Turno,
             horaPonto: ponto?.data_registro || "-",
-            entrada: ponto?.Entrada || "-",
-            saida: ponto?.Saida || "-",
+            entrada: ponto?.Entrada ?? "",
+            saida: ponto?.Saida ?? "",
             status: ponto?.Status || "-",
           };
         });

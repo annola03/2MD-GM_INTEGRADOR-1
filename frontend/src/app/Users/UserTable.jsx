@@ -12,7 +12,7 @@ export default function UserTable({ users }) {
     const texto = filtro.toLowerCase();
     return (
       item.Nome.toLowerCase().includes(texto) ||
-      item.gmin.toLowerCase().includes(texto) ||
+      item.GMID.toLowerCase().includes(texto) ||
       item.cargo.toLowerCase().includes(texto) ||
       item.area.toLowerCase().includes(texto) ||
       item.turno.toLowerCase().includes(texto) ||
@@ -25,7 +25,7 @@ export default function UserTable({ users }) {
 
     try {
       const res = await fetch(
-        `http://localhost:3001/api/funcionarios/${user.gmin}`,
+        `http://localhost:3001/api/funcionarios/${user.GMID}`,
         {
           method: "PUT",
           headers: {
@@ -72,7 +72,7 @@ export default function UserTable({ users }) {
         <thead>
           <tr>
             <th>Nome</th>
-            <th>GMIN</th>
+            <th>GMID</th>
             <th>Cargo</th>
             <th>Tipo</th>
             <th>Turno</th>
@@ -87,9 +87,9 @@ export default function UserTable({ users }) {
         <tbody>
           {dadosFiltrados.length > 0 ? (
             dadosFiltrados.map((user) => (
-              <tr key={user.gmin}>
+              <tr key={user.GMID}>
                 <td>{user.Nome}</td>
-                <td>{user.gmin}</td>
+                <td>{user.GMID}</td>
                 <td>{user.cargo}</td>
                 <td>{user.area}</td>
                 <td>{user.turno}</td>
@@ -100,26 +100,26 @@ export default function UserTable({ users }) {
                 </td>
 
                 <td>
-                  {editRow === user.gmin ? (
+                  {editRow === user.GMID ? (
                     <input
                       type="time"
                       value={entradaEdit}
                       onChange={(e) => setEntradaEdit(e.target.value)}
                     />
                   ) : (
-                    user.entrada || "-"
+                    user.entrada ? user.entrada : "-"
                   )}
                 </td>
 
                 <td>
-                  {editRow === user.gmin ? (
+                  {editRow === user.GMID ? (
                     <input
                       type="time"
                       value={saidaEdit}
                       onChange={(e) => setSaidaEdit(e.target.value)}
                     />
                   ) : (
-                    user.saida || "-"
+                    user.saida ? user.saida : "-"
                   )}
                 </td>
 
@@ -134,7 +134,7 @@ export default function UserTable({ users }) {
                 </td>
 
                 <td className="acoes">
-                  {editRow === user.gmin ? (
+                  {editRow === user.GMID ? (
                     <>
                       <button onClick={() => salvarHorario(user)}>💾</button>
                       <button onClick={() => setEditRow(null)}>❌</button>
@@ -143,7 +143,7 @@ export default function UserTable({ users }) {
                     <button
                       className="edit-btn"
                       onClick={() => {
-                        setEditRow(user.gmin);
+                        setEditRow(user.GMID);
                         setEntradaEdit(user.entrada || "");
                         setSaidaEdit(user.saida || "");
                       }}
