@@ -471,7 +471,8 @@ class AuthController {
   static async atualizarUsuario(req, res) {
     try {
       const { id } = req.params;
-      const { nome, email_padrao, senha, tipo } = req.body;
+      // campos que o frontend envia: nome, cargo, turno, GMID, senha
+      const { nome, cargo, turno, GMID, senha } = req.body;
 
       // Validação do ID
       if (!id || isNaN(id)) {
@@ -492,11 +493,11 @@ class AuthController {
         });
       }
 
-      // Preparar dados para atualização
+      // Preparar dados para atualização (mapear para nomes de coluna se necessário)
       const dadosAtualizacao = {};
 
       if (nome !== undefined) {
-        if (nome.trim() === "") {
+        if (typeof nome !== "string" || nome.trim() === "") {
           return res.status(400).json({
             sucesso: false,
             erro: "Nome inválido",
@@ -510,33 +511,63 @@ class AuthController {
             mensagem: "O nome deve ter pelo menos 2 caracteres",
           });
         }
-        dadosAtualizacao.nome = nome.trim();
+
+        // mapear para a coluna do DB (ajuste se seu DB usa 'nome' minúsculo)
+        dadosAtualizacao.Nome = nome.trim();
       }
 
-      if (email_padrao !== undefined) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email_padrao)) {
+      if (cargo !== undefined) {
+        if (typeof cargo !== "string" || cargo.trim() === "") {
           return res.status(400).json({
             sucesso: false,
-            erro: "Email inválido",
-            mensagem: "Formato de email inválido",
+            erro: "Cargo inválido",
+            mensagem: "O cargo não pode estar vazio",
+          });
+        }
+        dadosAtualizacao.Cargo = cargo.trim();
+      }
+
+      if (turno !== undefined) {
+        if (typeof turno !== "string" || turno.trim() === "") {
+          return res.status(400).json({
+            sucesso: false,
+            erro: "Turno inválido",
+            mensagem: "O turno não pode estar vazio",
+          });
+        }
+        dadosAtualizacao.Turno = turno.trim();
+      }
+
+      if (GMID !== undefined) {
+        if (typeof GMID !== "string" || GMID.trim() === "") {
+          return res.status(400).json({
+            sucesso: false,
+            erro: "GMID inválido",
+            mensagem: "O GMID não pode estar vazio",
           });
         }
 
-        // Verificar se o email_padrao já está em uso por outro usuário
-        const usuarioComEmail = await UsuarioModel.buscarPorEmail(email_padrao);
-        if (usuarioComEmail && usuarioComEmail.id !== parseInt(id)) {
+        // Verificar se já existe outro usuário com esse GMID
+        const existe = await UsuarioModel.buscarPorGMID(GMID.trim());
+        if (existe && existe.id !== parseInt(id, 10)) {
           return res.status(409).json({
             sucesso: false,
-            erro: "Email já cadastrado",
-            mensagem: "Este email já está sendo usado por outro usuário",
+            erro: "GMID já cadastrado",
+            mensagem: "Este GMID já está sendo usado por outro usuário",
           });
         }
 
-        dadosAtualizacao.email_padrao = email_padrao.trim().toLowerCase();
+        dadosAtualizacao.GMID = GMID.trim();
       }
 
       if (senha !== undefined) {
+        if (typeof senha !== "string" || senha.trim() === "") {
+          return res.status(400).json({
+            sucesso: false,
+            erro: "Senha inválida",
+            mensagem: "A senha não pode estar vazia",
+          });
+        }
         if (senha.length < 6) {
           return res.status(400).json({
             sucesso: false,
@@ -544,14 +575,14 @@ class AuthController {
             mensagem: "A senha deve ter pelo menos 6 caracteres",
           });
         }
-        dadosAtualizacao.senha = senha;
+
+        // criptografar antes de salvar
+        const hash = await bcrypt.hash(senha, 10);
+        // mapear para a coluna do DB (ajuste caso sua coluna seja 'senha' minúsculo)
+        dadosAtualizacao.Senha = hash;
       }
 
-      if (tipo !== undefined) {
-        dadosAtualizacao.tipo = tipo;
-      }
-
-      // Verificar se há dados para atualizar
+      // Se não houver nada para atualizar
       if (Object.keys(dadosAtualizacao).length === 0) {
         return res.status(400).json({
           sucesso: false,
@@ -560,19 +591,17 @@ class AuthController {
         });
       }
 
-      // Atualizar usuário
+      // Chamar model para atualizar (se seu model espera chaves minúsculas ajuste o objeto acima)
       const resultado = await UsuarioModel.atualizar(id, dadosAtualizacao);
 
-      res.status(200).json({
+      return res.status(200).json({
         sucesso: true,
         mensagem: "Usuário atualizado com sucesso",
-        dados: {
-          linhasAfetadas: resultado || 1,
-        },
+        dados: { linhasAfetadas: resultado || 1 },
       });
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
-      res.status(500).json({
+      return res.status(500).json({
         sucesso: false,
         erro: "Erro interno do servidor",
         mensagem: "Não foi possível atualizar o usuário",

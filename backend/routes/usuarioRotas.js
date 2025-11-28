@@ -7,7 +7,7 @@ const router = express.Router();
 // Rotas de usuários (apenas admin)
 router.get('/', authMiddleware, AuthController.listarUsuarios);
 router.post('/', authMiddleware, adminMiddleware, AuthController.criarUsuario);
-router.put('/:id', authMiddleware, adminMiddleware, AuthController.atualizarUsuario);
+router.put('/:id', authMiddleware, AuthController.atualizarUsuario);
 router.delete('/:id', authMiddleware, adminMiddleware, AuthController.excluirUsuario);
 router.put('/me', authMiddleware, AuthController.atualizarProprioUsuario);
 

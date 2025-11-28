@@ -1,87 +1,94 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./BaterPonto.css";
+import { UserContext } from "@/context/UserContext"; // PEGAR USUÁRIO LOGADO
 
 export default function BaterPontoPage() {
-  const [funcionarios, setFuncionarios] = useState([
-    { id: 1, nome: "Rebecca" },
-    { id: 2, nome: "Anna" },
-    { id: 3, nome: "Willian" },
-  ]);
-  const [animando, setAnimando] = useState(false);
-  const [cartaoAtivo, setCartaoAtivo] = useState(null);
-  const [horaAtual, setHoraAtual] = useState(new Date()); 
+  const { user } = useContext(UserContext); // NOME DO FUNCIONÁRIO LOGADO
 
-  // Atualiza o relógio em tempo real
+  const [horaAtual, setHoraAtual] = useState(new Date());
+  const [animando, setAnimando] = useState(false);
+
   useEffect(() => {
     const interval = setInterval(() => setHoraAtual(new Date()), 1000);
     return () => clearInterval(interval);
   }, []);
 
+  const registrarPonto = async () => {
+    const GMID = user?.GMID;
+    const turno = user?.Turno;
+
+    if (!GMID || !turno) {
+      console.error("Erro: GMID ou Turno não encontrados no user");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:3001/api/funcionarios/registrar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ GMID, Turno: turno }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Erro ao registrar ponto:", data);
+        return;
+      }
+
+      console.log("Ponto registrado:", data);
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
+  };
+
   const formatarHora = (date) =>
     date.toLocaleTimeString("pt-BR", { hour12: false });
 
-  const tocarSom = () => {
-    const audio = new Audio("/bip.mp3");
-    audio.play();
-  };
-
-  const baterPonto = async (func) => {
+  const baterPonto = async () => {
     if (animando) return;
+
     setAnimando(true);
-    setCartaoAtivo(func.id);
 
-    const novos = funcionarios.filter((f) => f.id !== func.id);
-    novos.push(func);
-    setFuncionarios(novos);
-
-    await new Promise((res) => setTimeout(res, 2000));
-    tocarSom();
-
-    await fetch("/api/bater-ponto", {
+    await fetch("http://localhost:3001/api/funcionarios/registrar", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        funcionarioId: func.id,
-        nome: func.nome,
+        funcionarioId: user?.id,
+        nome: user?.nome,
         hora: formatarHora(new Date()),
       }),
     });
 
-    await new Promise((res) => setTimeout(res, 1000));
-    setAnimando(false);
-    setCartaoAtivo(null);
+    setTimeout(() => setAnimando(false), 1500);
   };
 
   return (
-    <main className="ponto-page">
-  <h1 className="titulo-ponto">Ponto Eletrônico Demonstrativo</h1>
+    <main className="ponto-container">
+      <div className="maquina-nova">
+        <h2 className="titulo">Ponto Eletrônico</h2>
 
-  <div className="maquina">
-    <img src="/imagens/GM-logo.png" alt="GM" className="logo-gm" />
-    <div className="tela">
-      <span>Relógio de Ponto</span>
-      <span className="hora">{formatarHora(horaAtual)}</span>
-    </div>
-    <div className="leitor"></div>
-  </div>
+        <div className="visor">
+          <span className="label">Horário Atual</span>
+          <span className="hora-visivel">{formatarHora(horaAtual)}</span>
+        </div>
 
-  <div className="cartoes">
-    {funcionarios.map((f, index) => (
-      <div
-        key={f.id}
-        className={`cartao pos-${index + 1} ${
-          animando && cartaoAtivo === f.id ? "animando" : ""
-        }`}
-        onClick={() => baterPonto(f)}
-      >
-        <div className="foto" />
-        <span>{f.nome}</span>
-        <img src="/imagens/GM-logo.png" alt="GM" className="cartao-logo" />
+        <div className="leitor-novo"></div>
       </div>
-    ))}
-  </div>
-</main>
 
+      <div
+        className={`cartao-unico ${animando ? "animando" : ""}`}
+        onClick={() => {
+          baterPonto(); // sua animação
+          registrarPonto(); // agora registra o ponto com GMID e Turno do user
+        }}
+      >
+        <div className="foto-user"></div>
+        <span className="nome-user">{user?.Nome || "Usuário"}</span>
+
+        <img src="/imagens/GM-logo.png" className="logo-cartao" />
+      </div>
+    </main>
   );
 }

@@ -5,54 +5,88 @@ import "./gerenciar.css";
 export default function GerenciarUsuarios() {
   const [busca, setBusca] = useState("");
   const [usuarios, setUsuarios] = useState([]);
-
-  useEffect(() => {
-    async function carregarUsuarios() {
-      try {
-        const res = await fetch("http://localhost:3001/api/usuarios");
-        const data = await res.json();
-
-        if (data.sucesso) {
-          setUsuarios(data.usuarios);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar usuários:", error);
-      }
-    }
-
-    carregarUsuarios();
-  }, []);
-
   const [usuarioEditando, setUsuarioEditando] = useState(null);
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [usuarioExcluir, setUsuarioExcluir] = useState(null);
 
+  // =============================
+  // 🔹 1. BUSCAR USUÁRIOS DA API
+  // =============================
+
+  const carregarUsuarios = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch("http://localhost:3001/api/usuarios", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await res.json();
+
+      // ⬇⬇⬇ ESTE É O FIX
+      setUsuarios(
+        (data.dados || []).map((u) => ({
+          id: u.id,
+          nome: u.Nome,
+          cargo: u.Cargo,
+          turno: u.Turno,
+          gmid: u.GMID,
+          senha: u.Senha,
+        }))
+      );
+    } catch (error) {
+      console.error("Erro ao carregar usuários:", error);
+    }
+  };
+
+  useEffect(() => {
+    carregarUsuarios();
+  }, []);
+
+  // ===================================
+  // 🔹 2. SALVAR EDIÇÃO (inclui senha)
+  // ===================================
   const handleSaveEdit = async () => {
     try {
+       const token = localStorage.getItem("token");
       const res = await fetch(
         `http://localhost:3001/api/usuarios/${usuarioEditando.id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(usuarioEditando),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ENVIAR TOKEN
+
+          },
+          body: JSON.stringify({
+            Nome: usuarioEditando.nome,
+            Cargo: usuarioEditando.cargo,
+            Turno: usuarioEditando.turno,
+            GMID: usuarioEditando.gmid,
+            Senha: usuarioEditando.senha,
+          }),
         }
       );
 
-      const data = await res.json();
+      if (!res.ok) throw new Error("Erro ao atualizar usuário");
 
-      if (data.sucesso) {
-        setUsuarios((prev) =>
-          prev.map((u) => (u.id === usuarioEditando.id ? usuarioEditando : u))
-        );
-        setUsuarioEditando(null);
-      } else {
-        alert("Erro ao salvar: " + data.erro);
-      }
+      // Atualiza na interface sem recarregar
+      setUsuarios((prev) =>
+        prev.map((u) => (u.id === usuarioEditando.id ? usuarioEditando : u))
+      );
+
+      setUsuarioEditando(null);
     } catch (error) {
-      console.error("Erro ao editar usuário:", error);
+      console.error("Erro ao salvar edição:", error);
     }
   };
 
+  console.log(usuarios);
+
+  // ============================
+  // 🔹 3. EXCLUIR USUÁRIO
+  // ============================
   const handleConfirmDelete = async () => {
     try {
       const res = await fetch(
@@ -62,19 +96,18 @@ export default function GerenciarUsuarios() {
         }
       );
 
-      const data = await res.json();
+      if (!res.ok) throw new Error("Erro ao excluir usuário");
 
-      if (data.sucesso) {
-        setUsuarios(usuarios.filter((u) => u.id !== usuarioExcluir.id));
-        setUsuarioExcluir(null);
-      } else {
-        alert("Erro ao excluir: " + data.erro);
-      }
+      setUsuarios(usuarios.filter((u) => u.id !== usuarioExcluir.id));
+      setUsuarioExcluir(null);
     } catch (error) {
-      console.error("Erro ao excluir usuário:", error);
+      console.error("Erro ao excluir:", error);
     }
-  };  
+  };
 
+  // ============================
+  // 🔹 4. FILTRO
+  // ============================
   const usuariosFiltrados = usuarios.filter((u) =>
     u.nome.toLowerCase().includes(busca.toLowerCase())
   );
@@ -83,7 +116,8 @@ export default function GerenciarUsuarios() {
     <div className="gerenciar-container">
       <div className="titulo-section">
         <p className="subtitulo">GESTÃO DE USUÁRIOS - GM</p>
-        <h1>Gerencie colaboradores </h1>
+        <h1>Gerencie colaboradores</h1>
+
         <div className="input-wrapper">
           <input
             type="text"
@@ -95,6 +129,9 @@ export default function GerenciarUsuarios() {
         </div>
       </div>
 
+      {/* ==================== */}
+      {/* 🔹 TABELA DE USUÁRIOS */}
+      {/* ==================== */}
       <div className="tabela-container">
         <table className="tabela-usuarios">
           <thead>
@@ -107,13 +144,14 @@ export default function GerenciarUsuarios() {
               <th>Ações</th>
             </tr>
           </thead>
+
           <tbody>
             {usuariosFiltrados.map((u) => (
               <tr key={u.id}>
                 <td>{u.nome}</td>
                 <td>{u.cargo}</td>
                 <td>{u.turno}</td>
-                <td>{u.GMID}</td>
+                <td>{u.gmid}</td>
                 <td>{"•".repeat(8)}</td>
 
                 <td className="acoes">
@@ -132,6 +170,7 @@ export default function GerenciarUsuarios() {
                 </td>
               </tr>
             ))}
+
             {usuariosFiltrados.length === 0 && (
               <tr>
                 <td colSpan="5" className="nenhum">
@@ -143,11 +182,14 @@ export default function GerenciarUsuarios() {
         </table>
       </div>
 
-      {/* Modal de Edição */}
+      {/* ==================== */}
+      {/* 🔹 MODAL DE EDIÇÃO */}
+      {/* ==================== */}
       {usuarioEditando && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h2>Editar Colaborador</h2>
+
             <label>Nome</label>
             <input
               type="text"
@@ -156,6 +198,7 @@ export default function GerenciarUsuarios() {
                 setUsuarioEditando({ ...usuarioEditando, nome: e.target.value })
               }
             />
+
             <label>Cargo</label>
             <input
               type="text"
@@ -167,6 +210,7 @@ export default function GerenciarUsuarios() {
                 })
               }
             />
+
             <label>Turno</label>
             <select
               value={usuarioEditando.turno}
@@ -181,22 +225,21 @@ export default function GerenciarUsuarios() {
               <option value="Diurno">Diurno</option>
               <option value="Noturno">Noturno</option>
             </select>
-            <label>Email</label>
+
+            <label>GMID</label>
             <input
-              type="email"
-              value={usuarioEditando.email}
+              type="text"
+              value={usuarioEditando.gmid}
               onChange={(e) =>
-                setUsuarioEditando({
-                  ...usuarioEditando,
-                  email: e.target.value,
-                })
+                setUsuarioEditando({ ...usuarioEditando, gmid: e.target.value })
               }
             />
+
             <label>Senha</label>
             <div className="senha-wrapper">
               <input
                 type={mostrarSenha ? "text" : "password"}
-                value={usuarioEditando.senha}
+                value={usuarioEditando.senha || ""}
                 onChange={(e) =>
                   setUsuarioEditando({
                     ...usuarioEditando,
@@ -231,7 +274,9 @@ export default function GerenciarUsuarios() {
         </div>
       )}
 
-      {/* Modal de Exclusão */}
+      {/* ==================== */}
+      {/* 🔹 MODAL DE EXCLUSÃO */}
+      {/* ==================== */}
       {usuarioExcluir && (
         <div className="modal-overlay">
           <div className="modal-content modal-excluir">
@@ -239,6 +284,7 @@ export default function GerenciarUsuarios() {
             <p>
               Deseja realmente remover <strong>{usuarioExcluir.nome}</strong>?
             </p>
+
             <div className="modal-botoes">
               <button className="btn-excluir" onClick={handleConfirmDelete}>
                 Confirmar

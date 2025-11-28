@@ -54,6 +54,37 @@ class funcionarioController {
     }
   }
   
+  // POST /registrarPonto - Criar registro de ponto do funcionário
+   static async registrarPonto(req, res) {
+  try {
+    const { GMID, Turno } = req.body;
+
+    if (!GMID || !Turno) {
+      return res.status(400).json({
+        sucesso: false,
+        erro: "GMID e Turno são obrigatórios.",
+      });
+    }
+
+    const resultado = await funcionarioModel.registrarPonto(GMID, Turno);
+
+    return res.status(201).json({
+      sucesso: true,
+      ...resultado,
+    });
+
+  } catch (error) {
+    console.error("Erro ao registrar ponto:", error);
+    res.status(500).json({
+      sucesso: false,
+      erro: "Erro interno",
+      mensagem: "Não foi possível registrar o ponto.",
+    });
+  }
+}
+
+
+  
 
   // POST /funcionarios - Criar funcionário
   static async criar(req, res) {

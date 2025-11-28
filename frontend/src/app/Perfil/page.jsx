@@ -68,6 +68,8 @@ export default function ProfilePage() {
       });
   }, [user]);
 
+  console.log(historico)
+
   // ============================
   // SALVAR ALTERAÇÕES DE PERFIL
   // ============================
