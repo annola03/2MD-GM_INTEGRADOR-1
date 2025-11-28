@@ -56,6 +56,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!user?.GMID) return;
+    console.log("USER:", user);
 
     const token = localStorage.getItem("token");
 
@@ -64,11 +65,11 @@ export default function ProfilePage() {
     })
       .then((r) => r.json())
       .then((res) => {
-        if (res.sucesso) setHistorico(res.dados || []);
+        console.log("RESPOSTA DO HISTÓRICO:", res);
+        if (res.sucesso) setHistorico(res.funcionarios || []);
       });
   }, [user]);
 
-  console.log(historico)
 
   // ============================
   // SALVAR ALTERAÇÕES DE PERFIL
@@ -153,20 +154,17 @@ export default function ProfilePage() {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/auth/senha",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            senha_atual: senhaAtual,
-            nova_senha: novaSenha,
-          }),
-        }
-      );
+      const response = await fetch("http://localhost:3001/api/auth/senha", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          senha_atual: senhaAtual,
+          nova_senha: novaSenha,
+        }),
+      });
 
       const data = await response.json();
 
