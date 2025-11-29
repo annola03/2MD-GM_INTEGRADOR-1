@@ -207,12 +207,6 @@ export default function ProfilePage() {
             Histórico
           </li>
           <li
-            className={selected === "notifications" ? "active" : ""}
-            onClick={() => setSelected("notifications")}
-          >
-            Notificações
-          </li>
-          <li
             className={selected === "security" ? "active" : ""}
             onClick={() => setSelected("security")}
           >
@@ -344,20 +338,7 @@ export default function ProfilePage() {
           </section>
         )}
 
-        {/* === NOTIFICAÇÕES === */}
-        {selected === "notifications" && (
-          <section className="notifications">
-            <h2>Notificações</h2>
-            <div className="card">
-              <ul className="notif-list">
-                <li>Você bateu ponto com atraso.</li>
-                <li>Ponto registrado ontem.</li>
-                <li>Alteração no turno programado.</li>
-              </ul>
-            </div>
-          </section>
-        )}
-
+      
         {/* === SEGURANÇA === */}
         {selected === "security" && (
           <section className="security">
