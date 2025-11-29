@@ -1,101 +1,256 @@
+"use client";
+import { useEffect, useState } from "react";
 import "./Dashboard.css";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
+  PieChart, Pie, Cell
+} from "recharts";
 
 export default function Dashboard() {
-  return (
-    <main className="dashboard">
-      <h1 className="title">Painel de Controle de Turnos</h1>
+  const [usuarios, setUsuarios] = useState([]);
+  const [registros, setRegistros] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [diasFiltro, setDiasFiltro] = useState("7");
 
+  // ========= FORMATAR DATA =========
+  function formatarData(d) {
+    const date = new Date(d);
+    return date.toLocaleDateString("pt-BR", {
+      timeZone: "America/Sao_Paulo"
+    });
+  }
+
+  function limparISO(d) {
+    return d.split("T")[0]; // 2025-11-29
+  }
+
+  async function carregarDados() {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem("token");
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      };
+
+      const [usuariosRes, registrosRes] = await Promise.all([
+        fetch("http://localhost:3001/api/usuarios?limite=70", { headers }),
+        fetch("http://localhost:3001/api/funcionarios?limite=2000", { headers }),
+      ]);
+
+      const usuariosData = await usuariosRes.json();
+      const registrosData = await registrosRes.json();
+
+      // FORMATAÇÃO DA DATA NA TABELA E NO GRÁFICO
+      const registrosLimpos = (registrosData.funcionarios || []).map((r) => ({
+        ...r,
+        dataISO: limparISO(r.data_registro),     // YYYY-MM-DD
+        dataFormatada: formatarData(r.data_registro),
+      }));
+
+      setUsuarios(usuariosData.dados || usuariosData.funcionarios || []);
+      setRegistros(registrosLimpos);
+
+    } catch (err) {
+      console.error("Erro ao carregar API:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    carregarDados();
+  }, []);
+
+  const listaRegistros = Array.isArray(registros) ? registros : [];
+
+  // ========= KPIs =========
+  const totalFuncionarios = usuarios.length;
+  // -------- FILTRAR SOMENTE O DIA DE HOJE --------
+  const hojeISOonly = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+
+  const registrosHoje = listaRegistros.filter(r => r.dataISO === hojeISOonly);
+
+  // KPIs do dia
+  const totalRegistros = registrosHoje.length;
+
+  const totalAtrasos = registrosHoje.filter(r => r.Status === "Atraso").length;
+
+
+  const faltas = Math.max(
+    0,
+    totalFuncionarios - new Set(listaRegistros.map(r => r.GMID)).size
+  );
+
+  if (loading) return <h2 style={{ padding: 40 }}>Carregando dashboard...</h2>;
+
+  // ============== AGRUPAR POR DIA ==============
+  const historicoPorDia = listaRegistros.reduce((acc, item) => {
+    const dt = item.dataISO; // YYYY-MM-DD
+    if (!acc[dt]) acc[dt] = { data: dt, total: 0 };
+    acc[dt].total++;
+    return acc;
+  }, {});
+
+  let listaDias = Object.values(historicoPorDia).sort(
+    (a, b) => new Date(a.data) - new Date(b.data)
+  );
+
+  // ============== FILTRO ==============
+  const hoje = new Date();
+  const hojeISO = hoje.toISOString().split("T")[0];
+
+  function filtrar(dias) {
+    const limite = new Date();
+    limite.setDate(limite.getDate() - dias);
+
+    return listaDias.filter(d => {
+      return new Date(d.data) >= limite;
+    });
+  }
+
+  let movimentacaoPorDia = listaDias;
+
+  if (diasFiltro === "hoje") {
+    movimentacaoPorDia = listaDias.filter(d => d.data === hojeISO);
+  } else {
+    movimentacaoPorDia = filtrar(Number(diasFiltro));
+  }
+
+  // ============== DISTRIBUIÇÃO POR TURNO ==============
+  const distribuicaoTurno = listaRegistros.reduce((acc, item) => {
+    const turno = item.turno || "Indefinido";
+    if (!acc[turno]) acc[turno] = { turno, total: 0 };
+    acc[turno].total++;
+    return acc;
+  }, {});
+
+  const dadosTurno = Object.values(distribuicaoTurno);
+
+  return (
+    <div className="dashboard">
+      <h1 className="title">Dashboard Corporativo</h1>
+
+      {/* ------------ CARDS ----------- */}
       <div className="cards-grid">
         <div className="summary-card blue">
-          <h3>Funcionários Ativos</h3>
-          <p>128</p>
-          <span>+3% desde ontem</span>
+          <h3>Funcionários ativos</h3>
+          <p>{totalFuncionarios}</p>
+          <span>Total cadastrados</span>
         </div>
+
         <div className="summary-card purple">
-          <h3>Horas Trabalhadas Hoje</h3>
-          <p>856h</p>
-          <span>+2.1% desde ontem</span>
+          <h3>Registros</h3>
+          <p>{totalRegistros}</p>
+          <span>Batidas de ponto</span>
         </div>
+
         <div className="summary-card pink">
-          <h3>Horas Extras do Mês</h3>
-          <p>92h</p>
-          <span>-1.3% desde o mês passado</span>
+          <h3>Atrasos</h3>
+          <p>{totalAtrasos}</p>
+          <span>Hoje</span>
         </div>
+
         <div className="summary-card green">
-          <h3>Pontualidade Média</h3>
-          <p>97%</p>
-          <span>+1.2% desde a última semana</span>
+          <h3>Faltas</h3>
+          <p>{faltas}</p>
+          <span>Sem registro</span>
         </div>
       </div>
 
-      <section className="dashboard-grid">
-        {/* === Gráfico === */}
+      {/* ------------ GRID ----------- */}
+      <div className="dashboard-grid">
+
+        {/* Gráfico Movimentação */}
         <div className="graph-card">
           <div className="card-header">
-            <h2>Horas Trabalhadas por Semana</h2>
-            <select>
-              <option>Últimos 6 meses</option>
-              <option>Último mês</option>
+            <h2>Movimentação por Dia</h2>
+
+            <select value={diasFiltro} onChange={(e) => setDiasFiltro(e.target.value)}>
+              <option value="7">7 dias</option>
+              <option value="30">30 dias</option>
+              <option value="hoje">Hoje</option>
             </select>
           </div>
-          <div className="fake-graph"></div>
+
+          <BarChart width={450} height={250} data={movimentacaoPorDia}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="data" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="total" fill="#4a6cf7" />
+          </BarChart>
         </div>
 
-        {/* === Donut === */}
+        {/* Gráfico Pizza */}
         <div className="activity-card">
-          <h2>Atividade por Turno</h2>
-          <div className="fake-donut"></div>
+          <h2>Distribuição por Turno</h2>
+
+          <PieChart width={220} height={220}>
+            <Pie
+              data={dadosTurno}
+              cx="50%"
+              cy="50%"
+              outerRadius={80}
+              dataKey="total"
+            >
+              <Cell fill="#60a5fa" />
+              <Cell fill="#6a88e7" />
+              <Cell fill="#2c5d96" />
+            </Pie>
+            <Tooltip />
+          </PieChart>
+
           <ul>
-            <li><span className="dot blue"></span>Matutino – 25%</li>
-            <li><span className="dot purple"></span>Diurno – 40%</li>
-            <li><span className="dot pink"></span>Noturno – 35%</li>
+            <li><span className="dot blue"></span> Turno A</li>
+            <li><span className="dot purple"></span> Turno B</li>
+            <li><span className="dot pink"></span> Turno C</li>
           </ul>
         </div>
 
-        {/* === Registro de ponto === */}
-        <div className="table-card half-width">
-          <h2>Registro de Ponto (Hoje)</h2>
+        {/* Tabela real */}
+        <div className="table-card">
+          <h2>Últimos registros</h2>
           <table>
             <thead>
               <tr>
-                <th>Funcionário</th>
+                <th>GMID</th>
                 <th>Entrada</th>
                 <th>Saída</th>
-                <th>Turno</th>
                 <th>Status</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr>
-                <td>Maria Souza</td>
-                <td>08:00</td>
-                <td>17:00</td>
-                <td>Manhã</td>
-                <td className="ok"> Pontual</td>
-              </tr>
-              <tr>
-                <td>João Lima</td>
-                <td>08:45</td>
-                <td>17:30</td>
-                <td>Manhã</td>
-                <td className="late"> Atraso</td>
-              </tr>
-              <tr>
-                <td>Ana Costa</td>
-                <td>14:00</td>
-                <td>22:00</td>
-                <td>Tarde</td>
-                <td className="ok"> Pontual</td>
-              </tr>
+              {listaRegistros.slice(0, 15).map((r) => (
+                <tr key={r.id}>
+                  <td>{r.GMID}</td>
+                  <td>{r.dataFormatada}</td>
+                  <td>{r.Saida ? formatarData(r.Saida) : "-"}</td>
+                  <td className={r.Status === "Atraso" ? "late" : "ok"}>
+                    {r.Status}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
 
-        
-          
-          
-        
-      </section>
-    </main>
+        {/* Resumo */}
+        <div className="white-card">
+          <div className="white-content">
+            <h3 style={{ fontWeight: 700, color: "#1e3a8a" }}>Resumo do dia</h3>
+            <p><strong>{totalFuncionarios}</strong> funcionários</p>
+            <hr />
+            <p><strong>{totalAtrasos}</strong> atrasos</p>
+            <hr />
+            <p><strong>{faltas}</strong> faltas</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
   );
 }
