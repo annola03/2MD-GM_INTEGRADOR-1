@@ -6,7 +6,6 @@ USE Funcionarios_api;
 
 -- Inserir registros iniciais
 INSERT INTO Funcionarios (GMID, Entrada, Saida, Turno, Status, data_registro) VALUES
-INSERT INTO registros (gmid, entrada, saida, turno, status, data) VALUES
 ('RV3NGT','06:00:00','15:00:00','Diurno','Pontual','2025-10-01'),
 ('KJT5DS','15:00:00','23:59:00','Noturno','Pontual','2025-10-01'),
 ('FSDGF5','06:00:00','15:00:00','Diurno','Pontual','2025-10-01'),
