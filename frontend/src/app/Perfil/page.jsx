@@ -19,7 +19,7 @@ export default function ProfilePage() {
     email: "",
     telefone: "",
     endereco: "",
-    imagem: "/imagens/avatar.png",
+    imagem: "../imagens/perfil.png",
   });
 
   const [historico, setHistorico] = useState([]);
@@ -226,7 +226,7 @@ export default function ProfilePage() {
               <div className="photo-container">
                 <img
                   src={
-                    "https://i.pravatar.cc/40"
+                    "../imagens/perfil.png"
                   }
                   alt="Avatar"
                 />

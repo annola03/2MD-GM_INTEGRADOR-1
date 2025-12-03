@@ -25,7 +25,7 @@ export default function Header() {
 
         <div className="profile">
           <img
-            src="https://i.pravatar.cc/40"
+            src="../imagens/perfil.png"
             alt="User"
             className="avatar"
           />

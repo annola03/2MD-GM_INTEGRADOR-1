@@ -83,7 +83,7 @@ export default function AdminPage() {
           <InfoCard
             title={`Administrador ${user?.Nome}`}
             value={`${users.length} usuários`}
-            image="/imagens/fotoPerfil1.png"
+            image="../imagens/perfil.png"
           />
 
           <InfoCard

@@ -13,6 +13,7 @@ export default function Sidebar() {
   // Permissões
   const podeVer = user?.tipo === "admin" || user?.tipo === "gestor";
   const podeVerAdmin = user?.tipo === "admin";
+  const NpodeVerAdmin = user?.tipo != "admin";
 
   return (
     <aside className={`sidebar ${!open ? "closed" : ""}`}>
@@ -125,7 +126,7 @@ export default function Sidebar() {
         )}
 
         {/* Ponto demonstrativo */}
-        <Link href="/Ponto">
+        {NpodeVerAdmin && (<Link href="/Ponto">
           <SidebarItem
             icon={
               <img
@@ -140,6 +141,7 @@ export default function Sidebar() {
             open={open}
           />
         </Link>
+         )}
       </ul>
     </aside>
   );
