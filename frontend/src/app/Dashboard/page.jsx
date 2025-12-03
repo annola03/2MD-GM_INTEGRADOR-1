@@ -37,7 +37,7 @@ export default function Dashboard() {
 
       const [usuariosRes, registrosRes] = await Promise.all([
         fetch("http://localhost:3001/api/usuarios?limite=70", { headers }),
-        fetch("http://localhost:3001/api/funcionarios?limite=2000", { headers }),
+        fetch("http://localhost:3001/api/funcionarios?limite=3000", { headers }),
       ]);
 
       const usuariosData = await usuariosRes.json();

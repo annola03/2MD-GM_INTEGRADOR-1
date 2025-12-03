@@ -372,6 +372,8 @@ static async proximoPonto(req, res) {
       });
     }
   }
+
+  
 }
 
 export default funcionarioController;

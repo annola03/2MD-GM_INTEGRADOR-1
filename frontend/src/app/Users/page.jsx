@@ -33,7 +33,7 @@ export default function UsersPage() {
           fetch("http://localhost:3001/api/usuarios?limite=60", {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          fetch("http://localhost:3001/api/funcionarios?limite=1800", {
+          fetch("http://localhost:3001/api/funcionarios?limite=3000", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
