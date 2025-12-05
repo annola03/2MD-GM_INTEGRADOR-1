@@ -217,8 +217,8 @@ export default function Dashboard() {
             <thead>
               <tr>
                 <th>GMID</th>
-                <th>Entrada</th>
-                <th>Saída</th>
+                <th>Dia da entrada</th>
+                <th>Hora da saída</th>
                 <th>Status</th>
               </tr>
             </thead>
