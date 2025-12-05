@@ -217,7 +217,8 @@ export default function Dashboard() {
             <thead>
               <tr>
                 <th>GMID</th>
-                <th>Dia da entrada</th>
+                <th>Dia</th>
+                <th>Hora da entrada</th>
                 <th>Hora da saída</th>
                 <th>Status</th>
               </tr>
@@ -228,7 +229,8 @@ export default function Dashboard() {
                 <tr key={r.id}>
                   <td>{r.GMID}</td>
                   <td>{r.dataFormatada}</td>
-                  <td>{r.Saida ? formatarData(r.Saida) : "-"}</td>
+                  <td>{r.Entrada}</td>
+                  <td>{r.Saida}</td>
                   <td className={r.Status === "Atraso" ? "late" : "ok"}>
                     {r.Status}
                   </td>
